@@ -6,13 +6,13 @@
 
 To start off you will need to download the database for local development. You can do so at the link [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). We are using Postgres 13 you can install the latest patch for version 13, at this time it is `13.1`. When installing all the defaults should be kept the same. To make the development process as smooth as possible set your default database password to `admin`. You can also skip the installation for stack builder on the last step.
 
-### Install .Net Core 5
+### Install .Net 5
 
-Next up you will need the framework that the backend runs with. You can install the latest .Net Core 5 version at this moment it is `5.0.2`. You can find the SDK download [here](https://dotnet.microsoft.com/download/dotnet/5.0).
+Next up you will need the framework that the backend runs with. You can install the latest .Net 5 version at this moment it is `5.0.2`. You can find the SDK download [here](https://dotnet.microsoft.com/download/dotnet/5.0).
 
 ### Install Entity Framework Tools
 
-This software is using a code-first approach to database development which means you do not have to worry about writing any SQL. In order to use the tools after installing .Net Core 5 you can run the command `dotnet tool install --global dotnet-ef`.
+This software is using a code-first approach to database development which means you do not have to worry about writing any SQL. In order to use the tools after installing .Net 5 you can run the command `dotnet tool install --global dotnet-ef`.
 
 ## Development Tips
 
