@@ -4,7 +4,7 @@
 
 ### Install Postgres
 
-To start off you will need to download the database for local development. You can do so at the link [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). We are using Postgres 13 you can install the latest patch for version 13, at this time it is `13.1`. When installing all the defaults should be kept the same. To make the development process as smooth as possible set your default database password to `admin`.
+To start off you will need to download the database for local development. You can do so at the link [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). We are using Postgres 13 you can install the latest patch for version 13, at this time it is `13.1`. When installing all the defaults should be kept the same. To make the development process as smooth as possible set your default database password to `admin`. You can also skip the installation for stack builder on the last step.
 
 ### Install .Net Core 5
 

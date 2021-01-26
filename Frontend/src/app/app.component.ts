@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TimeEntryApiService } from './core/services/timeEntry.api.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'TimeTracker';
+  
+  results;
+
+  constructor(private TimeEntry: TimeEntryApiService) {
+    this.results = this.TimeEntry.getTimeEntry();
+  }
 }
