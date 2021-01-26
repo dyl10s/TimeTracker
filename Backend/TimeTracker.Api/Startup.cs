@@ -51,6 +51,8 @@ namespace Backend
 
             app.UseHttpsRedirection();
 
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.UseRouting();
 
             app.UseAuthorization();
