@@ -23,8 +23,8 @@ jobs:
 
       # Build the API
       - name: Build the Api
-        run: dotnet build ./Backend/TimeTracker.Api/TimeTrack.Api.csproj
+        run: dotnet build Backend/TimeTracker.Api
 
       # Test the API
       - name: Test the Api
-        run: dotnet test ./Backend/TimeTracker.Api/TimeTrack.Api.csproj
+        run: dotnet test Backend/TimeTracker.Api
