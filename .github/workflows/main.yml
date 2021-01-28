@@ -20,14 +20,15 @@ jobs:
         with:
           # SDK version to use.
           dotnet-version: "5.0.x"
-        working-directory: ./Backend/TimeTracker.Api
 
       # Build the API
       - name: Build the Api
+        working-directory: ./Backend/TimeTracker.Api
         run: dotnet build
 
       # Test the API
       - name: Test the Api
+        working-directory: ./Backend/TimeTracker.Api
         run: dotnet test
   
   build-frontend:
@@ -42,17 +43,19 @@ jobs:
         with:
           # node version to use.
           node-version: '12'
-        working-directory: ./Frontend
 
       - name: Install Dependencies
+        working-directory: ./Frontend
         run: |
           npm install -g @angular/cli
           npm i
 
       # Build the frontend
       - name: Build the frontend
+        working-directory: ./Frontend
         run: ng build --prod
 
       # Test the frontend
       - name: Test the frontend
+        working-directory: ./Frontend
         run: ng test --watch=false
