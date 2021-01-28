@@ -8,7 +8,7 @@ on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build-api:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -20,11 +20,39 @@ jobs:
         with:
           # SDK version to use.
           dotnet-version: "5.0.x"
+        working-directory: ./Backend/TimeTracker.Api
 
       # Build the API
       - name: Build the Api
-        run: dotnet build Backend/TimeTracker.Api
+        run: dotnet build
 
       # Test the API
       - name: Test the Api
-        run: dotnet test Backend/TimeTracker.Api
+        run: dotnet test
+  
+  build-frontend:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # node version to use.
+          node-version: '12'
+        working-directory: ./Frontend
+
+      - name: Install Dependencies
+        run: |
+          npm install -g @angular/cli
+          npm i
+
+      # Build the frontend
+      - name: Build the frontend
+        run: ng build --prod
+
+      # Test the frontend
+      - name: Test the frontend
+        run: ng test --watch=false
