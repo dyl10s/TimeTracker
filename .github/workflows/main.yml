@@ -153,5 +153,5 @@ jobs:
           key: ${{ secrets.DEV_KEY }}
           script: |
             export TIMETRACK_TAG=dev
-            docker-compose pull api frontend
-            docker-compose up -d
+            sudo docker-compose pull api frontend
+            sudo docker-compose up -d
