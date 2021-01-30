@@ -7,30 +7,29 @@ on: [push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build-api:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1.7.2
-        with:
-          # SDK version to use.
-          dotnet-version: "5.0.x"
+      # Steps represent a sequence of tasks that will be executed as part of the job
+      steps:
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v2
+        - uses: actions/setup-dotnet@v1.7.2
+          with:
+            # SDK version to use.
+            dotnet-version: "5.0.x"
 
-      # Build the API
-      - name: Build the Api
-        working-directory: ./Backend/TimeTracker.Api
-        run: dotnet build
+        # Build the API
+        - name: Build the Api
+          working-directory: ./Backend/TimeTracker.Api
+          run: dotnet build
 
-      # Test the API
-      - name: Test the Api
-        working-directory: ./Backend/TimeTracker.Api
-        run: dotnet test
-  
+        # Test the API
+        - name: Test the Api
+          working-directory: ./Backend/TimeTracker.Api
+          run: dotnet test
+    
   build-frontend:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -49,7 +48,6 @@ jobs:
         run: |
           npm install -g @angular/cli
           npm i
-
       # Build the frontend
       - name: Build the frontend
         working-directory: ./Frontend
@@ -59,3 +57,105 @@ jobs:
       - name: Test the frontend
         working-directory: ./Frontend
         run: ng test --watch=false
+
+  docker-deploy-api:
+    needs: [build-api, build-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/development' || github.ref == 'refs/head/master'
+    steps: 
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - if: github.ref == 'refs/head/development'  
+        name: Build and push dev
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Backend/TimeTracker.Api
+          file: ./Backend/TimeTracker.Api/Dockerfile
+          push: true
+          tags: strohscd/timetracker-api:dev
+      
+      - if: github.ref == 'refs/head/master'  
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Backend/TimeTracker.Api
+          file: ./Backend/TimeTracker.Api/Dockerfile
+          push: true
+          tags: strohscd/timetracker-api:latest
+
+  docker-deploy-frontend:
+    needs: [build-api, build-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/development' || github.ref == 'refs/head/master'
+    steps: 
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - if: github.ref == 'refs/head/development'
+        name: Build and push dev
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Frontend
+          file: ./Frontend/Dockerfile
+          push: true
+          tags: strohscd/timetracker-frontend:dev
+      
+      - if: github.ref == 'refs/head/master'
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Frontend
+          file: ./Frontend/Dockerfile
+          push: true
+          tags: strohscd/timetracker-frontend:latest
+
+  deploy-dev:
+    needs: [docker-deploy-api, docker-deploy-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/development'
+    steps: 
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: copy file via ssh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_KEY }}
+          source: "docker-compose.yml"
+          target: ""
+      
+      - name: Pull the new version and start the server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_KEY }}
+          script: |
+            export TIMETRACK_TAG=dev
+            docker-compose pull api frontend
+            docker-compose up -d

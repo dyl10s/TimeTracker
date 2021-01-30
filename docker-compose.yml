@@ -10,13 +10,13 @@ services:
       POSTGRES_DB: TimeTracker
 
   api:
-    image: strohscd/timetracker-api
+    image: strohscd/timetracker-api:${TIMETRACK_TAG:-latest}
     restart: always
     depends_on: 
       - db
 
   frontend:
-    image: strohscd/timetracker-frontend
+    image: strohscd/timetracker-frontend:${TIMETRACK_TAG:-latest}
     restart: always
     ports: 
       - 80:80
