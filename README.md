@@ -14,6 +14,14 @@ Next up you will need the framework that the backend runs with. You can install 
 
 This software is using a code-first approach to database development which means you do not have to worry about writing any SQL. In order to use the tools after installing .Net 5 you can run the command `dotnet tool install --global dotnet-ef`.
 
+### Install NodeJS and Angular
+
+The front end is built off of Angular and node.js so you will need to install the node.js installer. You can find the find the correct installer for your system [here](https://nodejs.org/en/download/). After NodeJS is installed, you can also install the Angular CLI. Run the command `npm install -g @angular/cli`.
+
+### Install node_modules
+
+To get the front end built and ready for local development, you need to install the `node_modules`. To do this, open up the Frontend folder inside of a terminal and run `npm install`. This will install all correct packages and you can now run `ng serve` to get the Angular app running on `http://localhost:4200`.
+
 ## Development Tips
 
 ### Database
