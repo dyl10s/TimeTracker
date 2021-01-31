@@ -142,6 +142,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
           key: ${{ secrets.DEV_KEY }}
           source: "docker-compose.yml"
           target: ""
@@ -150,6 +151,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
           key: ${{ secrets.DEV_KEY }}
           script: |
             export TIMETRACK_TAG=dev
