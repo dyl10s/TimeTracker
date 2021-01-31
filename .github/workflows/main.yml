@@ -134,19 +134,7 @@ jobs:
     needs: [docker-deploy-api, docker-deploy-frontend]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/development'
-    steps: 
-      - name: Check Out Repo 
-        uses: actions/checkout@v2
-
-      - name: Copy file via ssh
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.DEV_USER }}
-          key: ${{ secrets.DEV_KEY }}
-          source: "docker-compose.yml"
-          target: ""
-      
+    steps:     
       - name: Pull the new version and start the server
         uses: appleboy/ssh-action@master
         with:
@@ -154,6 +142,7 @@ jobs:
           username: ${{ secrets.DEV_USER }}
           key: ${{ secrets.DEV_KEY }}
           script: |
+            wget -N https://raw.githubusercontent.com/dyl10s/TimeTracker/development/docker-compose.yml
             export TIMETRACK_TAG=dev
             sudo docker-compose pull api frontend
             sudo docker-compose up -d
