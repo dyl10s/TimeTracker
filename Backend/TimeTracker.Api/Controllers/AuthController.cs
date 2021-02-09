@@ -119,12 +119,21 @@ namespace TimeTracker.Api.Controllers
                     };
                 }
 
+                // Make sure the email is unique
+                if(await database.Users.AnyAsync(x => x.Email.ToLower() == registerData.Email.ToLower()) == true)
+                {
+                    return new GenericResponseDTO<int>() 
+                    {
+                        Success = false,
+                        Message = "This email already exists"
+                    };
+                }
+
                 // Create the new user and add them to the database
                 var newUser = new User()
                 {
                     CreatedTime = DateTime.UtcNow,
                     Email = registerData.Email,
-                    IsTeacher = true,
                     Password = authHelper.GetPasswordHash(registerData.Password, configuration),
                     Name = registerData.Name
                 };

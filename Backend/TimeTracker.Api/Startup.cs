@@ -47,14 +47,6 @@ namespace Backend
                     };
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("IsTeacher", policy =>
-                {
-                    policy.RequireClaim("IsTeacher", "true");
-                });
-            });
-
             services.AddScoped<MainDb>(x => new MainDb(Configuration));
 
             services.AddSingleton<AuthHelper>(x => new AuthHelper());
