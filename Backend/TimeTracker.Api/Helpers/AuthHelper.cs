@@ -81,8 +81,7 @@ namespace TimeTracker.Api.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, loggedInUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, loggedInUser.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, loggedInUser.Name),
-                new Claim("IsTeacher", loggedInUser.IsTeacher.ToString().ToLower()),
+                new Claim(JwtRegisteredClaimNames.GivenName, loggedInUser.Name)
             };
 
             var token = new JwtSecurityToken(

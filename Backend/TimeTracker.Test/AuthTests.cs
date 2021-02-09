@@ -72,10 +72,32 @@ namespace TimeTracker.Test
             {
                 Email = "testgmail.com",
                 Name = "test",
-                Password = "testpass"
+                Password = "testPass1"
             });
 
             Assert.IsFalse(registerResults.Success);
-        }   
+        }  
+        
+        [TestMethod]
+        public async Task NoMatchingEmails()
+        {
+            var registerResults = await authController.Register(new UserDTO()
+            {
+                Email = "match1@gmail.com",
+                Name = "test",
+                Password = "testPass1"
+            });
+
+            Assert.IsTrue(registerResults.Success);
+
+            var registerResults2 = await authController.Register(new UserDTO()
+            {
+                Email = "match1@gmail.com",
+                Name = "test",
+                Password = "testPass1"
+            });
+
+            Assert.IsFalse(registerResults2.Success);
+        }  
     }
 }
