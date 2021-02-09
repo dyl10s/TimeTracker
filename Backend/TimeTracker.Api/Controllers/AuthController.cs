@@ -105,7 +105,7 @@ namespace TimeTracker.Api.Controllers
                     return new GenericResponseDTO<int>() 
                     {
                         Success = false,
-                        Message = "Invalid password"
+                        Message = "Invalid password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters"
                     };
                 }
 
