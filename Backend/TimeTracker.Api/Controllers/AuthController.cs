@@ -147,7 +147,7 @@ namespace TimeTracker.Api.Controllers
                     Data = newUser.Id
                 };
             }
-            catch (Exception e)
+            catch
             {
                 return new GenericResponseDTO<int>() 
                 {
