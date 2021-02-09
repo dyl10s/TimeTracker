@@ -27,7 +27,7 @@ jobs:
 
         # Test the API
         - name: Test the Api
-          working-directory: ./Backend/TimeTracker.Api
+          working-directory: ./Backend
           run: dotnet test
     
   build-frontend:

@@ -8,10 +8,16 @@ namespace TimeTracker.Api.Database
     public class MainDb : DbContext
     {
         IConfiguration configuration;
+        bool isTestDb = false;
 
         public MainDb(IConfiguration config)
         {
             configuration = config;
+        }
+
+        public MainDb(DbContextOptions<MainDb> options) : base (options)
+        {
+            isTestDb = true;    
         }
 
         // This is where the database tables are defined
@@ -24,7 +30,10 @@ namespace TimeTracker.Api.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
+            if(!isTestDb)
+            {
+                optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
+            }
             base.OnConfiguring(optionsBuilder);
         }
     }
