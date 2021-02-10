@@ -1,4 +1,4 @@
-export class TimeEntry {
+export interface TimeEntry {
     Id?: number;
     StartTime: Date;
     EndTime: Date;
