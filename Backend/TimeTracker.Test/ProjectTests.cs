@@ -55,6 +55,12 @@ namespace TimeTracker.Test
 
             Assert.AreEqual(allProjects.Data[0].Tags.Count, 2);
 
+            var newTag = await projectController.AddTag(new CreateTagDTO() 
+            {
+                ProjectId = allProjects.Data[0].Id, 
+                Tag = "New Tag"
+            });
+
             var projectById = await projectController.GetProjectById(allProjects.Data[0].Id);
 
             Assert.IsTrue(projectById.Success);
@@ -63,7 +69,8 @@ namespace TimeTracker.Test
             Assert.AreEqual(projectById.Data.Description, "Test Description");
             Assert.AreEqual(projectById.Data.Name, "Test Name");
 
-            Assert.AreEqual(projectById.Data.Tags.Count, 2);
+            Assert.AreEqual(projectById.Data.Tags.Count, 3);
+            Assert.IsTrue(projectById.Data.Tags.Any(x => x.Name == "New Tag"));
         }
     }
 }
