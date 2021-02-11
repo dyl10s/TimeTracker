@@ -26,6 +26,11 @@ namespace TimeTracker.Api.Controllers
             authHelper = auth;
         }
 
+        /// <summary>
+        /// Gets a project by a specific project id
+        /// </summary>
+        /// <param name="id">The Id of the project you want the data for</param>
+        /// <returns>All the information about a project</returns>
         [Authorize]
         [HttpGet("{id}")]
         public async Task<GenericResponseDTO<Project>> GetProjectById(int id)
@@ -50,6 +55,10 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Gets all the projects a user is associated with
+        /// </summary>
+        /// <returns>A list of all the projects the user is the teacher or is a student of</returns>
         [Authorize]
         [HttpGet]
         public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser()
@@ -72,6 +81,51 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Add a tag to a project
+        /// </summary>
+        /// <param name="newTag">The Id of a project to tag as well as the tag you want to add</param>
+        /// <returns>The Id of the newly created tag</returns>
+        [Authorize]
+        [HttpPost("Tag")]
+        public async Task<GenericResponseDTO<int>> AddTag(CreateTagDTO newTag)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            // Only allow the teacher to tag a project
+            var project = await database.Projects
+                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
+            
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            var tag = new Tag()
+            {
+                Name = newTag.Tag,
+                Project = project
+            };
+
+            await database.AddAsync(tag);
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>()
+            {
+                Data = tag.Id,
+                Success = true
+            };
+        }
+
+        /// <summary>
+        /// Create a new project
+        /// </summary>
+        /// <param name="newProject">The details of the new project to create</param>
+        /// <returns>The Id of the project that was created</returns>
         [Authorize]
         [HttpPost]
         public async Task<GenericResponseDTO<int>> CreateProject(ProjectCreateDTO newProject)
