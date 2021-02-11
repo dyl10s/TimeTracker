@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using TimeTracker.Api.Database;
 using TimeTracker.Api.Database.Models;
 
 namespace TimeTracker.Api.Helpers
@@ -68,6 +70,19 @@ namespace TimeTracker.Api.Helpers
         {
             // Create a token from 2 guids combined
             return Guid.NewGuid().ToString().Replace("-", "") + Guid.NewGuid().ToString().Replace("-", "");
+        }
+
+        public async Task<User> GetCurrentUser(ClaimsPrincipal user, MainDb db)
+        {
+            var currentUserId = GetCurrentUserId(user);
+            var currentUser = await db.Users.FirstAsync(x => x.Id == currentUserId);
+            return currentUser;
+        }
+
+        public int GetCurrentUserId(ClaimsPrincipal user)
+        {
+            var currentUserId = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return currentUserId;
         }
 
         public string GenerateJSONWebToken(User loggedInUser, IConfiguration configuration)    
