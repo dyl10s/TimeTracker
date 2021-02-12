@@ -17,14 +17,21 @@ namespace TimeTracker.Api.Controllers {
         [HttpGet("{id}")]
         public async Task<GenericResponseDTO<UserDTO>> Get(int id) {
 
-            var temp = await database.Users.AsNoTracking()
+            var queryResult = await database.Users.AsNoTracking()
                 .Where(user => user.Id == id)
-                .ToListAsync();
-            
+                .FirstOrDefaultAsync();
+
+            if(queryResult == default(Database.Models.User)) {
+                return new GenericResponseDTO<UserDTO> {
+                    Message = "No matching User ID found.",
+                    Success = false
+                };
+            }
+
             return new GenericResponseDTO<UserDTO>() {
                 Data = new UserDTO() {
-                    Email = temp[0].Email,
-                    Name = temp[0].Name
+                    Email = queryResult.Email,
+                    Name = queryResult.Name
                 },
                 Success = true
             };
