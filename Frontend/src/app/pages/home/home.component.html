@@ -1,0 +1,110 @@
+<div id="outerwrapper">
+  <div class="row d-flex justify-content-center">
+    <nb-card>
+      <nb-card-header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <a class="navbar-brand" href="#">
+            <img src="assets/webLogo.png" height="100" alt="logo" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="features">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="integration">Integration</a>
+              </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="login">Login</a>
+              </li>
+              <li class="nav-item">
+                <button
+                  type="button"
+                  class="btn btn-dark"
+                  routerLink="register"
+                >
+                  Sign Up
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </nb-card-header>
+
+      <nb-card-body class="body">
+        <div id="main">
+          <div class="homeIntroMobile" id="mobile">
+            <img src="assets/homeIntroMob.png" alt="homeIntro" />
+          </div>
+
+          <div class="homeIntroDesk" id="desktop">
+            <img src="assets/homeIntroDesk.png" alt="homeIntro" />
+          </div>
+
+          <div id="trackerExample">
+            <img src="assets/trackerEx.png" alt="trackerExample" />
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <!-- Footer -->
+    <nb-footer class="bg-light text-center text-lg-start">
+      <div class="container p-4">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">NTime</h5>
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a href="#!" class="text-dark">Home</a>
+              </li>
+              <li>
+                <a href="#!" class="text-dark">Features</a>
+              </li>
+              <li>
+                <a href="#!" class="text-dark">Integration</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2021 Copyright NTime
+      </div>
+      <!-- Copyright -->
+    </nb-footer>
+    <!-- Footer -->
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.jQuery ||
+        document.write(
+          '<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>'
+        );
+    </script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </div>
+</div>

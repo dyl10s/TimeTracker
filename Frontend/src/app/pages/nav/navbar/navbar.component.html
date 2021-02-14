@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="time">Time</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="projects">Projects</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="reports">Reports</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="manage">Manage</a>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="help">Help</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Name
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#"></a>
+          <a class="dropdown-item" href="profile">My Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
