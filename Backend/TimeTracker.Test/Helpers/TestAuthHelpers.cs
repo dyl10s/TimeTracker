@@ -41,5 +41,23 @@ namespace TimeTracker.Test.Helpers
                 User = user
             };
         }
+
+        public static void attachUserToContext(int userID, List<ControllerBase> controllers) {
+            var user = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userID.ToString())
+                })
+            });
+
+            foreach(ControllerBase controller in controllers) {
+                controller.ControllerContext.HttpContext = new DefaultHttpContext() {
+                    User = user
+                };
+            }
+        }
     }
+
+    
 }

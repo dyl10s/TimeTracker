@@ -1,14 +1,13 @@
-using Microsoft.AspNetCore.Mvc;           // ControllerBase
-using System.Threading.Tasks;             // Task
-using TimeTracker.Api.DTOs;               // UserDTO
-using TimeTracker.Api.Database;           // MainDb
-using TimeTracker.Api.Database.Models;    // User
-using Microsoft.EntityFrameworkCore;      // .AsNoTracking()
-using System.Linq;                        // .Where()
-using TimeTracker.Api.Helpers;            // AuthHelper
-using Microsoft.AspNetCore.Authorization; // [Authorize]
-using Microsoft.Extensions.Configuration; // IConfiguration
-using System.Collections.Generic;         // List<>
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using TimeTracker.Api.DTOs;
+using TimeTracker.Api.Database;
+using TimeTracker.Api.Database.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using TimeTracker.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace TimeTracker.Api.Controllers {
 
@@ -46,7 +45,7 @@ namespace TimeTracker.Api.Controllers {
                 .Include(x => x.Projects)
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
             
-            if(queryResult == default(Database.Models.User)) {
+            if(queryResult == null) {
                 return new GenericResponseDTO<ProfileDTO> {
                     Message = "No matching User ID found.",
                     Success = false
@@ -68,7 +67,7 @@ namespace TimeTracker.Api.Controllers {
 
         [HttpPost]
         [Route("/SetPassword")]
-        public async Task<GenericResponseDTO<int>> SetPassword(string password) {
+        public async Task<GenericResponseDTO<int>> SetPassword(PasswordChangeDTO passwordInfo) {
 
             int currentUserID;
 
@@ -81,26 +80,32 @@ namespace TimeTracker.Api.Controllers {
                 };
             }
 
-            User queryResult = await database.Users
-                .AsQueryable()
+            User currentUser = await database.Users
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
-            if(queryResult == default(Database.Models.User)) {
+            if(currentUser == null) {
                 return new GenericResponseDTO<int> {
                     Message = "No matching User ID found.",
                     Success = false
                 };
             }
 
-            if(!authHelper.IsValidPassword(password)) {
+            if(!currentUser.Password.SequenceEqual(authHelper.GetPasswordHash(passwordInfo.CurrentPassword, configuration))) {
+                return new GenericResponseDTO<int> {
+                    Message = "Verification password is incorrect.",
+                    Success = false
+                };
+            }
+
+            if(!authHelper.IsValidPassword(passwordInfo.NewPassword)) {
                 return new GenericResponseDTO<int> {
                     Success = false,
                     Message = "Invalid password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters"
                 };
             }
 
-            queryResult.Password = authHelper.GetPasswordHash(password, configuration);
-            database.SaveChanges();
+            currentUser.Password = authHelper.GetPasswordHash(passwordInfo.NewPassword, configuration);
+            await database.SaveChangesAsync();
 
             return new GenericResponseDTO<int> {
                 Success = true

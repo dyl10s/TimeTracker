@@ -1,14 +1,14 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;  // TestClass
-using TimeTracker.Api.Controllers;                   // ProfileController
-using TimeTracker.Api.Helpers;                       // AuthHelper
-using TimeTracker.Api.DTOs;                          // DTOs
-using System.Threading.Tasks;                        // Task
-using System.Security.Claims;                        // Claims stuff
-using System.Collections.Generic;                    // List
-using Microsoft.AspNetCore.Http;                     // DefaultHttpContext
-using Microsoft.EntityFrameworkCore;                 // .AsNoTracking()
-using TimeTracker.Api.Database.Models;               // User
-using System.Linq;                                   // SequenceEqual
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TimeTracker.Api.Controllers;
+using TimeTracker.Api.Helpers;
+using TimeTracker.Api.DTOs;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using TimeTracker.Api.Database.Models;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using TimeTracker.Test.Helpers;
 
 namespace TimeTracker.Test {
     [TestClass]
@@ -16,33 +16,18 @@ namespace TimeTracker.Test {
         ProfileController profileController;
         AuthController authController;
         AuthHelper authHelper;
+        List<ControllerBase> controllers;
         public ProfileTests() {
             authHelper = new AuthHelper();
             profileController = new ProfileController(database, authHelper, configuration);
             authController = new AuthController(database, configuration, authHelper);
-        }
-
-        private void attachUserToContext(int userID) {
-            var user = new ClaimsPrincipal(new List<ClaimsIdentity>()
-            {
-                new ClaimsIdentity(new List<Claim>()
-                {
-                    new Claim(ClaimTypes.NameIdentifier, userID.ToString())
-                })
-            });
-
-            profileController.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
-            authController.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
+            controllers = new List<ControllerBase>();
+            controllers.Add(profileController);
+            controllers.Add(authController);
         }
 
         [TestMethod]
-        public async Task ViewProfile1() {
+        public async Task ViewProfileTest_ValidInfo() {
 
             UserDTO newUser = new UserDTO {
                 Email = "moxie@123.net",
@@ -53,7 +38,7 @@ namespace TimeTracker.Test {
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
             Assert.IsTrue(registerResponse.Success);
 
-            attachUserToContext(registerResponse.Data);
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
 
             ProfileDTO expectedProfileInfo = new ProfileDTO {
                 Name = "Moxie",
@@ -69,13 +54,13 @@ namespace TimeTracker.Test {
         }
 
         [TestMethod]
-        public async Task ViewProfile2() {
+        public async Task ViewProfileTest_WithoutLoggingIn() {
             GenericResponseDTO<ProfileDTO> response = await profileController.GetUserProfile();
             Assert.IsFalse(response.Success);
         }
 
         [TestMethod]
-        public async Task SetPasswordTest1() {
+        public async Task SetPasswordTest_ValidInfo() {
 
             UserDTO newUser = new UserDTO {
                 Email = "phoebe@123.net",
@@ -86,12 +71,16 @@ namespace TimeTracker.Test {
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
             Assert.IsTrue(registerResponse.Success);
 
-            attachUserToContext(registerResponse.Data);
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
 
             GenericResponseDTO<AccessKeysDTO> loginResponse = await authController.Login(newUser);
             Assert.IsTrue(registerResponse.Success);
 
-            GenericResponseDTO<int> changePasswordResponse = await profileController.SetPassword("Aero125");
+            PasswordChangeDTO passwordChangeInfo = new PasswordChangeDTO {
+                CurrentPassword = "Aquarius13",
+                NewPassword = "Aero125"
+            };
+            GenericResponseDTO<int> changePasswordResponse = await profileController.SetPassword(passwordChangeInfo);
             Assert.IsTrue(changePasswordResponse.Success);
 
             User currentUser = await database.Users
@@ -102,7 +91,9 @@ namespace TimeTracker.Test {
             loginResponse = await authController.Login(newUser);
             Assert.IsFalse(loginResponse.Success);
 
-            changePasswordResponse = await profileController.SetPassword("Aquarius13");
+            passwordChangeInfo.CurrentPassword = "Aero125";
+            passwordChangeInfo.NewPassword = "Aquarius13";
+            changePasswordResponse = await profileController.SetPassword(passwordChangeInfo);
             Assert.IsTrue(changePasswordResponse.Success);
 
             currentUser = await database.Users
@@ -115,7 +106,7 @@ namespace TimeTracker.Test {
         }
 
         [TestMethod]
-        public async Task SetPasswordTest2() {
+        public async Task SetPasswordTest_InvalidNewPassword() {
 
             UserDTO newUser = new UserDTO {
                 Email = "belford@123.net",
@@ -126,12 +117,16 @@ namespace TimeTracker.Test {
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
             Assert.IsTrue(registerResponse.Success);
 
-            attachUserToContext(registerResponse.Data);
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
 
             GenericResponseDTO<AccessKeysDTO> loginResponse = await authController.Login(newUser);
             Assert.IsTrue(loginResponse.Success);
 
-            GenericResponseDTO<int> changePasswordResponse = await profileController.SetPassword("badpw");
+            PasswordChangeDTO passwordChangeInfo = new PasswordChangeDTO {
+                CurrentPassword = "sand_Boa13",
+                NewPassword = "badpw"
+            };
+            GenericResponseDTO<int> changePasswordResponse = await profileController.SetPassword(passwordChangeInfo);
             Assert.IsFalse(changePasswordResponse.Success);
 
             User currentUser = await database.Users
@@ -142,6 +137,42 @@ namespace TimeTracker.Test {
 
             loginResponse = await authController.Login(newUser);
             Assert.IsTrue(loginResponse.Success);
+        }
+
+        [TestMethod]
+        public async Task SetPasswordTest_IncorrectVerificationPassword() {
+
+            UserDTO newUser = new UserDTO {
+                Email = "basther@123.net",
+                Password = "1fOur3niNe7",
+                Name = "Basther"
+            };
+
+            GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
+            Assert.IsTrue(registerResponse.Success);
+
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
+
+            GenericResponseDTO<AccessKeysDTO> loginResponse = await authController.Login(newUser);
+            Assert.IsTrue(loginResponse.Success);
+
+            PasswordChangeDTO passwordChangeInfo = new PasswordChangeDTO {
+                CurrentPassword = "oNe4thRee9seVen",
+                NewPassword = "P4st_Midnight"
+            };
+
+            GenericResponseDTO<int> changePasswordResponse = await profileController.SetPassword(passwordChangeInfo);
+            Assert.IsFalse(changePasswordResponse.Success);
+
+            User currentUser = await database.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == registerResponse.Data);
+            Assert.IsFalse(authHelper.GetPasswordHash("oNe4thRee9seVen", configuration).SequenceEqual(currentUser.Password));
+            Assert.IsTrue(authHelper.GetPasswordHash("1fOur3niNe7", configuration).SequenceEqual(currentUser.Password));
+
+            loginResponse = await authController.Login(newUser);
+            Assert.IsTrue(loginResponse.Success);
+
         }
     }
     
