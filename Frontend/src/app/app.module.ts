@@ -34,7 +34,7 @@ import { RegisterComponent } from './auth/pages/register/register.component';
     NbSidebarModule.forRoot(), // NbSidebarModule.forRoot(), //if this is your app.module
     NbButtonModule,
     NbRouteTabsetModule,
-    NbMenuModule
+    NbMenuModule.forRoot()
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 
