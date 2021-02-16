@@ -1,0 +1,35 @@
+<nb-layout-column class="column">
+    <nb-card class="login-container">
+      <nb-card-header>
+        <h4 class="text-black">Login</h4>
+      </nb-card-header>
+
+      <nb-card-body>
+          <div class="form-group">
+            <input
+              type="email"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Email address"
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Password"
+            />
+          </div>
+          <div class="form-group">
+            <button nbButton fullWidth status="success">Login</button>
+          </div>
+          <nb-actions>
+            <nb-action>Not a member? Register</nb-action>
+          </nb-actions>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
