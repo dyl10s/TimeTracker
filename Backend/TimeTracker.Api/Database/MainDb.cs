@@ -39,9 +39,15 @@ namespace TimeTracker.Api.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>(e =>
+            builder.Entity<User>(u =>
             {
-                e.HasIndex(i => i.Email).IsUnique();
+                u.HasIndex(i => i.Email).IsUnique();
+            });
+
+            builder.Entity<Project>(p =>
+            {
+                p.HasMany(s => s.Students).WithMany(p => p.Projects);
+                p.HasOne(t => t.Teacher).WithMany(pt => pt.ProjectsTeaching);
             });
         }
     }
