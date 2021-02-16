@@ -6,18 +6,20 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
+import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,9 @@ import { RegisterComponent } from './auth/pages/register/register.component';
     NbButtonModule,
     NbMenuModule.forRoot(),
     NbTabsetModule,
-    NbRouteTabsetModule
+    NbRouteTabsetModule,
+    NbInputModule,
+    NbCardModule
 
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

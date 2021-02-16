@@ -9,7 +9,6 @@
 }
 
 
-
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
     #mobile{
@@ -18,6 +17,7 @@
     #desktop{
         display: inline;
         min-width: 100%;
+        overflow: hidden;
     }
 }
 
