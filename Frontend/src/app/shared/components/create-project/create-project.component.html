@@ -1,0 +1,101 @@
+<nb-layout-column>
+  <nb-layout-header class="header">
+    <h4 class="text-black">New Project</h4>
+  </nb-layout-header>
+  <div class="container">
+    <div class="line">
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <label for="client">Client</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="client" nbInput placeholder="Client" />
+          </div>
+        </nb-card-body>
+      </div>
+
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <label for="projectName">Project Name</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="text"
+              id="projectName"
+              nbInput
+              placeholder="Project Name"
+            />
+          </div>
+        </nb-card-body>
+      </div>
+
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <label for="projectCode">Project Code</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="number"
+              id="projectCode"
+              nbInput
+              placeholder="Project Code (optional)"
+            />
+          </div>
+        </nb-card-body>
+      </div>
+
+      <div class="row">
+        <nb-card-body>
+          <div class="mobile">
+            <div class="col-25">
+              <label for="dates">Dates</label>
+            </div>
+            <div class="col-75">
+              <input type="date" id="dates" nbInput placeholder="Starts on" />
+              <label for="dates">to</label>
+            </div>
+            <div class="col-75">
+              <input type="date" id="dates" nbInput placeholder="Ends on" />
+            </div>
+          </div>
+
+          <div class="desktop">
+            <div class="col-25">
+              <label for="dates">Dates</label>
+            </div>
+            <div class="col-75">
+              <input type="date" id="dates" nbInput placeholder="Starts on" />
+              <label for="dates">to</label>
+              <input type="date" id="dates" nbInput placeholder="Ends on" />
+            </div>
+          </div>
+        </nb-card-body>
+      </div>
+
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <label for="notes">Notes</label>
+          </div>
+          <div class="col-75">
+            <textarea nbInput id="notes" placeholder="Notes (optional)"></textarea>
+          </div>
+        </nb-card-body>
+      </div>
+    </div>
+
+    <div class="line">
+      <div class="row">
+        <div class="col-25">
+          <button nbButton status="success">Save Project</button>
+        </div>
+        <div class="col-25">
+          <button nbButton outline status="basic">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nb-layout-column>
