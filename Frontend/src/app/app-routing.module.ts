@@ -24,7 +24,6 @@ const routes: Routes = [
   } //Make sure this object is the last item in the array. Add all new routes above this one.
 ];
 
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

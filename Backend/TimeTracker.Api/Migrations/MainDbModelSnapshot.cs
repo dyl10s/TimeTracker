@@ -19,6 +19,21 @@ namespace TimeTracker.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProjectsId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("ProjectUser");
+                });
+
             modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -189,10 +204,25 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.HasOne("TimeTracker.Api.Database.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TimeTracker.Api.Database.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
                 {
                     b.HasOne("TimeTracker.Api.Database.Models.User", "Teacher")
-                        .WithMany("Projects")
+                        .WithMany("ProjectsTeaching")
                         .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
@@ -253,7 +283,7 @@ namespace TimeTracker.Api.Migrations
 
             modelBuilder.Entity("TimeTracker.Api.Database.Models.User", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("ProjectsTeaching");
 
                     b.Navigation("RefreshTokens");
 

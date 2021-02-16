@@ -24,7 +24,7 @@ import { RegisterComponent } from './auth/pages/register/register.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NbThemeModule.forRoot(),
+    NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
     HttpClientModule,
