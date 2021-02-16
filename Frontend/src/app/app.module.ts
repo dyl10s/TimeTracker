@@ -8,7 +8,7 @@ import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuM
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 
 

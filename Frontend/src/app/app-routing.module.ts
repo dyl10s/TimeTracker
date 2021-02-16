@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 
 
