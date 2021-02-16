@@ -6,18 +6,19 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbRouteTabsetModule, NbMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    RegisterComponent
+    RegisterComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -32,10 +33,8 @@ import { RegisterComponent } from './auth/pages/register/register.component';
     ReactiveFormsModule,
     NbSidebarModule.forRoot(), // NbSidebarModule.forRoot(), //if this is your app.module
     NbButtonModule,
-    NbMenuModule.forRoot(),
-    NbTabsetModule,
-    NbRouteTabsetModule
-
+    NbRouteTabsetModule,
+    NbMenuModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 
