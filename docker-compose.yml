@@ -1,0 +1,26 @@
+version: "3.1"
+services: 
+
+  db:
+    image: postgres
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_DB: TimeTracker
+
+  api:
+    image: strohscd/timetracker-api:${TIMETRACK_TAG:-latest}
+    restart: always
+    depends_on: 
+      - db
+
+  frontend:
+    image: strohscd/timetracker-frontend:${TIMETRACK_TAG:-latest}
+    restart: always
+    ports: 
+      - 80:80
+      - 443:443
+    depends_on: 
+      - db
+      - api

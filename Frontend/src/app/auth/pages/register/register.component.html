@@ -1,0 +1,72 @@
+<nb-layout>
+  <nb-layout-header class="header">
+    <a class="navbar-brand" href="#">
+      <img src="assets/webLogo.png" height="80" alt="logo" />
+    </a>
+  </nb-layout-header>
+
+  <nb-layout-column class="column">
+    <nb-card class="register-container">
+      <nb-card-header>
+        <h4 class="text-black">Register</h4>
+      </nb-card-header>
+
+      <nb-card-body>
+        <nb-form>
+         <div class="form-group">
+            <input
+              type="name"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="First Name"
+            />
+          </div>
+           <div class="form-group">
+            <input
+              type="name"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Last Name"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Email address"
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Password"
+            />
+          </div>
+        <div class="form-group">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div class="form-group">
+            <button nbButton fullWidth status="success">Register</button>
+          </div>
+          <nb-actions>
+            <nb-action>Already a member? Login</nb-action>
+          </nb-actions>
+        </nb-form>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>
