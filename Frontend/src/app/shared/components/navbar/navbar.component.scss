@@ -7,8 +7,9 @@
 .nav {
   background-color: #232d9a !important;
 }
- 
- 
+
+
+
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
     #mobile{
@@ -17,11 +18,9 @@
     #desktop{
         display: inline;
         min-width: 100%;
-        overflow: hidden;
     }
 }
- 
+
 /* Media query for desktop viewport targets screens a minimum width of 830px. */
 @media only screen and (min-width: 830px) {
 }
- 
