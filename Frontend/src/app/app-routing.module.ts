@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
-import { ProfileComponent } from './shared/components/profile/profile.component';
+import { ProfileComponent } from './dashboard/pages/profile/profile.component';
 
 
 const routes: Routes = [
@@ -20,10 +20,10 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'shared',
+    path: 'dashboard',
     children: [
       {
-        path: 'components',
+        path: 'pages',
         children: [
           {
             path: 'profile',
