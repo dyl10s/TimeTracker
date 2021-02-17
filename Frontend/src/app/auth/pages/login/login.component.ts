@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   });
 
   error: string;
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthApiService,
@@ -27,8 +28,11 @@ export class LoginComponent implements OnInit {
   }
 
   login(loginForm: any) {
+    this.error = '';
+    this.isLoading = true;
     if(!loginForm.email || !loginForm.password){
       this.error = "Please enter email and password.";
+      this.isLoading = false;
       return;
     } 
 
@@ -46,6 +50,10 @@ export class LoginComponent implements OnInit {
         this.loginForm.controls['password'].reset();
         this.error = response.message;
       }
+      this.isLoading = false;
+    }, (error: any) => {
+      this.error = 'API Not Connected.';
+      this.isLoading = false;
     });
   }
 

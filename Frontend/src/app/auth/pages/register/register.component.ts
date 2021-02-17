@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   });
 
   error: string;
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthApiService,
@@ -31,12 +32,15 @@ export class RegisterComponent implements OnInit {
   }
 
   register(registerForm: any) {
+    this.error = '';
+    this.isLoading = true;
     if(!registerForm.firstName || 
       !registerForm.lastName || 
       !registerForm.email || 
       !registerForm.password ||
       !registerForm.confirmPassword){
       this.error = "Please enter all fields.";
+      this.isLoading = false;
       return;
     } 
 
@@ -51,6 +55,10 @@ export class RegisterComponent implements OnInit {
       } else {
         this.error = response.message;
       }
+      this.isLoading = false;
+    }, (error: any) => {
+      this.error = 'API Not Connected.';
+      this.isLoading = false;
     });
   }
 

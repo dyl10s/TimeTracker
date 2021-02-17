@@ -60,7 +60,16 @@
           <p class="error" *ngIf="error">{{ error }}</p>
           
           <div class="form-group">
-            <button nbButton fullWidth status="success" (click)="register(registerForm.value)">Register</button>
+            <button 
+              nbButton 
+              fullWidth 
+              status="success" 
+              (click)="register(registerForm.value)"
+              [nbSpinner]="isLoading"
+              [disabled]="isLoading"
+              nbSpinnerStatus="danger">
+              Register
+          </button>
           </div>
           <nb-actions>
             <nb-action>Already a member? <span class="clickable" routerLink="/auth/login">Login</span></nb-action>
