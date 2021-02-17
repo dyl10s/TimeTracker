@@ -10,9 +10,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
+import { JwtModule } from '@auth0/angular-jwt';
 
-
-
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -36,8 +38,12 @@ import { RegisterComponent } from './auth/pages/register/register.component';
     NbTabsetModule,
     NbRouteTabsetModule,
     NbInputModule,
-    NbCardModule
-
+    NbCardModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    }),
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 

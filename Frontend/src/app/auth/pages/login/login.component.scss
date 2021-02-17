@@ -5,9 +5,14 @@
 .form-group {
     padding: 10px;
 }
+
 .login-container {
     margin: auto;
     text-align: center;  
+}
+
+.error {
+    color: red;
 }
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */

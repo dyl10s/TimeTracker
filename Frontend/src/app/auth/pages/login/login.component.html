@@ -4,7 +4,7 @@
         <h4 class="text-black">Login</h4>
       </nb-card-header>
 
-      <nb-card-body>
+      <nb-card-body [formGroup]="loginForm">
           <div class="form-group">
             <input
               type="email"
@@ -12,6 +12,7 @@
               fullWidth
               status="primary"
               placeholder="Email address"
+              formControlName="email"
             />
           </div>
 
@@ -22,13 +23,17 @@
               fullWidth
               status="primary"
               placeholder="Password"
+              formControlName="password"
             />
           </div>
+
+          <p class="error" *ngIf="error">{{ error }}</p>
+
           <div class="form-group">
-            <button nbButton fullWidth status="success">Login</button>
+            <button nbButton fullWidth status="success" (click)="login(loginForm.value)">Login</button>
           </div>
           <nb-actions>
-            <nb-action>Not a member? Register</nb-action>
+            <nb-action>Not a member? <span class="clickable" routerLink="/auth/register">Register</span></nb-action>
           </nb-actions>
       </nb-card-body>
     </nb-card>
