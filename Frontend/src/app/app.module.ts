@@ -4,16 +4,18 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { ProfileComponent } from './dashboard/pages/profile/profile.component';
+import { JwtModule } from '@auth0/angular-jwt';
 
-
-
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { ProfileComponent } from './dashboard/pages/profile/profile.component';
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
+    NbIconModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -38,8 +41,13 @@ import { ProfileComponent } from './dashboard/pages/profile/profile.component';
     NbTabsetModule,
     NbRouteTabsetModule,
     NbInputModule,
-    NbCardModule
-
+    NbCardModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    }),
+    NbSpinnerModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 
