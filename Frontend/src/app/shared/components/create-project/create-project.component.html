@@ -81,7 +81,11 @@
             <label for="notes">Notes</label>
           </div>
           <div class="col-75">
-            <textarea nbInput id="notes" placeholder="Notes (optional)"></textarea>
+            <textarea
+              nbInput
+              id="notes"
+              placeholder="Notes (optional)"
+            ></textarea>
           </div>
         </nb-card-body>
       </div>
@@ -89,12 +93,14 @@
 
     <div class="line">
       <div class="row">
-        <div class="col-25">
-          <button nbButton status="success">Save Project</button>
-        </div>
-        <div class="col-25">
-          <button nbButton outline status="basic">Cancel</button>
-        </div>
+        <nb-card-body>
+          <div class="col-25">
+            <button nbButton status="success">Save Project</button>
+          </div>
+          <div class="col-25">
+            <button nbButton outline status="basic">Cancel</button>
+          </div>
+        </nb-card-body>
       </div>
     </div>
   </div>

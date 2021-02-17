@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
+import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,20 @@ const routes: Routes = [
       {
         path: 'register',
         component: RegisterComponent
+      },
+    ]
+  },
+  {
+    path: 'shared',
+    children: [
+      {
+        path: 'components',
+        children: [
+          {
+            path: 'create-project',
+            component: CreateProjectComponent
+          },
+        ]
       },
     ]
   },
