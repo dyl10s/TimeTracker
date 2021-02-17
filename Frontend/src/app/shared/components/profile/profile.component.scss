@@ -73,7 +73,6 @@ button {
 
   button {
     width: unset;
-    margin: 10px;
   }
 
   /* Floating column for labels: 25% width */
@@ -98,16 +97,6 @@ button {
     padding: 10px;
   }
 
-  .sidebar {
-    padding: 10px;
-    width: 20%;
-  }
-
-  .menu {
-    display: inline-block !important;
-    padding: 12px;
-    max-width: max-content;
-  }
 }
 
 /* Media query for desktop viewport targets screens a minimum width of 830px. */

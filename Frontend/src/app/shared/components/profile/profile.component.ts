@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NbSidebarService } from '@nebular/theme';
-import { NbMenuItem } from '@nebular/theme';
 
 
 @Component({
@@ -10,27 +8,9 @@ import { NbMenuItem } from '@nebular/theme';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private sidebarService: NbSidebarService) {
+  constructor() {
   }
 
   ngOnInit(): void {
   }
-
-  toggle() {
-    this.sidebarService.toggle(true);
-    return false;
-  }
-
-  items: NbMenuItem[] = [
-    {
-      title: 'Basic Info',
-    },
-    {
-      title: 'Projects',
-    },
-    {
-      title: 'Notifications',
-    }
-  ];
-
 }
