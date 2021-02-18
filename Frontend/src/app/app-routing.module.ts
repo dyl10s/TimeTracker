@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LogoutComponent } from './views/auth/logout/logout.component';
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
+import { ProfileComponent } from './dashboard/pages/profile/profile.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -24,6 +25,15 @@ const routes: Routes = [
   {
     path: 'logout',
     component: LogoutComponent
+  },
+  {
+    path: 'dashboard',
+    children: [
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+    ]
   },
   {
     path: '**',
