@@ -141,14 +141,13 @@ namespace TimeTracker.Api.Controllers
                 };
 
                 // check if the user registered with an invite code, if they did, add them to a project
-                if(registerData.InviteCode != null && !registerData.InviteCode.SequenceEqual("")) {
+                if(String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
                         .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
                     if(project != null) {
                         newUser.Projects.Add(project);
-                        project.Students.Add(newUser);
                     }
 
                 }
