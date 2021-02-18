@@ -3,7 +3,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
-import { JwtService } from '../../../core/services/auth/jwt.service';
 
 @Component({
   selector: 'app-register',

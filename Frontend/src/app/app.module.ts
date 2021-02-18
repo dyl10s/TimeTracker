@@ -1,17 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { ProfileComponent } from './dashboard/pages/profile/profile.component';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
+
 import { JwtModule } from '@auth0/angular-jwt';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+import { LoginComponent } from './views/auth/login/login.component';
+import { RegisterComponent } from './views/auth/register/register.component';
+
+import { AuthGuard } from './core/guards/auth.guard';
+import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
+
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -25,6 +37,7 @@ export function tokenGetter() {
     ProfileComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -49,9 +62,16 @@ export function tokenGetter() {
     }),
     NbSpinnerModule
   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-
+  schemas: [ 
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
   providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
