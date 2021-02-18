@@ -9,7 +9,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 const routes: Routes = [
   {
     path: 'auth',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     data: { isAuth: true },
     children: [
       {
@@ -28,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'profile',
@@ -43,7 +43,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-      imports: [RouterModule.forRoot(routes)],
-      exports: [RouterModule]
-    })
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
 export class AppRoutingModule { }
