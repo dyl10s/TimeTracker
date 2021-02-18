@@ -1,6 +1,8 @@
 
 .container {
     min-width: 100%! important;
+    padding: unset! important;
+    overflow: hidden;
 }
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */

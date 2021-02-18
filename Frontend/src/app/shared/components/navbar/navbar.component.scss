@@ -1,27 +1,47 @@
-#mobile{
-    display: inline;
+#mobile {
+  display: inline;
 }
-#desktop{
-    display: none;
+#desktop {
+  display: none;
 }
 .nav {
   background-color: #232d9a !important;
+  padding: 10px 10px 0px 10px;
 }
 
+::ng-deep .nb-theme-default nb-tabset .tab.active .tab-link {
+  color: #ffffff;
+  outline: unset;
+  -webkit-tap-highlight-color: transparent;
+}
+::ng-deep .nb-theme-default nb-tabset .tab-link {
+  width: 100%;
+  color: #ffffff;
+  outline: unset;
+}
 
+::ng-deep .nb-theme-default nb-tabset .tabset {
+  border-bottom: unset;
+}
+
+::ng-deep .nb-theme-default nb-menu .menu-item a {
+  color: white;
+}
 
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-    #mobile{
-        display: none;
-    }
-    #desktop{
-        display: inline;
-        min-width: 100%;
-    }
+  #mobile {
+    display: none;
+  }
+
+  #desktop {
+    display: inline;
+    min-width: 100%;
+  }
 }
 
 /* Media query for desktop viewport targets screens a minimum width of 830px. */
 @media only screen and (min-width: 830px) {
+    
 }

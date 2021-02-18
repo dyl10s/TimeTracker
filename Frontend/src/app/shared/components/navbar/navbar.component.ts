@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
 
+
 @Component({
   selector: 'app-navbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,16 +11,18 @@ import { NbMenuItem } from '@nebular/theme';
   :host nb-tab {
     padding: 1.25rem;
   }
+  :host nb-tabset nav li {
+    color: white;
+  }
 `],
 
 })
 
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   deskItems: NbMenuItem[] = [
     {
