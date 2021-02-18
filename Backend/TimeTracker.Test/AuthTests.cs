@@ -98,7 +98,6 @@ namespace TimeTracker.Test
                 .FirstOrDefaultAsync(u => u.Id == registerResponse.Data);
 
             
-            System.Console.Write(project.Students.Count);
             Assert.IsTrue(project.Students.Count == 1);
             Assert.IsTrue(user.Projects.Count == 1);
             Assert.IsTrue(project.Students[0].Id == user.Id);
