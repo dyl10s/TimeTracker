@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TimeTracker.Api.Database.Models
@@ -9,6 +10,7 @@ namespace TimeTracker.Api.Database.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [JsonIgnore]
         public Project Project { get; set;}
     }
 }

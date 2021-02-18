@@ -72,6 +72,7 @@ namespace Backend
             }
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseHttpsRedirection();
 
