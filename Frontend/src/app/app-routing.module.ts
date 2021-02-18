@@ -23,13 +23,8 @@ const routes: Routes = [
     path: 'dashboard',
     children: [
       {
-        path: 'pages',
-        children: [
-          {
-            path: 'profile',
-            component: ProfileComponent
-          },
-        ]
+        path: 'profile',
+        component: ProfileComponent
       },
     ]
   },
