@@ -9,6 +9,7 @@ using TimeTracker.Api.Database;
 using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using System.Collections.Generic;
 
 namespace TimeTracker.Api.Controllers
 {
@@ -135,8 +136,22 @@ namespace TimeTracker.Api.Controllers
                     CreatedTime = DateTime.UtcNow,
                     Email = registerData.Email,
                     Password = authHelper.GetPasswordHash(registerData.Password, configuration),
-                    Name = registerData.Name
+                    Name = registerData.Name,
+                    Projects = new List<Project>()
                 };
+
+                // check if the user registered with an invite code, if they did, add them to a project
+                if(registerData.InviteCode != null && !registerData.InviteCode.SequenceEqual("")) {
+
+                    Project project = await database.Projects
+                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
+
+                    if(project != null) {
+                        newUser.Projects.Add(project);
+                        project.Students.Add(newUser);
+                    }
+
+                }
 
                 await database.AddAsync(newUser);
                 await database.SaveChangesAsync();
