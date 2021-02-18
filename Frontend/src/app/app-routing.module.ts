@@ -28,6 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [ AuthGuard ],
     children: [
       {
         path: 'profile',
