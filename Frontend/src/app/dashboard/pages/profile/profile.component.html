@@ -1,249 +1,122 @@
-<div class="desktop">
-  <div class="container">
-    <nb-layout-column class="">
-      <nb-layout-header class="header">
-        <h4>Basic Info</h4>
-      </nb-layout-header>
+<div class="container">
+  <nb-layout-column class="">
+    <nb-layout-header class="header">
+      <h4>Basic Info</h4>
+    </nb-layout-header>
 
-      <div class="line">
-        <div class="row">
-          <nb-card-body class="form">
-            <div class="col-25">
-              <label for="firstName">First Name</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="text"
-                id="firstName"
-                nbInput
-                placeholder="(user info here)"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body class="form">
-            <div class="col-25">
-              <label for="lastName">Last Name</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="text"
-                id="lastName"
-                nbInput
-                placeholder="(user info here)"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body class="form">
-            <div class="col-25">
-              <label for="email">Email</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="email"
-                id="email"
-                nbInput
-                placeholder="(user info here)"
-                disabled
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="success">Update Info</button>
-            </div>
-          </nb-card-body>
-        </div>
+    <div class="line">
+      <div class="row">
+        <nb-card-body class="form">
+          <div class="col-25">
+            <label for="firstName">First Name</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="text"
+              id="firstName"
+              nbInput
+              placeholder="(user info here)"
+            />
+          </div>
+        </nb-card-body>
       </div>
 
-      <div class="line">
-        <div class="row">
-          <nb-card-body>
-            <div class="col-75">
-              <label>Change your password.</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="Current Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="New Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="Verify New Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="control">Change Password</button>
-            </div>
-          </nb-card-body>
-        </div>
+      <div class="row">
+        <nb-card-body class="form">
+          <div class="col-25">
+            <label for="lastName">Last Name</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="text"
+              id="lastName"
+              nbInput
+              placeholder="(user info here)"
+            />
+          </div>
+        </nb-card-body>
       </div>
 
-      <div class="line">
-      </div>
-    </nb-layout-column>
-  </div>
-</div>
-
-<div class="mobile">
-  <nb-layout-header class="header">
-    <h4>Basic Info</h4>
-  </nb-layout-header>
-  <div class="container">
-    <nb-layout-column>
-      <div class="line">
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <label for="firstName">First Name</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="text"
-                id="firstName"
-                nbInput
-                placeholder="(user info here)"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <label for="lastName">Last Name</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="text"
-                id="lastName"
-                nbInput
-                placeholder="(user info here)"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <label for="email">Email</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="email"
-                id="email"
-                nbInput
-                placeholder="(user info here)"
-                disabled
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="success">Update Info</button>
-            </div>
-          </nb-card-body>
-        </div>
+      <div class="row">
+        <nb-card-body class="form">
+          <div class="col-25">
+            <label for="email">Email</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="email"
+              id="email"
+              nbInput
+              placeholder="(user info here)"
+              disabled
+            />
+          </div>
+        </nb-card-body>
       </div>
 
-      <div class="line">
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <label>Change your password.</label>
-            </div>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="Current Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <button nbButton status="success">Update Info</button>
+          </div>
+        </nb-card-body>
+      </div>
+    </div>
 
-        <div class="row">
-          <nb-card-body>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="New Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-
-        <div class="row">
-          <nb-card-body>
-            <div class="col-75">
-              <input
-                type="password"
-                nbInput
-                fullWidth
-                status="primary"
-                placeholder="Verify New Password"
-              />
-            </div>
-          </nb-card-body>
-        </div>
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="control">Change Password</button>
-            </div>
-          </nb-card-body>
-        </div>
+    <div class="line">
+      <div class="row">
+        <nb-card-body>
+          <div class="col-75">
+            <label>Change your password.</label>
+          </div>
+          <div class="col-75">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Current Password"
+            />
+          </div>
+        </nb-card-body>
       </div>
 
-      <div class="line"></div>
-    </nb-layout-column>
-  </div>
+      <div class="row">
+        <nb-card-body>
+          <div class="col-75">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="New Password"
+            />
+          </div>
+        </nb-card-body>
+      </div>
+
+      <div class="row">
+        <nb-card-body>
+          <div class="col-75">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Verify New Password"
+            />
+          </div>
+        </nb-card-body>
+      </div>
+      <div class="row">
+        <nb-card-body>
+          <div class="col-25">
+            <button nbButton status="control">Change Password</button>
+          </div>
+        </nb-card-body>
+      </div>
+    </div>
+
+    <div class="line"></div>
+  </nb-layout-column>
 </div>

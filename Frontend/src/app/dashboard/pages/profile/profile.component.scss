@@ -1,9 +1,3 @@
-.mobile {
-  display: inline;
-}
-.desktop {
-  display: none;
-}
 
 .line {
   border-top: 1px solid black;
@@ -59,13 +53,7 @@ button {
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-  .mobile {
-    display: none;
-  }
-  .desktop {
-    display: inline;
-  }
-
+  
   .colored-column-success {
     background-color: white;
   }
