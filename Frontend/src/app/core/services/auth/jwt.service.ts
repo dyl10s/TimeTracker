@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { PayloadDTO } from '../../models/auth/PayloadDto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class JwtService {
     localStorage.setItem('refreshToken', refresh);
   }
 
-  public decode(){
+  public decode(): PayloadDTO {
     try{
       return this.jwtHelper.decodeToken(localStorage.getItem('accessToken'));
     } catch {

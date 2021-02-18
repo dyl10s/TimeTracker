@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './auth/pages/login/login.component';
-import { RegisterComponent } from './auth/pages/register/register.component';
-
+import { LogoutComponent } from './views/auth/logout/logout.component';
+import { LoginComponent } from './views/auth/login/login.component';
+import { RegisterComponent } from './views/auth/register/register.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'auth',
+    canActivate: [ AuthGuard ],
+    data: { isAuth: true },
     children: [
       {
         path: 'login',
@@ -17,6 +20,10 @@ const routes: Routes = [
         component: RegisterComponent
       },
     ]
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent
   },
   {
     path: '**',
