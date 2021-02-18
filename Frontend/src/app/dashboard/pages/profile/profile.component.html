@@ -1,7 +1,9 @@
 <div class="desktop">
   <div class="container">
     <nb-layout-column class="">
-      <h2>Basic Info</h2>
+      <nb-layout-header class="header">
+        <h4>Basic Info</h4>
+      </nb-layout-header>
 
       <div class="line">
         <div class="row">
@@ -49,6 +51,14 @@
                 placeholder="(user info here)"
                 disabled
               />
+            </div>
+          </nb-card-body>
+        </div>
+
+        <div class="row">
+          <nb-card-body>
+            <div class="col-25">
+              <button nbButton status="success">Update Info</button>
             </div>
           </nb-card-body>
         </div>
@@ -102,28 +112,20 @@
         <div class="row">
           <nb-card-body>
             <div class="col-25">
-              <button nbButton status="basic">Change Password</button>
+              <button nbButton status="control">Change Password</button>
             </div>
           </nb-card-body>
         </div>
       </div>
 
       <div class="line">
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="success">Update Info</button>
-            </div>
-          </nb-card-body>
-        </div>
       </div>
     </nb-layout-column>
   </div>
 </div>
 
-
 <div class="mobile">
-  <nb-layout-header>
+  <nb-layout-header class="header">
     <h4>Basic Info</h4>
   </nb-layout-header>
   <div class="container">
@@ -177,6 +179,14 @@
             </div>
           </nb-card-body>
         </div>
+
+        <div class="row">
+          <nb-card-body>
+            <div class="col-25">
+              <button nbButton status="success">Update Info</button>
+            </div>
+          </nb-card-body>
+        </div>
       </div>
 
       <div class="line">
@@ -227,21 +237,13 @@
         <div class="row">
           <nb-card-body>
             <div class="col-25">
-              <button nbButton status="basic">Change Password</button>
+              <button nbButton status="control">Change Password</button>
             </div>
           </nb-card-body>
         </div>
       </div>
 
-      <div class="line">
-        <div class="row">
-          <nb-card-body>
-            <div class="col-25">
-              <button nbButton status="success">Update Info</button>
-            </div>
-          </nb-card-body>
-        </div>
-      </div>
+      <div class="line"></div>
     </nb-layout-column>
   </div>
 </div>
