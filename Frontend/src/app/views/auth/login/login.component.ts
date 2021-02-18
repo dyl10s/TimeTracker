@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 import { JwtService } from '../../../core/services/auth/jwt.service';
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthApiService,
-    private JwtService: JwtService
+    private JwtService: JwtService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit {
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
   
         // TODO: Remove alert and route to dashboard
-        alert(`You have been logged in as ${this.JwtService.decode().given_name}!`);
+        this.router.navigate(['/protected']);
       } else {
         this.loginForm.controls['password'].reset();
         this.error = response.message;
