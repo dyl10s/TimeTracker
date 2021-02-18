@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
 
     if(isAuth && this.jwtService.isAuthenticated()){
       // logged in true and isAuth
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard/profile']);
       return false;
     }
     

@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
   
         // TODO: Remove alert and route to dashboard
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard/profile']);
       } else {
         this.loginForm.controls['password'].reset();
         this.error = response.message;
