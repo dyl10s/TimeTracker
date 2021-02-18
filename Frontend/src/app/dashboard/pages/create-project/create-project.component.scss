@@ -12,7 +12,8 @@
   
   input[type="text"],
   input[type="number"],
-  textarea {
+  textarea,
+  button {
     width: 100%;
     padding: 12px;
     border: 1px solid gray !important;
@@ -38,9 +39,8 @@
   
   .container {
     border-radius: 5px;
-    background-color: white;
+    background-color: transparent;
     padding: 0px 20px 20px 20px;
-    height: 100%;
   }
   
   .col-25,
@@ -60,6 +60,11 @@
     margin-top: 13px !important;
     margin-bottom: 5px !important;
   }
+  
+  .header {
+    background-color: transparent;
+  }
+   
   
   /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
   @media only screen and (min-width: 660px) {
