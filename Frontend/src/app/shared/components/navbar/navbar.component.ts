@@ -1,28 +1,30 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
 
-
 @Component({
   selector: 'app-navbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  styles: [`
-  :host nb-tab {
-    padding: 1.25rem;
-  }
-  :host nb-tabset nav li {
-    color: white;
-  }
-`],
-
 })
 
 export class NavbarComponent implements OnInit {
 
+  isMenuOpen: boolean = false;
+
   constructor() {}
 
   ngOnInit(): void {}
+  
+  changeTab(event){
+    switch(event.tabTitle) {
+      case('Name'): 
+        this.isMenuOpen = !this.isMenuOpen;
+        break;
+      default:
+        break;
+    };
+  }
 
   deskItems: NbMenuItem[] = [
     {

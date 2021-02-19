@@ -9,6 +9,13 @@
   padding: 10px 10px 0px 10px;
 }
 
+:host nb-tab {
+  padding: 1.25rem;
+}
+:host nb-tabset nav li {
+  color: white;
+}
+
 ::ng-deep .nb-theme-default nb-tabset .tab.active .tab-link {
   color: #ffffff;
   outline: unset;
