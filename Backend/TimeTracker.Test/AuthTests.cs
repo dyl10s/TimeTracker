@@ -66,7 +66,7 @@ namespace TimeTracker.Test
         }
 
         [TestMethod]
-        public async Task CreateTestUser_WithInviteCode()
+        public async Task CreateTestUserWithInviteCode()
         {
             
             await TestAuthHelpers.LogInUser(database, configuration, projectController);
@@ -81,6 +81,7 @@ namespace TimeTracker.Test
 
             int projectID = createProjectResponse.Data;
             Project project = await database.Projects
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == projectID);
             string projectInviteCode = project.InviteCode;
 
@@ -95,14 +96,11 @@ namespace TimeTracker.Test
             Assert.IsTrue(registerResponse.Success);
 
             User user = await database.Users
+                .Include(x => x.Projects)
                 .FirstOrDefaultAsync(u => u.Id == registerResponse.Data);
 
-            
-            Assert.IsTrue(project.Students.Count == 1);
             Assert.IsTrue(user.Projects.Count == 1);
-            Assert.IsTrue(project.Students[0].Id == user.Id);
             Assert.IsTrue(user.Projects[0].Id == project.Id);
-            
         }
     
         [TestMethod]

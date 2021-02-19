@@ -140,11 +140,12 @@ namespace TimeTracker.Api.Controllers
                     Projects = new List<Project>()
                 };
 
+                await database.AddAsync(newUser);
+
                 // check if the user registered with an invite code, if they did, add them to a project
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
-                        .AsNoTracking()
                         .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
                     if(project != null) {
@@ -153,7 +154,6 @@ namespace TimeTracker.Api.Controllers
 
                 }
 
-                await database.AddAsync(newUser);
                 await database.SaveChangesAsync();
 
                 return new GenericResponseDTO<int>() 
