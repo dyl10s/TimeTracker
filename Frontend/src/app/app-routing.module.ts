@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { CreateProjectComponent } from './dashboard/pages/create-project/create-project.component';
+import { ProjectsComponent } from './dashboard/pages/projects/projects.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
           {
             path: 'create-project',
             component: CreateProjectComponent
+          },
+          {
+            path: 'projects',
+            component: ProjectsComponent
           },
         ]
       },

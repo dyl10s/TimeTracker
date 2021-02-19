@@ -10,9 +10,6 @@
     margin-bottom: 20px !important;
   }
   
-  input[type="text"],
-  input[type="number"],
-  textarea,
   button {
     width: 100%;
     padding: 12px;
@@ -20,18 +17,7 @@
     resize: vertical;
   }
   
-  input[type="date"] {
-    padding: 12px;
-    border: 1px solid gray !important;
-    resize: vertical;
-  }
-  
-  input:focus,
-  textarea:focus {
-    border: 2px solid black !important;
-    border-radius: 4px;
-  }
-  
+
   label {
     padding: 10px 10px 10px 5px;
     display: inline-block;
@@ -39,6 +25,7 @@
   
   .container {
     border-radius: 5px;
+    background-color: transparent;
     padding: 0px 20px 20px 20px;
   }
   
@@ -59,7 +46,18 @@
     margin-top: 13px !important;
     margin-bottom: 5px !important;
   }
+  
+  ::ng-deep .nb-theme-default nb-layout-header {
+    background-color: transparent! important;
 
+  }
+
+  ::ng-deep .nb-theme-default nb-layout-header nav {
+    box-shadow: unset! important;
+
+  }
+   
+  
   /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
   @media only screen and (min-width: 660px) {
     .mobile {
