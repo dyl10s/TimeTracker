@@ -144,10 +144,11 @@ namespace TimeTracker.Api.Controllers
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
+                        .AsNoTracking()
                         .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
                     if(project != null) {
-                        project.Students.Add(newUser);
+                        newUser.Projects.Add(project);
                     }
 
                 }
