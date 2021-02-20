@@ -64,6 +64,24 @@
       </div>
     </div>
 
+    <h3>Projects</h3>
+    <div class="line">
+      <span *ngIf="getProjects()?.length < 1">
+        <div class="row">
+          <nb-card-body>
+            <p>You're currently not part of any projects.</p>
+          </nb-card-body>
+        </div>
+      </span>
+      <span *ngFor="let project of getProjects();">
+        <div class="row">
+          <nb-card-body>
+            <p>{{project}}</p>
+          </nb-card-body>
+        </div>
+      </span>  
+    </div>
+
     <div class="line">
       <div class="row">
         <nb-card-body>
