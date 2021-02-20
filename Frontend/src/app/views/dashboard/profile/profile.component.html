@@ -14,7 +14,8 @@
               id="firstName"
               nbInput
               placeholder="First Name"
-              [value]="getFirstName()"
+              [value]="firstName"
+              [disabled]="userInfoLoading"
             />
           </div>
         </nb-card-body>
@@ -31,7 +32,8 @@
               id="lastName"
               nbInput
               placeholder="Last Name"
-              [value]="getLastName()"
+              [value]="lastName"
+              [disabled]="userInfoLoading"
             />
           </div>
         </nb-card-body>
@@ -49,7 +51,7 @@
               nbInput
               placeholder="Email"
               disabled
-              [value]="getEmailAddress()"
+              [value]="emailAddress"
             />
           </div>
         </nb-card-body>
@@ -58,22 +60,30 @@
       <div class="row">
         <nb-card-body>
           <div class="col-25">
-            <button nbButton status="success">Update Info</button>
+            <button nbButton status="success" [nbSpinner]="userInfoLoading">Update Info</button>
           </div>
         </nb-card-body>
       </div>
     </div>
 
+    <span *ngIf="userInfoError">
+      <div class="row">
+        <nb-card-body>
+          {{userInfoError}}
+        </nb-card-body>
+      </div>
+    </span>
+
     <h3>Projects</h3>
-    <div class="line">
-      <span *ngIf="getProjects()?.length < 1">
+    <div class="line" [nbSpinner]="userInfoLoading">
+      <span *ngIf="projects.length < 1">
         <div class="row">
           <nb-card-body>
             <p>You're currently not part of any projects.</p>
           </nb-card-body>
         </div>
       </span>
-      <span *ngFor="let project of getProjects();">
+      <span *ngFor="let project of projects;">
         <div class="row">
           <nb-card-body>
             <p>{{project}}</p>
@@ -82,7 +92,7 @@
       </span>  
     </div>
 
-    <div class="line">
+    <div class="line" [formGroup]="setPasswordForm">
       <div class="row">
         <nb-card-body>
           <h4>Change Password</h4>
@@ -93,6 +103,7 @@
               fullWidth
               status="primary"
               placeholder="Current Password"
+              formControlName="currentPassword"
             />
           </div>
         </nb-card-body>
@@ -107,6 +118,8 @@
               fullWidth
               status="primary"
               placeholder="New Password"
+              formControlName="newPassword"
+              [disabled]="passwordInfoLoading"
             />
           </div>
         </nb-card-body>
@@ -121,17 +134,33 @@
               fullWidth
               status="primary"
               placeholder="Verify New Password"
+              formControlName="newPasswordVerification"
             />
           </div>
         </nb-card-body>
       </div>
+
       <div class="row">
         <nb-card-body>
           <div class="col-25">
-            <button nbButton status="control">Change Password</button>
+            <button
+              nbButton
+              status="control"
+              (click)="setPassword(setPasswordForm)"
+              [disabled]="passwordInfoLoading"
+              [nbSpinner]="passwordInfoLoading">
+              Change Password
+            </button>
           </div>
         </nb-card-body>
       </div>
+
+        <div class="row">
+          <nb-card-body>
+            {{passwordUpdateStatus}}
+          </nb-card-body>
+        </div>
+
     </div>
   </nb-layout-column>
 </div>

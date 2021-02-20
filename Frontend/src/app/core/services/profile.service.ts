@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProfileDTO } from '../models/ProfileDTO.model';
-import { GenericResponseDTO } from '../models/GenericResponseDTO.model';
 import { environment } from '../../../environments/environment';
+import { PasswordChangeDTO } from '../models/PasswordChangeDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,10 @@ export class ProfileService {
 
   public getProfileInfo() {
     return this.http.get(`${this.api}/Profile`);
+  }
+
+  public setPassword(updatePasswordInfo: PasswordChangeDTO) {
+    return this.http.post(`${this.api}/SetPassword`, updatePasswordInfo);
   }
 
 }
