@@ -14,6 +14,7 @@
               id="firstName"
               nbInput
               placeholder="First Name"
+              [value]="getFirstName()"
             />
           </div>
         </nb-card-body>
@@ -30,6 +31,7 @@
               id="lastName"
               nbInput
               placeholder="Last Name"
+              [value]="getLastName()"
             />
           </div>
         </nb-card-body>
@@ -47,6 +49,7 @@
               nbInput
               placeholder="Email"
               disabled
+              [value]="getEmailAddress()"
             />
           </div>
         </nb-card-body>
