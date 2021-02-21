@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CreateProjectComponent } from './dashboard/pages/create-project/create-project.component';
-import { ProjectsComponent } from './dashboard/pages/projects/projects.component';
+import { ProjectsComponent } from './views/dashboard/projects/projects.component';
 
 import { LogoutComponent } from './views/auth/logout/logout.component';
 import { LoginComponent } from './views/auth/login/login.component';
@@ -26,6 +25,10 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'projects',
+    component: ProjectsComponent
+  },
+  {
     path: 'logout',
     component: LogoutComponent
   },
@@ -36,11 +39,7 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
-      },
-      {
-        path: 'projects',
-        component: ProjectsComponent
-      },
+      }
     ]
   },
   {

@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbDialogService } from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-Jwt';
 
 
@@ -18,11 +18,11 @@ import { RegisterComponent } from './views/auth/register/register.component';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
-import { ProjectsComponent } from './dashboard/pages/projects/projects.component';
-import { CreateProjectComponent } from './dashboard/pages/create-project/create-project.component';
+import { ProjectsComponent } from './views/dashboard/projects/projects.component';
+import { CreateProjectComponent } from './views/dashboard/create-project/create-project.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 
 
@@ -65,7 +65,6 @@ export function tokenGetter() {
     MatInputModule,
     MatDialogModule,
 
-
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter
@@ -82,7 +81,12 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    }
+    },
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
+    NbDialogService
   ],
   bootstrap: [AppComponent],
   entryComponents: [CreateProjectComponent]
