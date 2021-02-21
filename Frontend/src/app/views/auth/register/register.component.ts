@@ -1,6 +1,7 @@
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 
@@ -16,7 +17,8 @@ export class RegisterComponent implements OnInit {
     lastName: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
-    confirmPassword: new FormControl('')
+    confirmPassword: new FormControl(''),
+    inviteCode: new FormControl('')
   });
 
   error: string;
@@ -24,10 +26,14 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private authService: AuthApiService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.registerForm.patchValue({
+      inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode')
+    });
   }
 
   register(registerForm: any) {
@@ -46,8 +52,9 @@ export class RegisterComponent implements OnInit {
     this.authService.register({ 
       Email: registerForm.email, 
       Password: registerForm.password, 
-      Name: `${registerForm.firstName.trim()} ${registerForm.lastName.trim()}` })
-    .subscribe((response: GenericResponseDTO) => {
+      Name: `${registerForm.firstName.trim()} ${registerForm.lastName.trim()}`,
+      InviteCode: registerForm.inviteCode
+    }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Registration
         this.router.navigate(['/auth/login']);
