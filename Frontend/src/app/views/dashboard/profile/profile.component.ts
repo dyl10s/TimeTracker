@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProfileService } from '../../../core/services/profile.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-profile',
@@ -33,7 +34,7 @@ export class ProfileComponent implements OnInit {
     email: new FormControl({value: '', disabled: true})
   });
 
-  constructor(private profileService: ProfileService) {
+  constructor(private profileService: ProfileService, private toastrService: NbToastrService) {
     this.profileService.getProfileInfo().subscribe(
       (httpResponse: GenericResponseDTO) => {
         let tokens: string[] = httpResponse.data.name.split(' ', 2);
@@ -43,7 +44,7 @@ export class ProfileComponent implements OnInit {
         this.projects = httpResponse.data.projects;
       },
       (error) => {
-        this.userInfoStatus = 'Server error encountered (' + error + ')';
+        this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
       },
       () => {
         this.updateNameForm.get('firstName').enable();
@@ -59,10 +60,10 @@ export class ProfileComponent implements OnInit {
        setPasswordForm.get('newPasswordVerification').value === '' ||
        setPasswordForm.get('currentPassword').value === ''         )
     {
-      this.passwordUpdateStatus = 'All fields are required.';
+      this.toastrService.show('', 'All password fields are required.', {status:'danger'});
     }
     else if(setPasswordForm.get('newPassword').value != setPasswordForm.get('newPasswordVerification').value) {
-      this.passwordUpdateStatus = 'New passwords do not match each other.';
+      this.toastrService.show('', 'New passwords do not match each other.', {status:'danger'});
     }
     else {
       setPasswordForm.disable();
@@ -75,12 +76,12 @@ export class ProfileComponent implements OnInit {
       ).subscribe(
         (response: GenericResponseDTO) => {
           if(response.success)
-            this.passwordUpdateStatus = 'Password was updated successfully.';
+            this.toastrService.show('', 'Password was updated successfully.', {status:'success'});
           else
-            this.passwordUpdateStatus = response.message;
+            this.toastrService.show('', response.message, {status:'danger'});
         },
         (error) => {
-          this.passwordUpdateStatus = 'Server error encountered (' + error + ')';
+          this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
         },
         () => {
           setPasswordForm.enable();
@@ -94,7 +95,7 @@ export class ProfileComponent implements OnInit {
     if(updateNameForm.get('firstName').value === '' || 
        updateNameForm.get('lastName').value === ''  )
     {
-      this.userInfoStatus = 'Both a first and last name is required.';
+      this.toastrService.show('', 'Both a first and last name are required.', {status:'danger'});
     }
     else{
       updateNameForm.get('firstName').disable();
@@ -106,12 +107,12 @@ export class ProfileComponent implements OnInit {
       }).subscribe(
         (response: GenericResponseDTO) => {
           if(response.success)
-            this.userInfoStatus = 'Name updated successfully.';
+            this.toastrService.show('', 'Name updated successfully.', {status:'success'});
           else 
-            this.userInfoStatus = response.message;
+            this.toastrService.show('' , response.message, {status:'warning'});
         },
         (error) => {
-          this.passwordUpdateStatus = 'Server error encountered (' + error + ')';
+          this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
         },
         () => {
           updateNameForm.get('firstName').enable();
