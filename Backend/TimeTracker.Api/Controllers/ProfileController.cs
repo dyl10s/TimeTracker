@@ -125,7 +125,7 @@ namespace TimeTracker.Api.Controllers {
 
             if(!currentUser.Password.SequenceEqual(authHelper.GetPasswordHash(passwordInfo.CurrentPassword, configuration))) {
                 return new GenericResponseDTO<int> {
-                    Message = "Verification password is incorrect.",
+                    Message = "Current password is incorrect.",
                     Success = false
                 };
             }
@@ -133,7 +133,7 @@ namespace TimeTracker.Api.Controllers {
             if(!authHelper.IsValidPassword(passwordInfo.NewPassword)) {
                 return new GenericResponseDTO<int> {
                     Success = false,
-                    Message = "Invalid password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters"
+                    Message = "Invalid new password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters."
                 };
             }
 
