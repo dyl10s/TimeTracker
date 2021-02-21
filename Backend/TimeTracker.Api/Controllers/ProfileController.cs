@@ -65,6 +65,39 @@ namespace TimeTracker.Api.Controllers {
 
         }
 
+
+        /// <summary>
+        /// Updates a users name
+        /// </summary>
+        /// <param name="updatedInformation"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<GenericResponseDTO<int>> UpdateUserProfile(ProfileUpdateDTO profileUpdateInfo)
+        {
+            int currentUserID;
+
+            try {
+                currentUserID = authHelper.GetCurrentUserId(User);
+            } catch(System.NullReferenceException) {
+                return new GenericResponseDTO<int> {
+                    Message = "Not logged in.",
+                    Success = false
+                };
+            }
+
+            User currentUser = await database.Users
+                .FirstOrDefaultAsync(user => user.Id == currentUserID);
+
+            currentUser.Name = profileUpdateInfo.FirstName + " " + profileUpdateInfo.LastName;
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>
+            {
+                Success = true,
+                Data = currentUser.Id
+            };
+        }
+
         [HttpPost]
         [Route("/SetPassword")]
         public async Task<GenericResponseDTO<int>> SetPassword(PasswordChangeDTO passwordInfo) {
