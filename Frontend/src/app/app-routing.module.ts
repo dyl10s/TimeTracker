@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ProjectsComponent } from './views/dashboard/projects/projects.component';
+
 import { LogoutComponent } from './views/auth/logout/logout.component';
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
@@ -33,6 +35,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
+      },
+      {
+        path: 'projects',
+        component: ProjectsComponent
       },
     ]
   },
