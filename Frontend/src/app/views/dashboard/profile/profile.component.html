@@ -2,7 +2,7 @@
   <nb-layout-column>
     <h3>Basic Info</h3>
 
-    <div class="line">
+    <div class="line" [formGroup]="updateNameForm">
       <div class="row">
         <nb-card-body class="form">
           <div class="col-25">
@@ -14,8 +14,7 @@
               id="firstName"
               nbInput
               placeholder="First Name"
-              [value]="firstName"
-              [disabled]="userInfoLoading"
+              formControlName="firstName"
             />
           </div>
         </nb-card-body>
@@ -32,8 +31,7 @@
               id="lastName"
               nbInput
               placeholder="Last Name"
-              [value]="lastName"
-              [disabled]="userInfoLoading"
+              formControlName="lastName"
             />
           </div>
         </nb-card-body>
@@ -50,8 +48,8 @@
               id="email"
               nbInput
               placeholder="Email"
-              disabled
               [value]="emailAddress"
+              formControlName="email"
             />
           </div>
         </nb-card-body>
@@ -60,22 +58,28 @@
       <div class="row">
         <nb-card-body>
           <div class="col-25">
-            <button nbButton status="success" [nbSpinner]="userInfoLoading">Update Info</button>
+            <button
+              nbButton
+              status="success"
+              [nbSpinner]="disableNameSubmitButton"
+              (click)="setName(updateNameForm)">
+              Update Info
+            </button>
           </div>
         </nb-card-body>
       </div>
     </div>
 
-    <span *ngIf="userInfoError">
+    <span *ngIf="userInfoStatus">
       <div class="row">
         <nb-card-body>
-          {{userInfoError}}
+          {{userInfoStatus}}
         </nb-card-body>
       </div>
     </span>
 
     <h3>Projects</h3>
-    <div class="line" [nbSpinner]="userInfoLoading">
+    <div class="line" [nbSpinner]="projectsLoading">
       <span *ngIf="projects.length < 1">
         <div class="row">
           <nb-card-body>
@@ -119,7 +123,6 @@
               status="primary"
               placeholder="New Password"
               formControlName="newPassword"
-              [disabled]="passwordInfoLoading"
             />
           </div>
         </nb-card-body>
@@ -147,8 +150,8 @@
               nbButton
               status="control"
               (click)="setPassword(setPasswordForm)"
-              [disabled]="passwordInfoLoading"
-              [nbSpinner]="passwordInfoLoading">
+              [disabled]="disablePasswordSubmitButton"
+              [nbSpinner]="disablePasswordSubmitButton">
               Change Password
             </button>
           </div>
