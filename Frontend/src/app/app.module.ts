@@ -21,13 +21,6 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
 import { ProjectsComponent } from './views/dashboard/projects/projects.component';
 import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-
-
-
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -64,10 +57,6 @@ export function tokenGetter() {
     NbRouteTabsetModule,
     NbInputModule,
     NbCardModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
     NbButtonGroupModule,
 
     JwtModule.forRoot({
@@ -90,10 +79,6 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    },
-    {
-      provide: MatDialogRef,
-      useValue: {}
     },
     NbDialogService
   ],
