@@ -25,10 +25,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'projects',
-    component: ProjectsComponent
-  },
-  {
     path: 'logout',
     component: LogoutComponent
   },
@@ -39,7 +35,11 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
-      }
+      },
+      {
+        path: 'projects',
+        component: ProjectsComponent
+      },
     ]
   },
   {
