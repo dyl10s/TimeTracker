@@ -3,6 +3,11 @@ using System.Threading.Tasks;
 using TimeTracker.Api.Controllers;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Api.Database.Models;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using TimeTracker.Test.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace TimeTracker.Test
 {
@@ -10,9 +15,17 @@ namespace TimeTracker.Test
     public class AuthTests : BaseTest
     {
         AuthController authController;
+        ProjectController projectController;
+        AuthHelper authHelper;
+        List<ControllerBase> controllers;
         public AuthTests()
         {
-            authController = new AuthController(database, configuration, new AuthHelper());
+            authHelper = new AuthHelper();
+            authController = new AuthController(database, configuration, authHelper);
+            projectController = new ProjectController(database, authHelper);
+            controllers = new List<ControllerBase>();
+            controllers.Add(authController);
+            controllers.Add(projectController);
         }
 
         [TestMethod]
@@ -50,6 +63,44 @@ namespace TimeTracker.Test
             });
 
             Assert.IsNotNull(refreshResults.Data);
+        }
+
+        [TestMethod]
+        public async Task CreateTestUserWithInviteCode()
+        {
+            
+            await TestAuthHelpers.LogInUser(database, configuration, projectController);
+
+            ProjectCreateDTO projectInfo = new ProjectCreateDTO {
+                ProjectName = "Soup Delivery Website",
+                ClientName = "Soup Delivery LLC"
+            };
+
+            GenericResponseDTO<int> createProjectResponse = await projectController.CreateProject(projectInfo);
+            Assert.IsTrue(createProjectResponse.Success);
+
+            int projectID = createProjectResponse.Data;
+            Project project = await database.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == projectID);
+            string projectInviteCode = project.InviteCode;
+
+            UserDTO registrationInfo = new UserDTO {
+                Email = "suzuya@321.org",
+                Password = "decentPassword7",
+                Name = "Suzuya",
+                InviteCode = projectInviteCode
+            };
+
+            GenericResponseDTO<int> registerResponse = await authController.Register(registrationInfo);
+            Assert.IsTrue(registerResponse.Success);
+
+            User user = await database.Users
+                .Include(x => x.Projects)
+                .FirstOrDefaultAsync(u => u.Id == registerResponse.Data);
+
+            Assert.IsTrue(user.Projects.Count == 1);
+            Assert.IsTrue(user.Projects[0].Id == project.Id);
         }
     
         [TestMethod]

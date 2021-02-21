@@ -9,6 +9,7 @@ using TimeTracker.Api.Database;
 using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using System.Collections.Generic;
 
 namespace TimeTracker.Api.Controllers
 {
@@ -32,7 +33,7 @@ namespace TimeTracker.Api.Controllers
         /// </summary>
         /// <param name="loginData">This holds the username and password of the attempted login</param>
         /// <returns>A response with an access key and a refresh key</returns>
-        [Route("/Login")]
+        [Route("Login")]
         [HttpPost]
         public async Task<GenericResponseDTO<AccessKeysDTO>> Login(UserDTO loginData)
         {
@@ -93,7 +94,7 @@ namespace TimeTracker.Api.Controllers
         /// </summary>
         /// <param name="registerData">This holds the registration information</param>
         /// <returns>The Id of the user that was created</returns>
-        [Route("/Register")]
+        [Route("Register")]
         [HttpPost]
         public async Task<GenericResponseDTO<int>> Register(UserDTO registerData)
         {
@@ -135,10 +136,24 @@ namespace TimeTracker.Api.Controllers
                     CreatedTime = DateTime.UtcNow,
                     Email = registerData.Email,
                     Password = authHelper.GetPasswordHash(registerData.Password, configuration),
-                    Name = registerData.Name
+                    Name = registerData.Name,
+                    Projects = new List<Project>()
                 };
 
                 await database.AddAsync(newUser);
+
+                // check if the user registered with an invite code, if they did, add them to a project
+                if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
+
+                    Project project = await database.Projects
+                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
+
+                    if(project != null) {
+                        newUser.Projects.Add(project);
+                    }
+
+                }
+
                 await database.SaveChangesAsync();
 
                 return new GenericResponseDTO<int>() 
@@ -162,7 +177,7 @@ namespace TimeTracker.Api.Controllers
         /// </summary>
         /// <param name="refreshData">The refresh token and the email of the user it belongs to.</param>
         /// <returns>A new access token as well as the same refresh token to be used again</returns>
-        [Route("/Refresh")]
+        [Route("Refresh")]
         [HttpPost]
         public async Task<GenericResponseDTO<AccessKeysDTO>> Refresh(RefreshDTO refreshData)
         {

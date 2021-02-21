@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './auth/pages/login/login.component';
-import { RegisterComponent } from './auth/pages/register/register.component';
 import { CreateProjectComponent } from './dashboard/pages/create-project/create-project.component';
 import { ProjectsComponent } from './dashboard/pages/projects/projects.component';
 
+import { LogoutComponent } from './views/auth/logout/logout.component';
+import { LoginComponent } from './views/auth/login/login.component';
+import { RegisterComponent } from './views/auth/register/register.component';
+import { ProfileComponent } from './views/dashboard/profile/profile.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'auth',
+    canActivate: [ AuthGuard ],
+    data: { isAuth: true },
     children: [
       {
         path: 'login',
@@ -21,20 +26,20 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'logout',
+    component: LogoutComponent
+  },
+  {
     path: 'dashboard',
+    canActivate: [ AuthGuard ],
     children: [
       {
-        path: 'pages',
-        children: [
-          {
-            path: 'create-project',
-            component: CreateProjectComponent
-          },
-          {
-            path: 'projects',
-            component: ProjectsComponent
-          },
-        ]
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'projects',
+        component: ProjectsComponent
       },
     ]
   },

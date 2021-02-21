@@ -152,10 +152,12 @@ namespace TimeTracker.Api.Controllers
 
             // Create the tags
             var tags = new List<Tag>();
-            newProject.Tags.ForEach(x => tags.Add(new Tag() 
-            {
-                Name = x
-            }));
+            if(newProject.Tags != null) {
+                newProject.Tags.ForEach(x => tags.Add(new Tag() 
+                {
+                    Name = x
+                }));
+            }
 
             // Create the new project object
             var project = new Project()
@@ -166,7 +168,8 @@ namespace TimeTracker.Api.Controllers
                 Name = newProject.ProjectName,
                 Teacher = currentUser,
                 InviteCode = Guid.NewGuid().ToString(),
-                Tags = tags
+                Tags = tags,
+                Students = new List<User>()
             };
 
             await database.AddAsync(project);
