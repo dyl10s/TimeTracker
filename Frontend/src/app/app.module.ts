@@ -4,7 +4,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbButtonGroupModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,10 @@ import { LoginComponent } from './auth/pages/login/login.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { CreateProjectComponent } from './dashboard/pages/create-project/create-project.component';
 import { ProjectsComponent } from './dashboard/pages/projects/projects.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -41,13 +45,19 @@ import { ProjectsComponent } from './dashboard/pages/projects/projects.component
     NbTabsetModule,
     NbRouteTabsetModule,
     NbInputModule,
-    NbCardModule
+    NbCardModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    NbButtonGroupModule
 
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 
   providers: [
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CreateProjectComponent]
 })
 export class AppModule { }

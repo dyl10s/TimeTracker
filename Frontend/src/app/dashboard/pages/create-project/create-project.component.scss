@@ -1,97 +1,110 @@
 .mobile {
-    display: inline;
-  }
-  .desktop {
+  display: inline;
+}
+.desktop {
+  display: none;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+button {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid gray !important;
+  resize: vertical;
+}
+
+input[type="date"] {
+  padding: 12px;
+  border: 1px solid gray !important;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  border: 2px solid black !important;
+  border-radius: 4px;
+}
+
+label {
+  padding: 10px 10px 10px 5px;
+  display: inline-block;
+}
+
+.container {
+  border-radius: 5px;
+  padding: 0px 20px 20px 20px;
+  background-color: white;
+}
+
+.col-25,
+.col-75 {
+  float: left;
+  width: 100%;
+  margin-top: 0;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+button {
+  width: 100%;
+  margin-top: 13px !important;
+  margin-bottom: 5px !important;
+}
+
+h4 {
+  padding: 15px 15px 15px 0px;
+  margin: 10px 10px 10px 0px;
+}
+
+::ng-deep .nb-theme-default nb-card-body {
+  padding: unset;
+}
+
+
+/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
+@media only screen and (min-width: 660px) {
+  .mobile {
     display: none;
   }
-  
-  .line {
-    border-top: 1px solid black;
-    margin-bottom: 20px !important;
-  }
-  
-  input[type="text"],
-  input[type="number"],
-  textarea,
-  button {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid gray !important;
-    resize: vertical;
-  }
-  
-  input[type="date"] {
-    padding: 12px;
-    border: 1px solid gray !important;
-    resize: vertical;
-  }
-  
-  input:focus,
-  textarea:focus {
-    border: 2px solid black !important;
-    border-radius: 4px;
-  }
-  
-  label {
-    padding: 10px 10px 10px 5px;
-    display: inline-block;
-  }
-  
-  .container {
-    border-radius: 5px;
-    padding: 0px 20px 20px 20px;
-  }
-  
-  .col-25,
-  .col-75 {
-    float: left;
-    width: 100%;
-    margin-top: 0;
-  }
-  
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  button {
-    width: 100%;
-    margin-top: 13px !important;
-    margin-bottom: 5px !important;
+  .desktop {
+    display: inline;
   }
 
-  /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
-  @media only screen and (min-width: 660px) {
-    .mobile {
-      display: none;
-    }
-    .desktop {
-      display: inline;
-    }
-  
-    button {
-      width: unset;
-    }
-  
-    /* Floating column for labels: 25% width */
-    .col-25 {
-      float: left;
-      width: 25%;
-      margin-top: 6px;
-    }
-  
-    /* Floating column for inputs: 75% width */
-    .col-75 {
-      float: left;
-      width: 75%;
-      margin-top: 6px;
-    }
+  button {
+    width: unset;
   }
-  
-  /* Media query for desktop viewport targets screens a minimum width of 830px. */
-  @media only screen and (min-width: 830px) {
-      button {
-          width: 90%;
-      }
+
+  /* Floating column for labels: 25% width */
+  .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
   }
-  
+
+  /* Floating column for inputs: 75% width */
+  .col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+  }
+
+  ::ng-deep .nb-theme-default nb-card-body {
+    padding: 100px!important;
+  }
+
+  .container {
+    padding: 20px 20px 20px 20px;
+  }
+
+}
+
+/* Media query for desktop viewport targets screens a minimum width of 830px. */
+@media only screen and (min-width: 830px) {
+
+}
