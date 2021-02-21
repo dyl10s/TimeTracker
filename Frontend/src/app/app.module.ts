@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
@@ -28,7 +29,8 @@ export function tokenGetter() {
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
