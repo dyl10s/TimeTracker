@@ -6,15 +6,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbDialogService, NbButtonGroupModule } from '@nebular/theme';
-import { JwtModule } from '@auth0/angular-Jwt';
 
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule } from '@nebular/theme';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
@@ -39,7 +40,8 @@ export function tokenGetter() {
     RegisterComponent,
     CreateProjectComponent,
     ProjectsComponent,
-    ProfileComponent
+    ProfileComponent,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +73,11 @@ export function tokenGetter() {
         tokenGetter: tokenGetter
       }
     }),
-    NbSpinnerModule
+    NbSpinnerModule,
+    NbToastrModule.forRoot({
+      duration: 7500,
+      destroyByClick: true
+    })
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
