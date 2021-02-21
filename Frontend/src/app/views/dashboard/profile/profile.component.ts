@@ -15,8 +15,6 @@ export class ProfileComponent implements OnInit {
   lastName: string;
   emailAddress: string;
   projects: string[] = [];
-  passwordUpdateStatus: string;
-  userInfoStatus: string;
 
   disableNameSubmitButton: boolean = true;
   disablePasswordSubmitButton: boolean = false;

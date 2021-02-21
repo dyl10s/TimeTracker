@@ -70,14 +70,6 @@
       </div>
     </div>
 
-    <span *ngIf="userInfoStatus">
-      <div class="row">
-        <nb-card-body>
-          {{userInfoStatus}}
-        </nb-card-body>
-      </div>
-    </span>
-
     <h3>Projects</h3>
     <div class="line" [nbSpinner]="projectsLoading">
       <span *ngIf="projects.length < 1">
@@ -157,12 +149,6 @@
           </div>
         </nb-card-body>
       </div>
-
-        <div class="row">
-          <nb-card-body>
-            {{passwordUpdateStatus}}
-          </nb-card-body>
-        </div>
 
     </div>
   </nb-layout-column>
