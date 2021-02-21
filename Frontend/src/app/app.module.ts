@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbDialogService } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbDialogService, NbButtonGroupModule } from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-Jwt';
 
 
@@ -64,6 +64,7 @@ export function tokenGetter() {
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    NbButtonGroupModule,
 
     JwtModule.forRoot({
       config: {
