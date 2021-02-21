@@ -32,8 +32,6 @@ export class CreateProjectComponent {
 
   submitDialog(form: any) {
 
-    this.showLoadingSpinner = true;
-
     if(!form.clientName) {
       this.toastrService.show("A client name is required", 'Invalid Data', {status:'danger', duration: 5000});
       return;
@@ -52,6 +50,8 @@ export class CreateProjectComponent {
       }
     }
 
+    this.showLoadingSpinner = true;
+    
     this.projectService.createProject({
       clientName: form.clientName,
       description: form.description,
