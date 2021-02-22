@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { NbGetters, NbTreeGridDataService, NbTreeGridFilterService, NbTreeGridService, NbTreeGridSortService } from '@nebular/theme';
 import { NbDialogService, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
+import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
+import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { CreateProjectComponent } from 'src/app/shared/components/create-project/create-project.component';
 
@@ -25,7 +28,7 @@ export class ProjectsComponent {
   gridHeaders: string[] = ["Client", "Project Name", "Actions"];
 
   constructor(
-    private dataSourceBuilder: NbTreeGridDataSourceBuilder<ProjectDTO>, 
+    private dataSourceBuilder: CustomTreeBuilder<ProjectDTO>, 
     private projectService: ProjectService, 
     private toastrService: NbToastrService,
     private dialogService: NbDialogService) {
@@ -50,8 +53,11 @@ export class ProjectsComponent {
         }
       });
 
-      this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects);
-      this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects);
+      let customFilter = new CustomFilterService<ProjectDTO>();
+      customFilter.setFilterColumns(["name", "clientName"]);
+
+      this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
+      this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
       this.showLoadingSpinner = false;
     })
   }

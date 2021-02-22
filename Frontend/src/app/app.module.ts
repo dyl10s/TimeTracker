@@ -21,6 +21,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
 import { ProjectsComponent } from './views/dashboard/projects/projects.component';
 import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
+import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 
 export function tokenGetter() {
   return localStorage.getItem('token');

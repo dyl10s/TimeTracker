@@ -20,7 +20,7 @@
     </span>
   </div>
 
-  <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbSpinner]="showLoadingSpinner">
+  <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbFilter]="" [nbSpinner]="showLoadingSpinner">
     <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
     <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
 
