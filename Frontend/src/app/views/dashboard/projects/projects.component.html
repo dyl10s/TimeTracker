@@ -1,0 +1,59 @@
+<div class="container">
+
+  <div class="header">
+    <h2>Projects</h2>
+    <button (click)="openCreateNewProject()" nbButton status="success">
+      <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
+      <span class="adaptive-button-text">Create Project</span>
+    </button>
+  </div>
+    
+  <div class="filter-section">
+    <span>
+      <input nbInput [nbFilterInput]="showActive ? activeDataSource : archivedDataSource" id="search" placeholder="Search">
+    </span>
+    <span>
+      <nb-button-group size="small">
+        <button nbButtonToggle pressed (click)="viewActiveProjects()">Active Projects</button>
+        <button nbButtonToggle (click)="viewArchivedProjects()">Archived Projects</button>
+      </nb-button-group>
+    </span>
+  </div>
+
+  <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbFilter]="" [nbSpinner]="showLoadingSpinner">
+    <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+    <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+
+    <ng-container nbTreeGridColumnDef="Client">
+      <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+        Client
+      </th>
+      <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["clientName"] || '-'}}</td>
+    </ng-container>
+
+    <ng-container nbTreeGridColumnDef="Project Name">
+      <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+        Project Name
+      </th>
+      <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["name"] || '-'}}</td>
+    </ng-container>
+
+    <ng-container nbTreeGridColumnDef="Actions">
+      <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+        Actions
+      </th>
+      <td nbTreeGridCell *nbTreeGridCellDef="let row">
+        <div class="actions">
+          <button nbButton status="primary" (click)="copyInviteCode(row.data['inviteCode'])">
+            <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
+            <span class="adaptive-button-text">Copy Invite Code</span>
+          </button>
+          <button nbButton status="primary">
+            <nb-icon class="adaptive-button-icon" icon="eye-outline"></nb-icon>
+            <span class="adaptive-button-text">View Details</span>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+  </table>
+</div>

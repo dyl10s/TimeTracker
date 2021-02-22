@@ -1,0 +1,49 @@
+<nb-layout-column class="column">
+    <nb-card class="login-container">
+      <nb-card-header>
+        <h4 class="text-black">Login</h4>
+      </nb-card-header>
+
+      <nb-card-body [formGroup]="loginForm">
+          <div class="form-group">
+            <input
+              type="email"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Email address"
+              formControlName="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="password"
+              nbInput
+              fullWidth
+              status="primary"
+              placeholder="Password"
+              formControlName="password"
+            />
+          </div>
+
+          <p class="error" *ngIf="error">{{ error }}</p>
+
+          <div class="form-group">
+            <button 
+              nbButton 
+              fullWidth 
+              status="success" 
+              (click)="login(loginForm.value)"
+              [nbSpinner]="isLoading"
+              [disabled]="isLoading"
+              nbSpinnerStatus="success">
+              Login
+            </button>
+          </div>
+          <nb-actions>
+            <nb-action>Not a member? <span class="clickable" routerLink="/auth/register">Register</span></nb-action>
+          </nb-actions>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>

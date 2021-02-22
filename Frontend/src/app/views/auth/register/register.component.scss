@@ -1,0 +1,26 @@
+.header {
+    background-color: #232d9a;
+}
+
+.form-group {
+    padding: 10px;
+}
+
+.register-container {
+    margin: auto;
+    text-align: center;  
+}
+
+.error {
+    color: red;
+}
+
+/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
+@media only screen and (min-width: 660px) {
+    .register-container {
+        margin: auto;
+        width: 500px; 
+        text-align: center;  
+    }
+
+}
