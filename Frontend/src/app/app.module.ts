@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule } from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,14 +20,8 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
 import { ProjectsComponent } from './views/dashboard/projects/projects.component';
-import { CreateProjectComponent } from './views/dashboard/create-project/create-project.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-
-
-
+import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
+import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -51,6 +45,8 @@ export function tokenGetter() {
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
+    NbDialogModule.forRoot(),
+    NbTreeGridModule,
     NbIconModule,
     HttpClientModule,
     FormsModule,
@@ -62,10 +58,6 @@ export function tokenGetter() {
     NbRouteTabsetModule,
     NbInputModule,
     NbCardModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
     NbButtonGroupModule,
 
     JwtModule.forRoot({
@@ -88,10 +80,6 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    },
-    {
-      provide: MatDialogRef,
-      useValue: {}
     },
     NbDialogService
   ],
