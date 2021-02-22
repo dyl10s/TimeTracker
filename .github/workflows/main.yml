@@ -51,7 +51,7 @@ jobs:
       # Build the frontend
       - name: Build the frontend
         working-directory: ./Frontend
-        run: ng build --prod
+        run: ng build
 
       # Test the frontend
       - name: Test the frontend
