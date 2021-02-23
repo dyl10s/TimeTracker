@@ -136,7 +136,8 @@ namespace TimeTracker.Api.Controllers
                     CreatedTime = DateTime.UtcNow,
                     Email = registerData.Email,
                     Password = authHelper.GetPasswordHash(registerData.Password, configuration),
-                    Name = registerData.Name,
+                    FirstName = registerData.FirstName,
+                    LastName = registerData.LastName,
                     Projects = new List<Project>()
                 };
 
