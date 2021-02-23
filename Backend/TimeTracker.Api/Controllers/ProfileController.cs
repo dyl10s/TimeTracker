@@ -66,6 +66,39 @@ namespace TimeTracker.Api.Controllers {
 
         }
 
+
+        /// <summary>
+        /// Updates a users name
+        /// </summary>
+        /// <param name="updatedInformation"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<GenericResponseDTO<int>> UpdateUserProfile(ProfileUpdateDTO profileUpdateInfo)
+        {
+            int currentUserID;
+
+            try {
+                currentUserID = authHelper.GetCurrentUserId(User);
+            } catch(System.NullReferenceException) {
+                return new GenericResponseDTO<int> {
+                    Message = "Not logged in.",
+                    Success = false
+                };
+            }
+
+            User currentUser = await database.Users
+                .FirstOrDefaultAsync(user => user.Id == currentUserID);
+
+            currentUser.Name = profileUpdateInfo.FirstName + " " + profileUpdateInfo.LastName;
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>
+            {
+                Success = true,
+                Data = currentUser.Id
+            };
+        }
+
         [HttpPost]
         [Route("/SetPassword")]
         public async Task<GenericResponseDTO<int>> SetPassword(PasswordChangeDTO passwordInfo) {
@@ -93,7 +126,7 @@ namespace TimeTracker.Api.Controllers {
 
             if(!currentUser.Password.SequenceEqual(authHelper.GetPasswordHash(passwordInfo.CurrentPassword, configuration))) {
                 return new GenericResponseDTO<int> {
-                    Message = "Verification password is incorrect.",
+                    Message = "Current password is incorrect.",
                     Success = false
                 };
             }
@@ -101,7 +134,7 @@ namespace TimeTracker.Api.Controllers {
             if(!authHelper.IsValidPassword(passwordInfo.NewPassword)) {
                 return new GenericResponseDTO<int> {
                     Success = false,
-                    Message = "Invalid password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters"
+                    Message = "Invalid new password, the password must contain a lowercase letter, uppercase letter, a number and be at least 7 characters."
                 };
             }
 

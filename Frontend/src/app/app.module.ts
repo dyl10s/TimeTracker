@@ -6,7 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
+
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule } from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,10 +15,13 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
-
+import { ProjectsComponent } from './views/dashboard/projects/projects.component';
+import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
+import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -28,7 +32,10 @@ export function tokenGetter() {
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ProfileComponent
+    CreateProjectComponent,
+    ProjectsComponent,
+    ProfileComponent,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +45,8 @@ export function tokenGetter() {
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
+    NbDialogModule.forRoot(),
+    NbTreeGridModule,
     NbIconModule,
     HttpClientModule,
     FormsModule,
@@ -49,14 +58,20 @@ export function tokenGetter() {
     NbRouteTabsetModule,
     NbInputModule,
     NbCardModule,
+    NbButtonGroupModule,
+
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter
       }
     }),
-    NbSpinnerModule
+    NbSpinnerModule,
+    NbToastrModule.forRoot({
+      duration: 7500,
+      destroyByClick: true
+    })
   ],
-  schemas: [ 
+  schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
@@ -65,8 +80,10 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    }
+    },
+    NbDialogService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CreateProjectComponent]
 })
 export class AppModule { }

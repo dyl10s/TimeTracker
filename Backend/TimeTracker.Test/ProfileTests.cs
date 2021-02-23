@@ -57,6 +57,40 @@ namespace TimeTracker.Test {
         }
 
         [TestMethod]
+        public async Task UpdateProfileTest() {
+            UserDTO newUser = new UserDTO {
+                Email = "moxie@123.net",
+                Password = "Ag00dPassw0rd",
+                Name = "Moxie"
+            };
+
+            GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
+            Assert.IsTrue(registerResponse.Success);
+
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
+
+            ProfileDTO expectedProfileInfo = new ProfileDTO {
+                Name = "Changed Name",
+                Projects = new List<string>()
+            };
+
+            GenericResponseDTO<ProfileDTO> response1 = await profileController.GetUserProfile();
+            Assert.IsTrue(response1.Success);
+            Assert.AreEqual(response1.Data.Name, newUser.Name);
+
+            await profileController.UpdateUserProfile(new ProfileUpdateDTO()
+            {
+                FirstName = "Changed",
+                LastName = "Name"
+            });
+
+            GenericResponseDTO<ProfileDTO> response2 = await profileController.GetUserProfile();
+            Assert.IsTrue(response2.Success);
+            Assert.AreEqual(response2.Data.Name, expectedProfileInfo.Name);
+            Assert.IsTrue(response2.Data.Projects.SequenceEqual(expectedProfileInfo.Projects));
+        }
+
+        [TestMethod]
         public async Task ViewProfileTest_WithoutLoggingIn() {
             GenericResponseDTO<ProfileDTO> response = await profileController.GetUserProfile();
             Assert.IsFalse(response.Success);
