@@ -95,8 +95,8 @@ namespace TimeTracker.Test
 
             var singleDayNoResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
             {
-                 startDate = DateTime.Now, 
-                 endDate = DateTime.Now
+                 StartDate = DateTime.Now, 
+                 EndDate = DateTime.Now
             });
 
             Assert.AreEqual(singleDayNoResults.Success, true);
@@ -104,8 +104,8 @@ namespace TimeTracker.Test
 
             var singleDayResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
             {
-                 startDate = updatedTimeEntry.Day, 
-                 endDate = updatedTimeEntry.Day
+                 StartDate = updatedTimeEntry.Day, 
+                 EndDate = updatedTimeEntry.Day
             });
 
             Assert.AreEqual(singleDayResults.Success, true);
@@ -113,8 +113,8 @@ namespace TimeTracker.Test
 
             var multipleDayResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
             {
-                 startDate = updatedTimeEntry.Day.AddDays(-10), 
-                 endDate = updatedTimeEntry.Day.AddDays(123)
+                 StartDate = updatedTimeEntry.Day.AddDays(-10), 
+                 EndDate = updatedTimeEntry.Day.AddDays(123)
             });
 
             Assert.AreEqual(multipleDayResults.Success, true);

@@ -62,12 +62,12 @@ namespace Backend.Controllers
             var currentUserId = authHelper.GetCurrentUserId(User);
 
             // Set times to beginning and end of days
-            data.startDate = new DateTime(data.startDate.Year, data.startDate.Month, data.startDate.Day, 0, 0, 0);
-            data.endDate = new DateTime(data.endDate.Year, data.endDate.Month, data.endDate.Day, 23, 59, 59);
+            data.StartDate = new DateTime(data.StartDate.Year, data.StartDate.Month, data.StartDate.Day, 0, 0, 0);
+            data.EndDate = new DateTime(data.EndDate.Year, data.EndDate.Month, data.EndDate.Day, 23, 59, 59);
 
             var entries = await database.TimeEntries
                 .AsNoTracking()
-                .Where(x => x.User.Id == currentUserId && x.Day >= data.startDate && x.Day <= data.endDate)
+                .Where(x => x.User.Id == currentUserId && x.Day >= data.StartDate && x.Day <= data.EndDate)
                 .ToListAsync();
 
             return new GenericResponseDTO<List<TimeEntry>>()
