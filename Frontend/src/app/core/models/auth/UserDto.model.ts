@@ -1,6 +1,7 @@
 export interface UserDto {
     Email: string;
     Password: string;
-    Name?: string;
+    FirstName?: string;
+    LastName?: string;
     InviteCode?: string;
 }

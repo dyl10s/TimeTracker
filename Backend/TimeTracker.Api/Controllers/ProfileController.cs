@@ -55,7 +55,8 @@ namespace TimeTracker.Api.Controllers {
             return new GenericResponseDTO<ProfileDTO>() {
                 Data = new ProfileDTO() {
                     Email = queryResult.Email,
-                    Name = queryResult.Name,
+                    FirstName = queryResult.FirstName,
+                    LastName = queryResult.LastName,
                     Projects = queryResult.Projects
                         .Select(x => x.Name)
                         .ToList()
@@ -88,7 +89,8 @@ namespace TimeTracker.Api.Controllers {
             User currentUser = await database.Users
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
-            currentUser.Name = profileUpdateInfo.FirstName + " " + profileUpdateInfo.LastName;
+            currentUser.FirstName = profileUpdateInfo.FirstName;
+            currentUser.LastName = profileUpdateInfo.LastName;
             await database.SaveChangesAsync();
 
             return new GenericResponseDTO<int>
