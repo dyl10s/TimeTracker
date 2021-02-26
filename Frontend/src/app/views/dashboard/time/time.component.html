@@ -1,0 +1,122 @@
+<div class="container">
+  <nb-layout-column>
+    <div class="header">
+      <h2>Time</h2>
+      <button (click)="openCreateNewTimeEntry()" nbButton status="success">
+        <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
+        <span class="adaptive-button-text">New Entry</span>
+      </button>
+    </div>
+
+    <div class="return-today-section" *ngIf="notToday">
+      <button nbButton status="primary" (click)="returnToday()">
+        <nb-icon
+          class="adaptive-button-icon"
+          icon="arrow-forward-outline"
+        ></nb-icon>
+        <span class="adaptive-button-text">Return to today</span>
+      </button>
+    </div>
+
+    <div class="date-section">
+      <nb-button-group outline>
+        <button nbButton (click)="decDate()">
+          <nb-icon icon="chevron-left-outline"></nb-icon>
+        </button>
+        <button nbButton (click)="incDate()">
+          <nb-icon icon="chevron-right-outline"></nb-icon>
+        </button>
+      </nb-button-group>
+
+      <h6>{{ today | date: "fullDate" }}</h6>
+
+      <div class="calender-section">
+        <button nbButton [nbPopover]="tabs" nbPopoverTrigger="hover" outline>
+          <nb-icon icon="calendar"></nb-icon>
+        </button>
+        <ng-template #tabs>
+          <nb-card-body>
+            <nb-calendar [(date)]="today" (click)="updateDates()">
+            </nb-calendar>
+          </nb-card-body>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="entry-detail-section">
+      <nb-card>
+        <nb-card-body>
+          <ul>
+            <nb-button-group>
+              <button nbButtonToggle id="monday" pressed="{{ monActive }}">
+                M<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="tuesday" pressed="{{ tueActive }}">
+                T<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="wednesday" pressed="{{ wedActive }}">
+                W<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="thursday" pressed="{{ thurActive }}">
+                R<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="friday" pressed="{{ friActive }}">
+                F<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="saturday" pressed="{{ satActive }}">
+                S<br />{{ timeSpent }}
+              </button>
+
+              <button nbButtonToggle id="sunday" pressed="{{ sunActive }}">
+                S<br />{{ timeSpent }}
+              </button>
+
+              <div class="weekTime">
+                <button nbButtonToggle class="weekTimeSpent" disabled>
+                  Total: {{ weekTimeSpent }}
+                </button>
+              </div>
+            </nb-button-group>
+          </ul>
+
+          <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
+            <tbody>
+              <tr>
+                <td id="details">
+                  <div class="projectName">Project Name</div>
+                  <div class="projectNotes">Project Notes</div>
+                </td>
+
+                <td id="time">{{ timeSpent }}</td>
+
+                <td id="buttons">
+                  <button (click)="startStopTimer()" nbButton status="primary">
+                    <nb-icon
+                      class="adaptive-button-icon"
+                      icon="{{ timerBtnIcon }}"
+                    ></nb-icon>
+                    <span class="adaptive-button-text">{{ timerBtnText }}</span>
+                  </button>
+
+                  <button (click)="editTimer()" nbButton outline>
+                    <nb-icon
+                      style
+                      class="adaptive-button-icon"
+                      id="edit-icon"
+                      icon="edit"
+                    ></nb-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-layout-column>
+</div>

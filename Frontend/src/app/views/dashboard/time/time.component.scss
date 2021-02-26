@@ -1,0 +1,178 @@
+.container {
+  padding: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+}
+
+.header {
+  h2 {
+    display: inline;
+  }
+
+  button {
+    float: right;
+  }
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.date-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .calender-section {
+    display: none;
+  }
+
+  h6 {
+    overflow: hidden;
+  }
+}
+
+.entry-detail-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  ul {
+    border: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  ul li {
+    display: inline-block;
+  }
+
+  button {
+    padding: 1vh 2.8vw !important;
+  }
+
+  .weekTime {
+    display: none;
+  }
+
+  table {
+    width: 100%;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+
+  th,
+  td {
+    padding: 15px;
+  }
+
+  #details {
+    width: 50%;
+  }
+
+  .projectName {
+    margin-bottom: 5px;
+  }
+
+  #buttons {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      margin: 5px;
+    }
+  }
+}
+
+.return-today-section {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: inline;
+  float: right;
+}
+
+.adaptive-button-text {
+  display: none;
+}
+
+.adaptive-button-icon {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+::ng-deep .nb-theme-default nb-card-body,
+::ng-deep .nb-theme-default nb-card {
+  background-color: transparent;
+  padding: unset !important;
+  width: 100%;
+  border: unset! important;
+}
+/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
+@media only screen and (min-width: 660px) {
+  .container {
+    padding: 40px;
+  }
+
+  .date-section {
+    float: left;
+    justify-content: space-between;
+    align-items: center;
+    .calender-section {
+      display: inline;
+    }
+  }
+
+  .entry-detail-section {
+    .weekTime {
+      display: inline;
+    }
+
+    #details {
+      width: 70%;
+    }
+
+    button {
+      padding: 1vh 3.2vw !important;
+    }
+
+    #buttons {
+      button {
+        padding: 0.6875rem 1.125rem !important;
+      }
+
+      #edit-icon {
+        margin-right: 0 !important;
+      }
+    }
+  }
+
+  .adaptive-button-text {
+    display: inline;
+  }
+
+  .adaptive-button-icon {
+    margin-right: 0.5rem !important;
+  }
+
+  ::ng-deep
+    .nb-theme-default
+    [nbbutton].appearance-filled.status-basic[disabled],
+  ::ng-deep
+    .nb-theme-default
+    .appearance-filled.status-basic[disabled][nbbuttontoggle] {
+    height: 100%;
+    padding: 15px;
+  }
+}

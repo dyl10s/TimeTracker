@@ -6,6 +6,7 @@ import { LogoutComponent } from './views/auth/logout/logout.component';
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
+import { TimeComponent } from './views/dashboard/time/time.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -39,6 +40,10 @@ const routes: Routes = [
       {
         path: 'projects',
         component: ProjectsComponent
+      },
+      {
+        path: 'time',
+        component: TimeComponent
       },
     ]
   },
