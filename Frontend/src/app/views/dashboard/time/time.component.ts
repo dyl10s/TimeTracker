@@ -26,17 +26,14 @@ export class TimeComponent {
     private dateService: NbDateService<Date>
   ) {
     this.today = this.dateService.today();
-    this.weekDay = this.dateService.getDayOfWeek(this.today);
   }
 
   incDate() {
     this.today = this.dateService.addDay(this.today, 1);
-    this.updateDates();
   }
 
   decDate() {
     this.today = this.dateService.addDay(this.today, -1);
-    this.updateDates();
   }
 
   returnToday() {
@@ -60,6 +57,7 @@ export class TimeComponent {
   }
 
   updateDates() {
+    this.weekDay = this.dateService.getDayOfWeek(this.today);
     if (this.today.valueOf() === this.dateService.today().valueOf()) {
       this.notToday = false;
     } else {

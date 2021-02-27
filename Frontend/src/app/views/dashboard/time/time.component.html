@@ -14,66 +14,68 @@
           class="adaptive-button-icon"
           icon="arrow-forward-outline"
         ></nb-icon>
-        <span class="adaptive-button-text">Return to today</span>
+        <span class="adaptive-button-text">today</span>
       </button>
     </div>
 
     <div class="date-section">
-      <nb-button-group outline>
-        <button nbButton (click)="decDate()">
-          <nb-icon icon="chevron-left-outline"></nb-icon>
-        </button>
-        <button nbButton (click)="incDate()">
-          <nb-icon icon="chevron-right-outline"></nb-icon>
-        </button>
-      </nb-button-group>
+      <button nbButton outline (click)="decDate()">
+        <nb-icon icon="chevron-left-outline"></nb-icon>
+      </button>
 
-      <h6>{{ today | date: "fullDate" }}</h6>
-
-      <div class="calender-section">
-        <button nbButton [nbPopover]="tabs" nbPopoverTrigger="hover" outline>
-          <nb-icon icon="calendar"></nb-icon>
-        </button>
-        <ng-template #tabs>
-          <nb-card-body>
-            <nb-calendar [(date)]="today" (click)="updateDates()">
-            </nb-calendar>
-          </nb-card-body>
-        </ng-template>
+      <div class="center-date">
+        <h6>
+          {{ today | date: "fullDate" }}
+        </h6>
+        <div class="calender-section">
+          <button nbButton [nbPopover]="tabs" nbPopoverTrigger="hover" outline>
+            <nb-icon icon="calendar"></nb-icon>
+          </button>
+          <ng-template #tabs>
+            <nb-card-body>
+              <nb-calendar [(date)]="today" (click)="updateDates()">
+              </nb-calendar>
+            </nb-card-body>
+          </ng-template>
+        </div>
       </div>
+
+      <button nbButton outline (click)="incDate()">
+        <nb-icon icon="chevron-right-outline"></nb-icon>
+      </button>
     </div>
 
     <div class="entry-detail-section">
       <nb-card>
         <nb-card-body>
           <ul>
-            <nb-button-group>
+            <nb-button-group outline>
               <button nbButtonToggle id="monday" pressed="{{ monActive }}">
-                M<br />{{ timeSpent }}
+                M<br />
               </button>
 
               <button nbButtonToggle id="tuesday" pressed="{{ tueActive }}">
-                T<br />{{ timeSpent }}
+                T<br />
               </button>
 
               <button nbButtonToggle id="wednesday" pressed="{{ wedActive }}">
-                W<br />{{ timeSpent }}
+                W<br />
               </button>
 
               <button nbButtonToggle id="thursday" pressed="{{ thurActive }}">
-                R<br />{{ timeSpent }}
+                R<br />
               </button>
 
               <button nbButtonToggle id="friday" pressed="{{ friActive }}">
-                F<br />{{ timeSpent }}
+                F<br />
               </button>
 
               <button nbButtonToggle id="saturday" pressed="{{ satActive }}">
-                S<br />{{ timeSpent }}
+                S<br />
               </button>
 
               <button nbButtonToggle id="sunday" pressed="{{ sunActive }}">
-                S<br />{{ timeSpent }}
+                S<br />
               </button>
 
               <div class="weekTime">
@@ -84,37 +86,45 @@
             </nb-button-group>
           </ul>
 
-          <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
-            <tbody>
-              <tr>
-                <td id="details">
-                  <div class="projectName">Project Name</div>
-                  <div class="projectNotes">Project Notes</div>
-                </td>
+          <div class="entryListExist">
+            <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
+              <tbody>
+                <tr>
+                  <td id="details">
+                    <div class="projectName">Project Name</div>
+                    <div class="projectNotes">Project Notes</div>
+                  </td>
 
-                <td id="time">{{ timeSpent }}</td>
+                  <td id="time">{{ timeSpent }}</td>
 
-                <td id="buttons">
-                  <button (click)="startStopTimer()" nbButton status="primary">
-                    <nb-icon
-                      class="adaptive-button-icon"
-                      icon="{{ timerBtnIcon }}"
-                    ></nb-icon>
-                    <span class="adaptive-button-text">{{ timerBtnText }}</span>
-                  </button>
+                  <td id="buttons">
+                    <button
+                      (click)="startStopTimer()"
+                      nbButton
+                      status="primary"
+                    >
+                      <nb-icon
+                        class="adaptive-button-icon"
+                        icon="{{ timerBtnIcon }}"
+                      ></nb-icon>
+                      <span class="adaptive-button-text">{{
+                        timerBtnText
+                      }}</span>
+                    </button>
 
-                  <button (click)="editTimer()" nbButton outline>
-                    <nb-icon
-                      style
-                      class="adaptive-button-icon"
-                      id="edit-icon"
-                      icon="edit"
-                    ></nb-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <button (click)="editTimer()" nbButton outline>
+                      <nb-icon
+                        style
+                        class="adaptive-button-icon"
+                        id="edit-icon"
+                        icon="edit"
+                      ></nb-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </nb-card-body>
       </nb-card>
     </div>

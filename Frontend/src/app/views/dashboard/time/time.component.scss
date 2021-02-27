@@ -24,13 +24,10 @@
   gap: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  justify-content: space-between;
 
   .calender-section {
     display: none;
-  }
-
-  h6 {
-    overflow: hidden;
   }
 }
 
@@ -57,10 +54,6 @@
 
   ul li {
     display: inline-block;
-  }
-
-  button {
-    padding: 1vh 2.8vw !important;
   }
 
   .weekTime {
@@ -92,7 +85,19 @@
 
     button {
       margin: 5px;
+      width: unset;
     }
+  }
+
+  [nbButton].appearance-outline.size-medium,
+  .appearance-outline.size-medium[nbButtonToggle] {
+    height: 100%;
+    padding: 15px;
+    width: 20%;
+  }
+
+  nb-button-group {
+    width: 100%;
   }
 }
 
@@ -117,7 +122,7 @@
   background-color: transparent;
   padding: unset !important;
   width: 100%;
-  border: unset! important;
+  border: unset !important;
 }
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
@@ -129,6 +134,13 @@
     float: left;
     justify-content: space-between;
     align-items: center;
+
+    .center-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .calender-section {
       display: inline;
     }
@@ -156,6 +168,17 @@
         margin-right: 0 !important;
       }
     }
+
+    [nbButton].appearance-outline.size-medium,
+    .appearance-outline.size-medium[nbButtonToggle] {
+      height: 100%;
+      padding: 15px;
+      width: 20%;
+    }
+
+    nb-button-group {
+      width: 100%;
+    }
   }
 
   .adaptive-button-text {
@@ -164,15 +187,5 @@
 
   .adaptive-button-icon {
     margin-right: 0.5rem !important;
-  }
-
-  ::ng-deep
-    .nb-theme-default
-    [nbbutton].appearance-filled.status-basic[disabled],
-  ::ng-deep
-    .nb-theme-default
-    .appearance-filled.status-basic[disabled][nbbuttontoggle] {
-    height: 100%;
-    padding: 15px;
   }
 }
