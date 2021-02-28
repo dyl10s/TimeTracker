@@ -42,7 +42,7 @@
             </button>
           </div>
           <nb-actions>
-            <nb-action>Not a member? <span class="clickable" routerLink="/auth/register">Register</span></nb-action>
+            <nb-action>Not a member? <span class="clickable" routerLink="/auth/register" [queryParams]="{inviteCode: activatedRoute.snapshot.queryParamMap.get('inviteCode')}">Register</span></nb-action>
           </nb-actions>
       </nb-card-body>
     </nb-card>

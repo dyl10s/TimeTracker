@@ -65,6 +65,18 @@ namespace TimeTracker.Api.Controllers
                     User = curUser
                 };
 
+                // check if the user logged in with an invite code, if they did, add them to a project
+                if(!String.IsNullOrWhiteSpace(loginData.InviteCode)) {
+
+                    Project project = await database.Projects
+                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
+
+                    if(project != null) {
+                        curUser.Projects.Add(project);
+                    }
+
+                }
+
                 await database.AddAsync(userRefreshToken);
                 await database.SaveChangesAsync();
 
@@ -168,7 +180,7 @@ namespace TimeTracker.Api.Controllers
                 return new GenericResponseDTO<int>() 
                 {
                     Success = false,
-                    Message = "An unknown error has occured"
+                    Message = "An unknown error has occurred"
                 };
             }
         }

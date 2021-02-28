@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectService } from 'src/app/core/services/project.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 import { JwtService } from '../../../core/services/auth/jwt.service';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
+    inviteCode: new FormControl('')
   });
 
   error: string;
@@ -23,10 +25,15 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private JwtService: JwtService,
-    private router: Router
+    private router: Router,
+    public activatedRoute: ActivatedRoute,
+    private projectService: ProjectService
   ) { }
 
   ngOnInit(): void {
+    this.loginForm.patchValue({
+      inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode')
+    });
   }
 
   login(loginForm: any) {
@@ -43,11 +50,9 @@ export class LoginComponent implements OnInit {
       Password: loginForm.password 
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
+        const inviteCode = this.activatedRoute.snapshot.queryParamMap.get('inviteCode');
         // Handle Successful Login
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
-  
-        // TODO: Remove alert and route to dashboard
-        this.router.navigate(['/dashboard/profile']);
       } else {
         this.loginForm.controls['password'].reset();
         this.error = response.message;
