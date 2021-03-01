@@ -12,7 +12,13 @@
 
   button {
     float: right;
+    margin: 5px;
   }
+
+  .return-date-section {
+    display: inline;
+  }
+
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -62,8 +68,8 @@
 
   table {
     width: 100%;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
+    border-top: 1px solid #8f9bb3;
+    border-bottom: 1px solid #8f9bb3;
   }
 
   th,
@@ -101,13 +107,6 @@
   }
 }
 
-.return-today-section {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  display: inline;
-  float: right;
-}
-
 .adaptive-button-text {
   display: none;
 }
@@ -143,6 +142,12 @@
 
     .calender-section {
       display: inline;
+      nb-button-group {
+        margin: 10px;
+        button {
+          height: 40px! important;
+        }
+      }
     }
   }
 
@@ -178,6 +183,44 @@
 
     nb-button-group {
       width: 100%;
+    }
+  }
+
+  .week-details-section {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 12px 5px;
+        vertical-align: middle;
+      }
+      thead, tr {
+        border-bottom: 1px solid #8f9bb3;
+      }
+      tbody {
+        .adaptive-button-icon {
+          margin-right: 0 !important;
+        }
+      }
+      tfoot {
+        button {
+          margin: 5px;
+          height: 44px! important;
+        }
+      }
+    }
+    .name {
+      text-align: left;
+      padding: 15px !important;
+    }
+
+    .day,
+    .total,
+    .delete {
+      width: 90px;
+      padding: 5px !important;
+      text-align: center;
     }
   }
 
