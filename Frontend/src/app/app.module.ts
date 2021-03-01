@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbSelectModule, NbDatepickerModule, NbDatepickerAdapter, NbPopoverModule, NbCalendarModule, NbCalendarRangeModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule} from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,6 +24,8 @@ import { CreateProjectComponent } from './shared/components/create-project/creat
 import { TimeComponent } from './views/dashboard/time/time.component';
 import { CreateTimeComponent } from './shared/components/create-time/create-time.component';
 import { EditTimeComponent } from './shared/components/edit-time/edit-time.component';
+import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
+import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -40,7 +42,8 @@ export function tokenGetter() {
     NavbarComponent,
     TimeComponent,
     CreateTimeComponent,
-    EditTimeComponent
+    EditTimeComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +56,7 @@ export function tokenGetter() {
     NbDialogModule.forRoot(),
     NbTreeGridModule,
     NbIconModule,
+    NbTagModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
