@@ -1,11 +1,21 @@
 import { HttpClientModule } from '@angular/common/http';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JwtModule } from '@auth0/angular-jwt';
-import { NbThemeModule, NbDialogService, NbDialogModule, NbActionsModule, NbButtonModule, NbDialogRef, NbMenuModule, NbIconModule, NbTabsetModule } from '@nebular/theme';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { AuthApiService } from 'src/app/core/services/auth/auth-api.service';
+import { NbThemeModule, NbDialogRef, NbToastrModule } from '@nebular/theme';
 import { CreateProjectComponent } from './create-project.component';
+
+/* 
+  Create a mock class since we don't have the real dialog
+  and the component is expecting it in the constructor
+*/
+export class NbDialogMock {
+  open() {
+    return;
+  }
+
+  close() {
+    return;
+  }
+}
 
 describe('CreateProjectComponent', () => {
   let component: CreateProjectComponent;
@@ -17,21 +27,12 @@ describe('CreateProjectComponent', () => {
         CreateProjectComponent
       ],
       providers: [
-        AuthApiService, 
         NbThemeModule.forRoot({ name: 'default' }).providers, 
-        NbDialogService,
-        NbDialogRef
+        { provide: NbDialogRef, useClass: NbDialogMock }
       ],
       imports: [
-        NbDialogModule.forRoot(),
-        AppRoutingModule,
-        NbActionsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NbButtonModule,
-        NbMenuModule.forRoot(),
-        NbIconModule,
-        NbTabsetModule
+        HttpClientModule,
+        NbToastrModule.forRoot()
       ]
     })
     .compileComponents();
