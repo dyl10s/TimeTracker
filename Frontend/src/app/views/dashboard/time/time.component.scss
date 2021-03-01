@@ -1,26 +1,12 @@
 .container {
-  padding: 40px;
+  padding: 20px;
   padding-left: 10px;
   padding-right: 10px;
   overflow: hidden;
 }
 
-.header {
-  h2 {
-    display: inline;
-  }
-
-  button {
-    float: right;
-    margin: 5px;
-  }
-
-  .return-date-section {
-    display: inline;
-  }
-
-  padding-top: 10px;
-  padding-bottom: 10px;
+button {
+  height: 40px !important;
 }
 
 .date-section {
@@ -28,13 +14,42 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 50px;
   justify-content: space-between;
+  h6 {
+    display: inline !important;
+  }
+}
 
-  .calender-section {
+.button-control-section {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 60px;
+
+  button {
+    float: right;
+    display: inline;
+    margin-right: 10px;
+  }
+
+  .return-date-section {
+    display: inline;
+  }
+
+  .view-options-section {
     display: none;
   }
+
+  .calendar-section {
+    display: inline;
+    float: left;
+    button {
+      float: unset !important;
+    }
+  }
+
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .entry-detail-section {
@@ -126,7 +141,20 @@
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
   .container {
-    padding: 40px;
+    padding: 20px;
+  }
+
+  .button-control-section {
+    .view-options-section {
+      display: inline;
+    }
+    nb-button-group {
+      display: inline;
+      button {
+        float: left! important;
+        margin: unset;
+      }
+    }
   }
 
   .date-section {
@@ -138,16 +166,6 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-    }
-
-    .calender-section {
-      display: inline;
-      nb-button-group {
-        margin: 10px;
-        button {
-          height: 40px! important;
-        }
-      }
     }
   }
 
@@ -191,22 +209,18 @@
       width: 100%;
       border-collapse: collapse;
 
-      th, td {
+      th,
+      td {
         padding: 12px 5px;
         vertical-align: middle;
       }
-      thead, tr {
+      thead,
+      tr {
         border-bottom: 1px solid #8f9bb3;
       }
       tbody {
         .adaptive-button-icon {
           margin-right: 0 !important;
-        }
-      }
-      tfoot {
-        button {
-          margin: 5px;
-          height: 44px! important;
         }
       }
     }

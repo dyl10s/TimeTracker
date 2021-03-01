@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NbCalendarRange } from '@nebular/theme';
+import { Component, OnInit } from '@angular/core';
 import { NbDateService, NbDialogService } from '@nebular/theme';
+import { interval, Subscription } from 'rxjs';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
 
@@ -9,7 +9,8 @@ import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss']
 })
-export class TimeComponent {
+export class TimeComponent implements OnInit {
+  updateSubscription: Subscription;
   showLoadingSpinner: boolean = false;
   // Date choosen  //
   today: Date;
@@ -20,8 +21,7 @@ export class TimeComponent {
   notDate: boolean = false;
   // Controls active day //
   weekDay: number;
-  monActive = false; tueActive = false; wedActive = false; thurActive = false;
-  friActive = false; satActive = false; sunActive = false;
+  daysActive: boolean[] = [false, false, false, false, false, false, false];
   // Variables to be set from db //
   timeSpent = '0:00';
   weekTimeSpent = '0:00'
@@ -33,7 +33,8 @@ export class TimeComponent {
   weekView: boolean = false;
   // Return button text //
   returnText: String = "Today";
-
+  // Week view button dates //
+  monDate: Date; tueDate: Date; wedDate: Date; thurDate: Date; friDate: Date; satDate: Date; sunDate: Date;
 
   constructor(
     private dialogService: NbDialogService,
@@ -42,15 +43,23 @@ export class TimeComponent {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
     this.weekEndDate = this.weekEnd;
+  }
 
+  /* Refresh variables */
+  ngOnInit() {
+    this.updateSubscription = interval(100).subscribe(
+      (val) => {
+        this.updateDates()
+      }
+    );
   }
 
   /* Increases date using arrow buttons */
   incDate() {
-    this.updateDates();
     if (this.dayView) {
       this.today = this.dateService.addDay(this.today, 1);
     } else {
+      this.today = this.dateService.addDay(this.weekStartDate, 7);
       this.weekStartDate = this.dateService.addDay(this.weekStartDate, 7)
       this.weekEndDate = this.dateService.addDay(this.weekEndDate, 7)
     }
@@ -58,10 +67,10 @@ export class TimeComponent {
 
   /* Decreases date using arrow buttons */
   decDate() {
-    this.updateDates();
     if (this.dayView) {
       this.today = this.dateService.addDay(this.today, -1);
     } else {
+      this.today = this.dateService.addDay(this.weekStartDate, -7);
       this.weekStartDate = this.dateService.addDay(this.weekStartDate, -7)
       this.weekEndDate = this.dateService.addDay(this.weekEndDate, -7)
     }
@@ -73,13 +82,49 @@ export class TimeComponent {
     this.notDate = false;
   }
 
+  /* Returns to day view from week -day button click */
+  returnDayView(number) {
+    switch (number) {
+      case 1:
+        this.setDayView();
+        this.today = this.monDate;
+        break;
+      case 2:
+        this.setDayView();
+        this.today = this.tueDate;
+        break;
+      case 3:
+        this.setDayView();
+        this.today = this.wedDate;
+        break;
+      case 4:
+        this.setDayView();
+        this.today = this.thurDate;
+        break;
+      case 5:
+        this.setDayView();
+        this.today = this.friDate;
+        break;
+      case 6:
+        this.setDayView();
+        this.today = this.satDate;
+        break;
+      case 0:
+        this.setDayView();
+        this.today = this.sunDate;
+        break;
+      default:
+        console.log("Error");
+        break;
+    }
+  }
+
   /* Updates screen for day view button click */
   setDayView() {
     this.dayView = true;
     this.weekView = false;
     this.returnText = "Today";
     this.today = this.dateService.today();
-
   }
 
   /* Updates screen for week view button click */
@@ -88,7 +133,6 @@ export class TimeComponent {
     this.dayView = false;
     this.returnText = "Week";
     this.today = this.dateService.today();
-
   }
 
   /* Method to get calendar week start date */
@@ -162,38 +206,30 @@ export class TimeComponent {
 
   /* To be modified -- controls date views on button clicks */
   updateDates() {
-    this.weekStartDate = this.weekStart;
-    this.weekEndDate = this.weekEnd;
-
     this.weekDay = this.dateService.getDayOfWeek(this.today);
-    if (this.today.valueOf() === this.dateService.today().valueOf()) {
+    if (this.today.setHours(0, 0, 0, 0).valueOf() === this.dateService.today().setHours(0, 0, 0, 0).valueOf()) {
       this.notDate = false;
     } else {
       this.notDate = true;
     }
 
-    // Note: tried loop with array here to save space - wouldnt update variable //
-    // if (this.weekDay == 1) {
-    //   this.monActive = true;
-    // }
-    // if (this.weekDay == 2) {
-    //   this.tueActive = true;
-    // }
-    // if (this.weekDay == 3) {
-    //   this.wedActive = true;
-    // }
-    // if (this.weekDay == 4) {
-    //   this.thurActive = true;
-    // }
-    // if (this.weekDay == 5) {
-    //   this.friActive = true;
-    // }
-    // if (this.weekDay == 6) {
-    //   this.satActive = true;
-    // }
-    // if (this.weekDay == 7) {
-    //   this.sunActive = true;
-    // }
+    this.weekStartDate = this.weekStart;
+    this.weekEndDate = this.weekEnd;
+    this.monDate = this.weekStartDate;
+    this.tueDate = this.dateService.addDay(this.weekStartDate, 1);
+    this.wedDate = this.dateService.addDay(this.weekStartDate, 2);
+    this.thurDate = this.dateService.addDay(this.weekStartDate, 3);
+    this.friDate = this.dateService.addDay(this.weekStartDate, 4);
+    this.satDate = this.dateService.addDay(this.weekStartDate, 5);
+    this.sunDate = this.dateService.addDay(this.weekStartDate, 6);
+
+    for (let i = 0; i < 8; i++) {
+      if (this.weekDay == i) {
+        this.daysActive[i] = true;
+      } else {
+        this.daysActive[i] = false;
+      }
+    }
   }
 
 }

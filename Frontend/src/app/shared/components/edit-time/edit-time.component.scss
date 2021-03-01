@@ -3,6 +3,7 @@
     padding: 20px 20px 20px 20px;
     background-color: white;
     width: min(500px, 95vw);
+    overflow: hidden;
   }
   
   .form-field {
@@ -13,10 +14,8 @@
     nb-select, input, textarea {
       margin-top: 2px;
       margin-bottom: 10px;
-    }
-
-    #time {
-      width: 30%;
+      width: 100%! important;
+      max-width: unset! important;
     }
   }
   
@@ -27,5 +26,6 @@
   .actions-footer {
     button {
       margin-right: 10px;
+      margin-top: 10px;
     }
   }

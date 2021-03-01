@@ -1,29 +1,5 @@
 <div class="container">
   <nb-layout-column>
-    <div class="header">
-      <h2>Time</h2>
-
-      <div class="return-date-section" *ngIf="notDate">
-        <button nbButton status="primary" (click)="returnDate()">
-          <nb-icon
-            class="adaptive-button-icon"
-            icon="arrow-forward-outline"
-          ></nb-icon>
-          <span class="adaptive-button-text">{{ returnText }}</span>
-        </button>
-      </div>
-
-      <button
-        (click)="openCreateNewTimeEntry()"
-        nbButton
-        status="success"
-        *ngIf="dayView"
-      >
-        <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
-        <span class="adaptive-button-text">New Entry</span>
-      </button>
-    </div>
-
     <div class="date-section">
       <button nbButton outline (click)="decDate()">
         <nb-icon icon="chevron-left-outline"></nb-icon>
@@ -36,27 +12,6 @@
         <h6 *ngIf="weekView">
           {{ weekStartDate | date }} - {{ weekEndDate | date }}
         </h6>
-        <div class="calender-section">
-          <button
-            nbButton
-            [nbPopover]="tabs"
-            nbPopoverTrigger="hover"
-            nbPopoverPlacement="bottom"
-            outline
-          >
-            <nb-icon icon="calendar"></nb-icon>
-          </button>
-          <ng-template #tabs>
-            <nb-card-body>
-              <nb-calendar [(date)]="today" (click)="updateDates()">
-              </nb-calendar>
-            </nb-card-body>
-          </ng-template>
-          <nb-button-group outline>
-            <button nbButtonToggle (click)="setDayView()">Day</button>
-            <button nbButtonToggle (click)="setWeekView()">Week</button>
-          </nb-button-group>
-        </div>
       </div>
 
       <button nbButton outline (click)="incDate()">
@@ -64,36 +19,77 @@
       </button>
     </div>
 
+    <div class="button-control-section">
+      <div class="calendar-section">
+        <button
+          nbButton
+          [nbPopover]="tabs"
+          nbPopoverTrigger="hover"
+          nbPopoverPlacement="bottom"
+          outline
+        >
+          <nb-icon icon="calendar"></nb-icon>
+        </button>
+        <ng-template #tabs>
+          <nb-card-body>
+            <nb-calendar [(date)]="today"> </nb-calendar>
+          </nb-card-body>
+        </ng-template>
+      </div>
+
+      <div class="view-options-section">
+        <nb-button-group outline>
+          <button nbButtonToggle (click)="setDayView()">Day</button>
+          <button nbButtonToggle (click)="setWeekView()">Week</button>
+        </nb-button-group>
+      </div>
+
+      <button (click)="openCreateNewTimeEntry()" nbButton status="success">
+        <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
+        <span class="adaptive-button-text">New Entry</span>
+      </button>
+
+      <div class="return-date-section" *ngIf="notDate">
+        <button nbButton status="primary" (click)="returnDate()">
+          <nb-icon
+            class="adaptive-button-icon"
+            icon="arrow-forward-outline"
+          ></nb-icon>
+          <span class="adaptive-button-text">{{ returnText }}</span>
+        </button>
+      </div>
+    </div>
+
     <div class="entry-detail-section" *ngIf="dayView">
       <nb-card>
         <nb-card-body>
           <ul>
             <nb-button-group outline>
-              <button nbButtonToggle id="monday" pressed="{{ monActive }}">
+              <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}">
                 M<br />
               </button>
 
-              <button nbButtonToggle id="tuesday" pressed="{{ tueActive }}">
+              <button nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}">
                 T<br />
               </button>
 
-              <button nbButtonToggle id="wednesday" pressed="{{ wedActive }}">
+              <button nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}">
                 W<br />
               </button>
 
-              <button nbButtonToggle id="thursday" pressed="{{ thurActive }}">
+              <button nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}">
                 R<br />
               </button>
 
-              <button nbButtonToggle id="friday" pressed="{{ friActive }}">
+              <button nbButtonToggle id="friday" pressed="{{ daysActive[5] }}">
                 F<br />
               </button>
 
-              <button nbButtonToggle id="saturday" pressed="{{ satActive }}">
+              <button nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}">
                 S<br />
               </button>
 
-              <button nbButtonToggle id="sunday" pressed="{{ sunActive }}">
+              <button nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}">
                 S<br />
               </button>
 
@@ -156,28 +152,42 @@
               <tr>
                 <td class="name"></td>
                 <td class="day">
-                  <button nbButton outline>M<br />{{ monDate }}</button>
+                  <button nbButton outline (click)="returnDayView(1)">
+                    M<br />{{ monDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>T<br />{{ tueDate }}</button>
+                  <button nbButton outline (click)="returnDayView(2)">
+                    T<br />{{ tueDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>W<br />{{ wedDate }}</button>
+                  <button nbButton outline (click)="returnDayView(3)">
+                    W<br />{{ wedDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>R<br />{{ thurDate }}</button>
+                  <button nbButton outline (click)="returnDayView(4)">
+                    R<br />{{ thurDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>F<br />{{ friDate }}</button>
+                  <button nbButton outline (click)="returnDayView(5)">
+                    F<br />{{ friDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>S<br />{{ satDate }}</button>
+                  <button nbButton outline (click)="returnDayView(6)">
+                    S<br />{{ satDate | date: "LLL d" }}
+                  </button>
                 </td>
                 <td class="day">
-                  <button nbButton outline>S<br />{{ sunDate }}</button>
+                  <button nbButton outline (click)="returnDayView(0)">
+                    S<br />{{ sunDate | date: "LLL d" }}
+                  </button>
                 </td>
 
-                <td class="total"></td>
+                <td class="total">0:00</td>
                 <td class="delete"></td>
               </tr>
             </thead>
@@ -186,7 +196,6 @@
               <tr>
                 <td class="name">
                   <div class="projectName">Project Name</div>
-                  <div class="projectNotes">Project Notes</div>
                 </td>
                 <td class="day">
                   <input
@@ -253,7 +262,7 @@
                 </td>
                 <td class="total">0:00</td>
                 <td class="delete">
-                  <button nbButton outline>
+                  <button nbButton status="danger">
                     <nb-icon
                       class="adaptive-button-icon"
                       icon="close-outline"
@@ -263,28 +272,7 @@
               </tr>
             </tbody>
 
-            <tfoot>
-              <tr>
-                <td class="name">
-                  <button nbButton status="success">
-                    <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
-                    <span class="adaptive-button-text">Row</span>
-                  </button>
-                  <button nbButton status="primary">
-                    <span class="adaptive-button-text">Save</span>
-                  </button>
-                </td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="day"><label>0:00</label></td>
-                <td class="total"></td>
-                <td class="delete"></td>
-              </tr>
-            </tfoot>
+            <tfoot></tfoot>
           </table>
         </nb-card-body>
       </nb-card>
