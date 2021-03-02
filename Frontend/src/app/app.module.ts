@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbPopoverModule } from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,7 @@ import { ProjectsComponent } from './views/dashboard/projects/projects.component
 import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
 import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
+import { HomeComponent } from './shared/components/home/home.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -37,7 +38,8 @@ export function tokenGetter() {
     ProjectsComponent,
     ProfileComponent,
     NavbarComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -62,6 +64,7 @@ export function tokenGetter() {
     NbInputModule,
     NbCardModule,
     NbButtonGroupModule,
+    NbPopoverModule,
 
     JwtModule.forRoot({
       config: {

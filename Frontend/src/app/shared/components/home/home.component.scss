@@ -1,0 +1,86 @@
+.container {
+  overflow: hidden;
+  width: 100%;
+  a {
+    cursor: pointer;
+  }
+}
+
+.intro-section {
+  background-color: #232d9a;
+  display: block;
+  text-align: center;
+  padding: 0px 20px 20px 20px;
+
+  .mob {
+    display: inline;
+  }
+  .desk {
+    display: none;
+  }
+  img {
+    max-width: 100%;
+  }
+}
+
+.tracker-example-section {
+  display: block;
+  text-align: center;
+  padding: 20px;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.footer {
+  display: block;
+  padding: 20px;
+  width: 100%;
+  float: left;
+  margin-top: 60px;
+  border-top: 1px solid rgba(143, 155, 179, 0.5);
+  img {
+    width: 100px;
+  }
+  a {
+    text-decoration: none;
+    color: gray;
+  }
+}
+
+/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
+@media only screen and (min-width: 660px) {
+  .intro-section {
+    padding: 0px 40px 40px 40px;
+    .mob {
+      display: none;
+    }
+    .desk {
+      display: inline;
+    }
+  }
+
+  .tracker-example-section {
+    display: block;
+    text-align: center;
+    padding: 40px;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .footer {
+    display: block;
+    padding: 40px;
+    img {
+      width: 100px;
+    }
+    a {
+      text-decoration: none;
+      color: gray;
+    }
+  }
+
+}

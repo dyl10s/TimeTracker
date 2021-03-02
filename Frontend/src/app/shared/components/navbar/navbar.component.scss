@@ -1,9 +1,64 @@
-#mobile {
+.mobile {
   display: inline;
+  width: 100%;
 }
-#desktop {
+.desktop {
   display: none;
 }
+
+a {
+  cursor: pointer;
+}
+
+#in-app-nav-mob {
+  // To be styled here
+}
+
+#home-nav-mob {
+  background-color: #232d9a;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 0px 20px;
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  button {
+    margin-top: 30px;
+    height: 20px;
+    background-color: #232d9a;
+    border: none;
+  }
+  img {
+    width: 200px;
+  }
+}
+// nbPopover controls - dont work inside #home-nav-mob styles //
+::ng-deep .cdk-overlay-pane {
+  overflow: hidden;
+  width: 100% !important;
+  right: unset !important;
+}
+::ng-deep .nb-theme-default nb-popover {
+  width: 100% !important;
+  background-color: #232d9a;
+  padding: 0px 20px 20px 20px;
+  a {
+    text-decoration: none;
+    color: white;
+  }
+}
+::ng-deep .nb-theme-default nb-popover.nb-overlay-bottom-start .arrow {
+  display: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+td {
+  border-bottom: 1px solid;
+}
+
 .nav {
   background-color: #232d9a !important;
   padding: 10px 10px 0px 10px;
@@ -35,20 +90,51 @@
   color: white;
 }
 
-
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-  #mobile {
+  .mobile {
     display: none;
   }
 
-  #desktop {
+  .desktop {
     display: inline;
-    min-width: 100%;
+    width: 100%;
   }
-}
 
-/* Media query for desktop viewport targets screens a minimum width of 830px. */
-@media only screen and (min-width: 830px) {
-    
+  #in-app-nav-desk {
+    // To be styled here
+  }
+
+  #home-nav-desk {
+    background-color: #232d9a;
+    display: flex;
+    padding: 20px 20px 0px 20px;
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    p {
+      display: inline-block;
+      padding: 10px;
+    }
+    img {
+      width: 180px;
+    }
+
+    .all-link-section {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .left-link-section {
+      width: fit-content;
+      padding-left: 10px;
+    }
+    .right-link-section {
+      width: fit-content;
+      button {
+        background: black;
+      }
+    }
+  }
 }
