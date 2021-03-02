@@ -48,13 +48,12 @@ const routes: Routes = [
         component: ProjectDetailsComponent
       },
       {
-<<<<<<< HEAD
         path: 'home',
         component: HomeComponent
-=======
+      },
+      {
         path: 'time',
         component: TimeComponent
->>>>>>> 38ff9f982ec1be86b5a9a363f359948b16c8bbbb
       }
     ]
   },
