@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbPopoverModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule} from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +21,9 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { TokenInterceptorService } from './core/services/auth/token-interceptor.service';
 import { ProjectsComponent } from './views/dashboard/projects/projects.component';
 import { CreateProjectComponent } from './shared/components/create-project/create-project.component';
+import { TimeComponent } from './views/dashboard/time/time.component';
+import { CreateTimeComponent } from './shared/components/create-time/create-time.component';
+import { EditTimeComponent } from './shared/components/edit-time/edit-time.component';
 import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 import { HomeComponent } from './shared/components/home/home.component';
@@ -39,7 +42,11 @@ export function tokenGetter() {
     ProfileComponent,
     NavbarComponent,
     ProjectDetailsComponent,
-    HomeComponent
+    HomeComponent,
+    TimeComponent,
+    CreateTimeComponent,
+    EditTimeComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +71,10 @@ export function tokenGetter() {
     NbInputModule,
     NbCardModule,
     NbButtonGroupModule,
+    NbSelectModule,
+    NbDatepickerModule.forRoot(),
     NbPopoverModule,
+    NbCalendarModule,
 
     JwtModule.forRoot({
       config: {
@@ -90,6 +100,6 @@ export function tokenGetter() {
     NbDialogService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [CreateProjectComponent]
+  entryComponents: [CreateProjectComponent, CreateTimeComponent]
 })
 export class AppModule { }

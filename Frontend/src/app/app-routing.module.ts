@@ -6,6 +6,7 @@ import { LogoutComponent } from './views/auth/logout/logout.component';
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
+import { TimeComponent } from './views/dashboard/time/time.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 import { HomeComponent } from './shared/components/home/home.component';
@@ -47,8 +48,13 @@ const routes: Routes = [
         component: ProjectDetailsComponent
       },
       {
+<<<<<<< HEAD
         path: 'home',
         component: HomeComponent
+=======
+        path: 'time',
+        component: TimeComponent
+>>>>>>> 38ff9f982ec1be86b5a9a363f359948b16c8bbbb
       }
     ]
   },
