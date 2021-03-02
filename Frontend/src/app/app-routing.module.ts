@@ -13,6 +13,10 @@ import { HomeComponent } from './shared/components/home/home.component';
 
 const routes: Routes = [
   {
+    path: 'home',
+    component: HomeComponent
+  },
+  {
     path: 'auth',
     canActivate: [ AuthGuard ],
     data: { isAuth: true },
@@ -46,10 +50,6 @@ const routes: Routes = [
       {
         path: 'projects/:id',
         component: ProjectDetailsComponent
-      },
-      {
-        path: 'home',
-        component: HomeComponent
       },
       {
         path: 'time',

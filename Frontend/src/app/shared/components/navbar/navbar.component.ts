@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
   }
 
   homeClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
   loginClick = function () {
     this.router.navigateByUrl('/auth/login');
@@ -32,10 +32,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigateByUrl('/auth/register');
   }
   featuresClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
   integrationClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
   
   changeTab(event){

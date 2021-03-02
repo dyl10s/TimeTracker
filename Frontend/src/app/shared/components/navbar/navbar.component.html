@@ -1,5 +1,5 @@
 <div class="desktop">
-  <div id="in-app-nav-desk" *ngIf="!hasRoute('/dashboard/home')">
+  <div id="in-app-nav-desk" *ngIf="!hasRoute('/home')">
     <nb-tabset fullWidth class="nav" (changeTab)="changeTab($event)">
       <nb-tab tabTitle="Time"> </nb-tab>
       <nb-tab tabTitle="Projects"> </nb-tab>
@@ -15,7 +15,7 @@
     </nb-tabset>
   </div>
 
-  <div id="home-nav-desk" *ngIf="hasRoute('/dashboard/home')">
+  <div id="home-nav-desk" *ngIf="hasRoute('/home')">
     <a (click)="homeClick()"> <img src="assets/logo.png" alt="logo" /> </a>
     <div class="all-link-section">
       <div class="left-link-section">
@@ -32,11 +32,11 @@
 
 
 <div class="mobile">
-  <div id="in-app-nav-mob" *ngIf="!hasRoute('/dashboard/home')">
+  <div id="in-app-nav-mob" *ngIf="!hasRoute('/home')">
     <nb-menu [items]="mobItems" autoCollapse="true" class="nav"> </nb-menu>
   </div>
 
-  <div id="home-nav-mob" *ngIf="hasRoute('/dashboard/home')">
+  <div id="home-nav-mob" *ngIf="hasRoute('/home')">
     <a (click)="homeClick()"> <img src="assets/logo.png" alt="logo" /> </a>
     <button nbButton [nbPopover]="tabs" nbPopoverPlacement="bottom">
       <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>

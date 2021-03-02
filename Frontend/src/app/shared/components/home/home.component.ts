@@ -16,13 +16,13 @@ export class HomeComponent implements OnInit {
   }
 
   homeClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
   featuresClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
   integrationClick = function () {
-    this.router.navigateByUrl('/dashboard/home');
+    this.router.navigateByUrl('/home');
   }
 
 }
