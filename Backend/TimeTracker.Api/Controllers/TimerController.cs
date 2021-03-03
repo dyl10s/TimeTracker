@@ -26,60 +26,70 @@ namespace Backend.Controllers
             authHelper = auth;
         }
 
+        // returns a TimerDTO for the newly created Timer
         [HttpPost]
-        public async Task<GenericResponseDTO<int>> startTimer(TimerCreateDTO timerInfo) {
+        [Route("Start")]
+        public async Task<GenericResponseDTO<TimerDTO>> StartTimer(TimerCreateDTO timerInfo) {
 
             if(User == null) {
-                return new GenericResponseDTO<int> {
+                return new GenericResponseDTO<TimerDTO> {
                     Message = "Not logged in.",
                     Success = false
                 };
             }
 
             Project project = await database.Projects
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == timerInfo.ProjectId);
 
             if(project == null) {
-                return new GenericResponseDTO<int> {
+                return new GenericResponseDTO<TimerDTO> {
                     Message = "Could not find project.",
                     Success = false
                 };
             }
 
-            await database.Timers
+            Timer timer = (await database.Timers
                 .AddAsync(new Timer {
                     User = await authHelper.GetCurrentUser(User, database),
                     StartTime = DateTime.Now,
                     Notes = timerInfo.Notes,
                     Project = project
-                });
+                })).Entity;
 
             await database.SaveChangesAsync();
 
-            return new GenericResponseDTO<int> {
+            return new GenericResponseDTO<TimerDTO> {
+                Data = new TimerDTO {
+                    Id = timer.Id,
+                    StartTime = timer.StartTime,
+                    Notes = timer.Notes,
+                    ProjectId = timer.Project.Id
+                },
                 Success = true
             };
             
         }
 
+        // returns a TimeEntryDTO for the newly created TimeEntry
         [HttpPost]
         [Route("Stop")]
-        public async Task<GenericResponseDTO<int>> stopTimer(int timerId) {
+        public async Task<GenericResponseDTO<TimeEntryDTO>> StopTimer(int timerId) {
 
             if(User == null) {
-                return new GenericResponseDTO<int> {
+                return new GenericResponseDTO<TimeEntryDTO> {
                     Message = "Not logged in.",
                     Success = false
                 };
             }
 
             Timer timer = await database.Timers
-                .AsNoTracking()
+                .Include(t => t.User)
+                .Include(t => t.Project)
                 .FirstOrDefaultAsync(t => t.Id == timerId);
 
             if(timer.User.Id != authHelper.GetCurrentUserId(User)) {
-                return new GenericResponseDTO<int> {
+                return new GenericResponseDTO<TimeEntryDTO> {
                     Message = "Invalid user.",
                     Success = false
                 };
@@ -87,25 +97,81 @@ namespace Backend.Controllers
 
             DateTime timeEntryCreationTime = DateTime.Now;
 
-            await database.TimeEntries.AddAsync(new TimeEntry{
-                CreatedTime = timeEntryCreationTime,
-                Notes = timer.Notes,
-                Project = timer.Project,
-                LastModified = timeEntryCreationTime,
-                User = await authHelper.GetCurrentUser(User, database),
-                Length = timeEntryCreationTime.Second - timer.StartTime.Second,
-                Day = timeEntryCreationTime
-            });
+            TimeEntry timeEntry = (await database.TimeEntries
+                .AddAsync(new TimeEntry{
+                    CreatedTime = timeEntryCreationTime,
+                    Notes = timer.Notes,
+                    Project = timer.Project,
+                    LastModified = timeEntryCreationTime,
+                    User = await authHelper.GetCurrentUser(User, database),
+                    Length = (timeEntryCreationTime - timer.StartTime).TotalMinutes,
+                    Day = timeEntryCreationTime
+                })).Entity;
+
+            TimeEntryDTO returnData = new TimeEntryDTO {
+                Id = timeEntry.Id,
+                Length = timeEntry.Length,
+                Notes = timeEntry.Notes,
+                ProjectId = timer.Project.Id,
+                Day = timeEntry.Day
+            };
+
+            database.Timers.Remove(timer);
 
             await database.SaveChangesAsync();
 
-            return new GenericResponseDTO<int> {
-                Success = true
+            return new GenericResponseDTO<TimeEntryDTO> {
+                Success = true,
+                Data = returnData
             };
         }
 
+        // returns a TimerDTO for the given timer id
+        [HttpPost]
+        public async Task<GenericResponseDTO<TimerDTO>> GetTimerById(int timerId) {
+            
+            if(User == null) {
+                return new GenericResponseDTO<TimerDTO> {
+                    Message = "Not logged in.",
+                    Success = false
+                };
+            }
+
+            Timer timer = await database.Timers
+                .AsNoTracking()
+                .Include(t => t.User)
+                .Include(t => t.Project)
+                .FirstOrDefaultAsync(t => t.Id == timerId);
+
+            if(timer == null) {
+                return new GenericResponseDTO<TimerDTO> {
+                    Message = "Could not find timer with a matching Id.",
+                    Success = false
+                };
+            }
+
+            if(timer.User.Id != authHelper.GetCurrentUserId(User)) {
+                return new GenericResponseDTO<TimerDTO> {
+                    Message = "Timer does not belong to the current user.",
+                    Success = false
+                };
+            }
+
+            return new GenericResponseDTO<TimerDTO> {
+                Data = new TimerDTO{
+                    Id = timer.Id,
+                    StartTime = timer.StartTime,
+                    Notes = timer.Notes,
+                    ProjectId = timer.Project.Id 
+                },
+                Success = true
+            };
+            
+        }
+
+        // returns a list of timerDTOs for each timer belonging to the logged in user
         [HttpGet]
-        public async Task<GenericResponseDTO<List<TimerDTO>>> getAllTimers() {
+        public async Task<GenericResponseDTO<List<TimerDTO>>> GetAllTimers() {
 
             int currentUserId;
 
@@ -121,6 +187,7 @@ namespace Backend.Controllers
             List<Timer> timers = await database.Timers
                 .AsNoTracking()
                 .Where(t => t.User.Id == currentUserId)
+                .Include(t => t.Project)
                 .ToListAsync();
 
             List<TimerDTO> timerDTOs = new List<TimerDTO>();
@@ -128,7 +195,7 @@ namespace Backend.Controllers
                 Id = t.Id,
                 StartTime = t.StartTime,
                 Notes = t.Notes,
-                ProjectName = t.Project.Name
+                ProjectId = t.Project.Id
             }));
 
             return new GenericResponseDTO<List<TimerDTO>> {

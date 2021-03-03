@@ -5,6 +5,6 @@ namespace TimeTracker.Api.DTOs {
         public int Id;
         public DateTime StartTime;
         public string Notes;
-        public string ProjectName;
+        public int ProjectId;
     }
 }
