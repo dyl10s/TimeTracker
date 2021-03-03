@@ -39,7 +39,6 @@ namespace Backend.Controllers
             }
 
             Project project = await database.Projects
-                //.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == timerInfo.ProjectId);
 
             if(project == null) {
