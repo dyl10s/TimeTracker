@@ -1,0 +1,248 @@
+.container {
+  padding: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+}
+
+button {
+  height: 40px !important;
+}
+
+.date-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 50px;
+  justify-content: space-between;
+  h6 {
+    display: inline !important;
+  }
+}
+
+.button-control-section {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 60px;
+
+  button {
+    float: right;
+    display: inline;
+    margin-right: 10px;
+  }
+
+  .return-date-section {
+    display: inline;
+  }
+
+  .view-options-section {
+    display: none;
+  }
+
+  .calendar-section {
+    display: inline;
+    float: left;
+    button {
+      float: unset !important;
+    }
+  }
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.entry-detail-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  ul {
+    border: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  ul li {
+    display: inline-block;
+  }
+
+  .weekTime {
+    display: none;
+  }
+
+  table {
+    width: 100%;
+    border-top: 1px solid #8f9bb3;
+    border-bottom: 1px solid #8f9bb3;
+  }
+
+  th,
+  td {
+    padding: 15px;
+  }
+
+  #details {
+    width: 50%;
+  }
+
+  .projectName {
+    margin-bottom: 5px;
+  }
+
+  #buttons {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      margin: 5px;
+      width: unset;
+    }
+  }
+
+  [nbButton].appearance-outline.size-medium,
+  .appearance-outline.size-medium[nbButtonToggle] {
+    height: 100%;
+    padding: 15px;
+    width: 20%;
+  }
+
+  nb-button-group {
+    width: 100%;
+  }
+}
+
+.adaptive-button-text {
+  display: none;
+}
+
+.adaptive-button-icon {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+::ng-deep .nb-theme-default nb-card-body,
+::ng-deep .nb-theme-default nb-card {
+  background-color: transparent;
+  padding: unset !important;
+  width: 100%;
+  border: unset !important;
+}
+/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
+@media only screen and (min-width: 660px) {
+  .container {
+    padding: 20px;
+  }
+
+  .button-control-section {
+    .view-options-section {
+      display: inline;
+    }
+    nb-button-group {
+      display: inline;
+      button {
+        float: left! important;
+        margin: unset;
+      }
+    }
+  }
+
+  .date-section {
+    float: left;
+    justify-content: space-between;
+    align-items: center;
+
+    .center-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+
+  .entry-detail-section {
+    .weekTime {
+      display: inline;
+    }
+
+    #details {
+      width: 70%;
+    }
+
+    button {
+      padding: 1vh 3.2vw !important;
+    }
+
+    #buttons {
+      button {
+        padding: 0.6875rem 1.125rem !important;
+      }
+
+      #edit-icon {
+        margin-right: 0 !important;
+      }
+    }
+
+    [nbButton].appearance-outline.size-medium,
+    .appearance-outline.size-medium[nbButtonToggle] {
+      height: 100%;
+      padding: 15px;
+      width: 20%;
+    }
+
+    nb-button-group {
+      width: 100%;
+    }
+  }
+
+  .week-details-section {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        padding: 12px 5px;
+        vertical-align: middle;
+      }
+      thead,
+      tr {
+        border-bottom: 1px solid #8f9bb3;
+      }
+      tbody {
+        .adaptive-button-icon {
+          margin-right: 0 !important;
+        }
+      }
+    }
+    .name {
+      text-align: left;
+      padding: 15px !important;
+    }
+
+    .day,
+    .total,
+    .delete {
+      width: 90px;
+      padding: 5px !important;
+      text-align: center;
+    }
+  }
+
+  .adaptive-button-text {
+    display: inline;
+  }
+
+  .adaptive-button-icon {
+    margin-right: 0.5rem !important;
+  }
+}
