@@ -1,6 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NbThemeModule, NbDialogRef, NbToastrModule } from '@nebular/theme';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
+import { NbThemeModule, NbDialogRef, NbToastrModule, NbActionsModule, NbButtonModule, NbSpinnerModule, NbCardModule, NbMenuService } from '@nebular/theme';
+import { tokenGetter } from 'src/app/app.module';
 import { CreateProjectComponent } from './create-project.component';
 
 /* 
@@ -21,7 +24,7 @@ describe('CreateProjectComponent', () => {
   let component: CreateProjectComponent;
   let fixture: ComponentFixture<CreateProjectComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         CreateProjectComponent
@@ -32,7 +35,18 @@ describe('CreateProjectComponent', () => {
       ],
       imports: [
         HttpClientModule,
-        NbToastrModule.forRoot()
+        NbToastrModule.forRoot(),
+        FormsModule,
+        ReactiveFormsModule,
+        NbActionsModule,
+        NbButtonModule,
+        NbSpinnerModule,
+        NbCardModule,
+        JwtModule.forRoot({
+          config: {
+            tokenGetter: tokenGetter
+          }
+        }),
       ]
     })
     .compileComponents();

@@ -4,6 +4,10 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { NavbarComponent } from './navbar.component';
+import { NbMenuModule, NbMenuService, NbTabsetModule, NbThemeModule } from '@nebular/theme';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -11,7 +15,18 @@ describe('NavbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavbarComponent ]
+      declarations: [ NavbarComponent ],
+      providers: [
+        NbThemeModule.forRoot({ name: 'default' }).providers,
+        NbMenuModule.forRoot().providers,
+        RouterModule.forRoot([]).providers
+      ],
+      imports: [
+        NbMenuModule,
+        BrowserAnimationsModule,
+        NbTabsetModule,
+        NbEvaIconsModule
+      ]
     })
     .compileComponents();
   }));

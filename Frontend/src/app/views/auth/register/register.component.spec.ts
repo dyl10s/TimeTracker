@@ -6,15 +6,17 @@ import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbLayoutMo
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { tokenGetter } from 'src/app/app.module';
 import { AuthApiService } from 'src/app/core/services/auth/auth-api.service';
-import { LoginComponent } from './login.component';
+import { RegisterComponent } from './register.component';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('RegisterComponent', () => {
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent],
+      declarations: [
+        RegisterComponent
+      ],
       providers: [
         AuthApiService,
         NbStatusService
@@ -41,7 +43,7 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

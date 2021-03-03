@@ -51,6 +51,8 @@ export class ProjectsComponent {
             data: x
           });
         }
+      }, (err) => {
+        console.log(err)
       });
 
       let customFilter = new CustomFilterService<ProjectDTO>();

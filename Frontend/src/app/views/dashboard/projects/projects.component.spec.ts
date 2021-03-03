@@ -1,13 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JwtModule } from '@auth0/angular-jwt';
-import { NbDialogModule, NbDialogService, NbThemeModule, NbToastrModule, NbToastrService, NbTreeGridModule, NbTreeGridService, NbTreeGridSortService } from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { NbButtonGroupModule, NbDialogModule, NbDialogService, NbIconModule, NbSpinnerModule, NbThemeModule, NbToastrModule, NbToastrService, NbTreeGridModule, NbTreeGridService, NbTreeGridSortService } from '@nebular/theme';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { tokenGetter } from 'src/app/app.module';
 import { AuthApiService } from 'src/app/core/services/auth/auth-api.service';
-import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
-import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectsComponent } from './projects.component';
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
 
 describe('ProjectComponent', () => {
   let component: ProjectsComponent;
@@ -30,7 +33,13 @@ describe('ProjectComponent', () => {
             tokenGetter: tokenGetter
           }
         }),
-        AppRoutingModule]
+        AppRoutingModule,
+        NbButtonGroupModule,
+        NbIconModule,
+        NbEvaIconsModule,
+        NbSpinnerModule,
+        HttpClientTestingModule,
+      ]
     })
     .compileComponents();
   }));
@@ -44,4 +53,5 @@ describe('ProjectComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
