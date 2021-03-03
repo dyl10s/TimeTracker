@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 import { JwtService } from '../../../core/services/auth/jwt.service';
@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private JwtService: JwtService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +48,16 @@ export class LoginComponent implements OnInit {
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
   
         // TODO: Remove alert and route to dashboard
-        this.router.navigate(['/dashboard/profile']);
+        this.route.queryParamMap.subscribe(
+          (paramMap) => {
+            console.log(paramMap);
+            if(paramMap.get('returnUrl'))
+              this.router.navigate([paramMap.get('returnUrl')]);
+            else
+              this.router.navigate(['/dashboard/profile']);
+          }
+        )
+        
       } else {
         this.loginForm.controls['password'].reset();
         this.error = response.message;
