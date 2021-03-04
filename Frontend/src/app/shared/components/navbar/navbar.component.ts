@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -11,13 +12,29 @@ export class NavbarComponent implements OnInit {
 
   isMenuOpen: boolean = false;
 
-  constructor() {}
+  constructor(
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {}
-  
+
+  hasRoute(route: string){
+    return this.router.url.includes(route);
+  }
+
+  homeClick = function () {
+    this.router.navigateByUrl('');
+  }
+  loginClick = function () {
+    this.router.navigateByUrl('/auth/login');
+  }
+  signupClick = function () {
+    this.router.navigateByUrl('/auth/register');
+  }
+
   changeTab(event){
     switch(event.tabTitle) {
-      case('Name'): 
+      case('Name'):
         this.isMenuOpen = !this.isMenuOpen;
         break;
       default:

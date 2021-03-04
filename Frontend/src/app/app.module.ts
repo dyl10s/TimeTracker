@@ -26,6 +26,7 @@ import { CreateTimeComponent } from './shared/components/create-time/create-time
 import { EditTimeComponent } from './shared/components/edit-time/edit-time.component';
 import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
+import { HomeComponent } from './shared/components/home/home.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -40,6 +41,8 @@ export function tokenGetter() {
     ProjectsComponent,
     ProfileComponent,
     NavbarComponent,
+    ProjectDetailsComponent,
+    HomeComponent,
     TimeComponent,
     CreateTimeComponent,
     EditTimeComponent,
