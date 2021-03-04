@@ -1,5 +1,6 @@
 export interface ProfileDTO {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     projects: string[];
 }

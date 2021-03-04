@@ -35,9 +35,8 @@ export class ProfileComponent implements OnInit {
   constructor(private profileService: ProfileService, private toastrService: NbToastrService) {
     this.profileService.getProfileInfo().subscribe(
       (httpResponse: GenericResponseDTO) => {
-        let tokens: string[] = httpResponse.data.name.split(' ', 2);
-        this.updateNameForm.get('firstName').setValue(tokens[0]);
-        this.updateNameForm.get('lastName').setValue(tokens[1]);
+        this.updateNameForm.get('firstName').setValue(httpResponse.data.firstName);
+        this.updateNameForm.get('lastName').setValue(httpResponse.data.lastName);
         this.emailAddress = httpResponse.data.email;
         this.projects = httpResponse.data.projects;
       },
@@ -100,8 +99,8 @@ export class ProfileComponent implements OnInit {
       updateNameForm.get('lastName').disable();
       this.disableNameSubmitButton = true;
       this.profileService.setName({
-        firstName: this.updateNameForm.get('firstName').value,
-        lastName: this.updateNameForm.get('lastName').value
+        firstName: this.updateNameForm.get('firstName').value.trim(),
+        lastName: this.updateNameForm.get('lastName').value.trim()
       }).subscribe(
         (response: GenericResponseDTO) => {
           if(response.success)

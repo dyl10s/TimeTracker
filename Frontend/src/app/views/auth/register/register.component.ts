@@ -52,7 +52,8 @@ export class RegisterComponent implements OnInit {
     this.authService.register({ 
       Email: registerForm.email, 
       Password: registerForm.password, 
-      Name: `${registerForm.firstName.trim()} ${registerForm.lastName.trim()}`,
+      FirstName: registerForm.firstName.trim(),
+      LastName: registerForm.lastName.trim(),
       InviteCode: registerForm.inviteCode
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
