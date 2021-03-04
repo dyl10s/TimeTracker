@@ -16,6 +16,8 @@ button {
   gap: 10px;
   padding-bottom: 50px;
   justify-content: space-between;
+  text-align: center;
+
   h6 {
     display: inline !important;
   }
@@ -29,11 +31,13 @@ button {
   button {
     float: right;
     display: inline;
-    margin-right: 10px;
   }
 
   .return-date-section {
     display: inline;
+    button {
+      margin-right: 10px;
+    }
   }
 
   .view-options-section {
@@ -55,9 +59,7 @@ button {
 .entry-detail-section {
   width: 100%;
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
 
@@ -83,13 +85,13 @@ button {
 
   table {
     width: 100%;
-    border-top: 1px solid #8f9bb3;
-    border-bottom: 1px solid #8f9bb3;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
   }
 
   th,
   td {
-    padding: 15px;
+    padding: 10px;
   }
 
   #details {
@@ -102,8 +104,6 @@ button {
 
   #buttons {
     display: flex;
-    justify-content: space-between;
-
     button {
       margin: 5px;
       width: unset;
@@ -138,6 +138,28 @@ button {
   width: 100%;
   border: unset !important;
 }
+
+// Undo styles to popover made by nav //
+::ng-deep .cdk-overlay-pane {
+  overflow: initial;
+  width: initial;
+  right: initial;
+}
+::ng-deep .nb-theme-default nb-popover {
+  width: initial;
+  background-color: initial;
+  padding: initial;
+  a {
+    font-size: initial;
+    font-weight: inital;
+    font-family: initial;
+    text-decoration: initial;
+    color:initial;
+  }
+}
+::ng-deep .nb-theme-default nb-popover.nb-overlay-bottom-start .arrow {
+  display: initial;
+}
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
   .container {
@@ -145,6 +167,10 @@ button {
   }
 
   .button-control-section {
+
+    .calendar-section{
+      margin-right: 10px;
+    }
     .view-options-section {
       display: inline;
     }
@@ -183,8 +209,10 @@ button {
     }
 
     #buttons {
+      float: right;
+      justify-content: center;
       button {
-        padding: 0.6875rem 1.125rem !important;
+        padding: inherit !important;
       }
 
       #edit-icon {
@@ -216,7 +244,7 @@ button {
       }
       thead,
       tr {
-        border-bottom: 1px solid #8f9bb3;
+        border-bottom: 1px solid;
       }
       tbody {
         .adaptive-button-icon {

@@ -6,12 +6,12 @@
       </button>
 
       <div class="center-date">
-        <h6 *ngIf="dayView">
+        <h4 *ngIf="dayView">
           {{ today | date: "fullDate" }}
-        </h6>
-        <h6 *ngIf="weekView">
+        </h4>
+        <h4 *ngIf="weekView">
           {{ weekStartDate | date }} - {{ weekEndDate | date }}
-        </h6>
+        </h4>
       </div>
 
       <button nbButton outline (click)="incDate()">
