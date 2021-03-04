@@ -1,19 +1,56 @@
-<div id="desktop">
-  <nb-tabset fullWidth class="nav" (changeTab)="changeTab($event)">
-    <nb-tab tabTitle="Time"> </nb-tab>
-    <nb-tab tabTitle="Projects"> </nb-tab>
-    <nb-tab tabTitle="Reports"> </nb-tab>
-    <nb-tab tabTitle="Manage"> </nb-tab>
-    <nb-tab tabTitle="Help"> </nb-tab>
-    <nb-tab tabTitle="Name" [tabIcon]="!isMenuOpen ? 'arrow-down' : 'arrow-up'">
-      <nb-menu [items]="deskItems" *ngIf="isMenuOpen"></nb-menu>
-    </nb-tab>
-  </nb-tabset>
+<div class="desktop">
+  <div id="in-app-nav-desk" *ngIf="!hasRoute('')">
+    <nb-tabset fullWidth class="nav" (changeTab)="changeTab($event)">
+      <nb-tab tabTitle="Time"> </nb-tab>
+      <nb-tab tabTitle="Projects"> </nb-tab>
+      <nb-tab tabTitle="Reports"> </nb-tab>
+      <nb-tab tabTitle="Manage"> </nb-tab>
+      <nb-tab tabTitle="Help"> </nb-tab>
+      <nb-tab
+        tabTitle="Name"
+        [tabIcon]="!isMenuOpen ? 'arrow-down' : 'arrow-up'"
+      >
+        <nb-menu [items]="deskItems" *ngIf="isMenuOpen"></nb-menu>
+      </nb-tab>
+    </nb-tabset>
+  </div>
+
+  <div id="home-nav-desk" *ngIf="hasRoute('')">
+    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
+    <div class="right-link-section">
+      <p><a (click)="loginClick()">Login</a></p>
+      <button nbButton><a (click)="signupClick()">Sign up</a></button>
+    </div>
+  </div>
 </div>
 
-<div id="mobile">
-  <nb-menu [items]="mobItems" autoCollapse="true" class="nav">
-  </nb-menu>
+<div class="mobile">
+  <div id="in-app-nav-mob" *ngIf="!hasRoute('')">
+    <nb-menu [items]="mobItems" autoCollapse="true" class="nav"> </nb-menu>
+  </div>
+
+  <div id="home-nav-mob" *ngIf="hasRoute('')">
+    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
+    <button nbButton [nbPopover]="tabs" nbPopoverPlacement="bottom">
+      <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
+    </button>
+    <ng-template #tabs>
+      <nb-card-body>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <p><a (click)="loginClick()">Login</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p><a (click)="signupClick()">Sign up</a></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </ng-template>
+  </div>
 </div>
-
-
