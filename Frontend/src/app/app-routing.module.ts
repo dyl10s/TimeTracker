@@ -13,7 +13,7 @@ import { HomeComponent } from './shared/components/home/home.component';
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomeComponent
   },
   {

@@ -1,5 +1,5 @@
 <div class="desktop">
-  <div id="in-app-nav-desk" *ngIf="!hasRoute('/home')">
+  <div id="in-app-nav-desk" *ngIf="!hasRoute('')">
     <nb-tabset fullWidth class="nav" (changeTab)="changeTab($event)">
       <nb-tab tabTitle="Time"> </nb-tab>
       <nb-tab tabTitle="Projects"> </nb-tab>
@@ -15,29 +15,22 @@
     </nb-tabset>
   </div>
 
-  <div id="home-nav-desk" *ngIf="hasRoute('/home')">
-    <a (click)="homeClick()"> <img src="assets/logo.png" alt="logo" /> </a>
-    <div class="all-link-section">
-      <div class="left-link-section">
-        <p><a (click)="featuresClick()">Features</a></p>
-        <p><a (click)="integrationClick()">Integration</a></p>
-      </div>
-      <div class="right-link-section">
-        <p><a (click)="loginClick()">Login</a></p>
-        <button nbButton><a (click)="signupClick()">Sign up</a></button>
-      </div>
+  <div id="home-nav-desk" *ngIf="hasRoute('')">
+    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
+    <div class="right-link-section">
+      <p><a (click)="loginClick()">Login</a></p>
+      <button nbButton><a (click)="signupClick()">Sign up</a></button>
     </div>
   </div>
 </div>
 
-
 <div class="mobile">
-  <div id="in-app-nav-mob" *ngIf="!hasRoute('/home')">
+  <div id="in-app-nav-mob" *ngIf="!hasRoute('')">
     <nb-menu [items]="mobItems" autoCollapse="true" class="nav"> </nb-menu>
   </div>
 
-  <div id="home-nav-mob" *ngIf="hasRoute('/home')">
-    <a (click)="homeClick()"> <img src="assets/logo.png" alt="logo" /> </a>
+  <div id="home-nav-mob" *ngIf="hasRoute('')">
+    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
     <button nbButton [nbPopover]="tabs" nbPopoverPlacement="bottom">
       <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
     </button>
@@ -45,16 +38,6 @@
       <nb-card-body>
         <table>
           <tbody>
-            <tr>
-              <td>
-                <p><a (click)="featuresClick()">Features</a></p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p><a (click)="integrationClick()">Integration</a></p>
-              </td>
-            </tr>
             <tr>
               <td>
                 <p><a (click)="loginClick()">Login</a></p>

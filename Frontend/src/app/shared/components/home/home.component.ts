@@ -16,13 +16,6 @@ export class HomeComponent implements OnInit {
   }
 
   homeClick = function () {
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('');
   }
-  featuresClick = function () {
-    this.router.navigateByUrl('/home');
-  }
-  integrationClick = function () {
-    this.router.navigateByUrl('/home');
-  }
-
 }

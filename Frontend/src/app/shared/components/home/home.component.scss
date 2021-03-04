@@ -10,16 +10,36 @@
   background-color: #232d9a;
   display: block;
   text-align: center;
-  padding: 0px 20px 20px 20px;
+  padding: 50px 20px 50px 20px;
 
-  .mob {
+  .intro-text,
+  .intro-text-bottom {
     display: inline;
+    text-align: center;
+    font-family: Roboto, sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: rgba(252, 252, 252, 1);
+    text-decoration: none;
+    line-height: 1em;
+
+    .colored-word {
+      color: #15db95;
+      font-family: "Permanent Marker", handwriting;
+      font-weight: 300;
+    }
   }
-  .desk {
-    display: none;
-  }
-  img {
-    max-width: 100%;
+  .intro-text-bottom {
+    line-height: .7em;
+    padding-top: 5px;
+    .small-text {
+      color: rgba(0, 0, 0, 1);
+      font-size: 25px;
+
+      .ext-text {
+        display: none;
+      }
+    }
   }
 }
 
@@ -40,24 +60,40 @@
   float: left;
   margin-top: 60px;
   border-top: 1px solid rgba(143, 155, 179, 0.5);
-  img {
-    width: 100px;
-  }
-  a {
+  .logo {
+    font-family: Prompt, sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: rgba(191, 189, 189, 1);
+    text-transform: none;
+    font-style: normal;
     text-decoration: none;
-    color: gray;
+    line-height: 1em;
+    letter-spacing: 2.3px;
   }
 }
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
   .intro-section {
-    padding: 40px 40px 40px 40px;
-    .mob {
-      display: none;
+    padding: 70px 40px 70px 40px;
+    .intro-text,
+    .intro-text-bottom {
+      line-height: 1.5em;
+      .text-break {
+        display: none;
+      }
     }
-    .desk {
-      display: inline;
+    .intro-text-bottom {
+      line-height: .7em;
+      .small-text {
+        color: rgba(0, 0, 0, 1);
+        font-size: 25px;
+
+        .ext-text {
+          display: inline;
+        }
+      }
     }
   }
 
@@ -77,10 +113,5 @@
     img {
       width: 100px;
     }
-    a {
-      text-decoration: none;
-      color: gray;
-    }
   }
-
 }

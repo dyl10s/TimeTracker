@@ -10,27 +10,27 @@ a {
   cursor: pointer;
 }
 
-#in-app-nav-mob {
-  // To be styled here
-}
-
 #home-nav-mob {
   background-color: #232d9a;
   display: flex;
   justify-content: space-between;
   padding: 20px 20px 0px 20px;
-  a {
-    text-decoration: none;
-    color: white;
-  }
   button {
-    margin-top: 30px;
-    height: 20px;
+    margin-top: 20px;
+    height: 30px;
     background-color: #232d9a;
     border: none;
   }
-  img {
-    width: 200px;
+  .logo {
+    font-family: Prompt, sans-serif;
+    font-size: 60px;
+    font-weight: 700;
+    color: rgba(252, 252, 252, 1);
+    text-transform: none;
+    font-style: normal;
+    text-decoration: none;
+    line-height: 1em;
+    letter-spacing: 2.3px;
   }
 }
 // nbPopover controls - dont work inside #home-nav-mob styles //
@@ -44,6 +44,9 @@ a {
   background-color: #232d9a;
   padding: 0px 20px 20px 20px;
   a {
+    font-size: 17px;
+    font-weight: 700;
+    font-family: Prompt, sans-serif;
     text-decoration: none;
     color: white;
   }
@@ -86,9 +89,7 @@ td {
   border-bottom: unset;
 }
 
-::ng-deep .nb-theme-default nb-menu .menu-item a {
-  color: white;
-}
+
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
@@ -101,15 +102,15 @@ td {
     width: 100%;
   }
 
-  #in-app-nav-desk {
-    // To be styled here
-  }
-
   #home-nav-desk {
     background-color: #232d9a;
     display: flex;
     padding: 20px 20px 0px 20px;
+    justify-content: space-between;
     a {
+      font-size: 17px;
+      font-weight: 700;
+      font-family: Prompt, sans-serif;
       text-decoration: none;
       color: white;
     }
@@ -117,23 +118,22 @@ td {
       display: inline-block;
       padding: 10px;
     }
-    img {
-      width: 180px;
-    }
-
-    .all-link-section {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
-    .left-link-section {
-      width: fit-content;
-      padding-left: 10px;
+    .logo {
+      font-family: Prompt, sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      color: rgba(252, 252, 252, 1);
+      text-transform: none;
+      font-style: normal;
+      text-decoration: none;
+      line-height: 1em;
+      letter-spacing: 2.3px;
     }
     .right-link-section {
       width: fit-content;
       button {
         background: black;
+        border: none;
       }
     }
   }
