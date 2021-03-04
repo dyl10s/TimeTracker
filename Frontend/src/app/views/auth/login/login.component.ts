@@ -47,10 +47,8 @@ export class LoginComponent implements OnInit {
         // Handle Successful Login
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
   
-        // TODO: Remove alert and route to dashboard
         this.route.queryParamMap.subscribe(
           (paramMap) => {
-            console.log(paramMap);
             if(paramMap.get('returnUrl'))
               this.router.navigate([paramMap.get('returnUrl')]);
             else
