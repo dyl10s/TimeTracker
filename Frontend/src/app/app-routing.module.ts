@@ -36,6 +36,10 @@ const routes: Routes = [
     component: LogoutComponent
   },
   {
+    path: 'projects',
+    component: ProjectsComponent
+  },
+  {
     path: 'dashboard',
     canActivate: [ AuthGuard ],
     children: [
