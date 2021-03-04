@@ -18,7 +18,7 @@ button {
   justify-content: space-between;
   text-align: center;
 
-  h6 {
+  h4 {
     display: inline !important;
   }
 }
@@ -139,27 +139,6 @@ button {
   border: unset !important;
 }
 
-// Undo styles to popover made by nav //
-::ng-deep .cdk-overlay-pane {
-  overflow: initial;
-  width: initial;
-  right: initial;
-}
-::ng-deep .nb-theme-default nb-popover {
-  width: initial;
-  background-color: initial;
-  padding: initial;
-  a {
-    font-size: initial;
-    font-weight: inital;
-    font-family: initial;
-    text-decoration: initial;
-    color:initial;
-  }
-}
-::ng-deep .nb-theme-default nb-popover.nb-overlay-bottom-start .arrow {
-  display: initial;
-}
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
   .container {

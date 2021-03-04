@@ -33,62 +33,6 @@ a {
     letter-spacing: 2.3px;
   }
 }
-// nbPopover controls - dont work inside #home-nav-mob styles //
-::ng-deep .cdk-overlay-pane {
-  overflow: hidden;
-  width: 100% !important;
-  right: unset !important;
-}
-::ng-deep .nb-theme-default nb-popover {
-  width: 100% !important;
-  background-color: #232d9a;
-  padding: 0px 20px 20px 20px;
-  a {
-    font-size: 17px;
-    font-weight: 700;
-    font-family: Prompt, sans-serif;
-    text-decoration: none;
-    color: white;
-  }
-}
-::ng-deep .nb-theme-default nb-popover.nb-overlay-bottom-start .arrow {
-  display: none;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-td {
-  border-bottom: 1px solid;
-}
-
-.nav {
-  background-color: #232d9a !important;
-  padding: 10px 10px 0px 10px;
-}
-
-:host nb-tab {
-  padding: 1.25rem;
-}
-:host nb-tabset nav li {
-  color: white;
-}
-
-::ng-deep .nb-theme-default nb-tabset .tab.active .tab-link {
-  color: #ffffff;
-  outline: unset;
-  -webkit-tap-highlight-color: transparent;
-}
-::ng-deep .nb-theme-default nb-tabset .tab-link {
-  width: 100%;
-  color: #ffffff;
-  outline: unset;
-}
-
-::ng-deep .nb-theme-default nb-tabset .tabset {
-  border-bottom: unset;
-}
-
 
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
