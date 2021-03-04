@@ -152,7 +152,7 @@ namespace TimeTracker.Test {
 
             Assert.IsTrue(startTimerResponse.Success);
 
-            GenericResponseDTO<List<TimerDTO>> getTimerByIdResponse = await timerController.GetTimersWithinDateRange(DateTime.UtcNow - new TimeSpan(1, 0, 0), DateTime.UtcNow);
+            GenericResponseDTO<List<TimerDTO>> getTimerByIdResponse = await timerController.GetTimersWithinDateRange(DateTime.UtcNow, DateTime.UtcNow);
 
             Assert.IsTrue(getTimerByIdResponse.Success);
             Assert.AreEqual(getTimerByIdResponse.Data[0].Id, startTimerResponse.Data.Id);
@@ -160,7 +160,8 @@ namespace TimeTracker.Test {
             Assert.AreEqual(getTimerByIdResponse.Data[0].ProjectId, projectId);
             Assert.AreEqual(getTimerByIdResponse.Data[0].StartTime, startTimerResponse.Data.StartTime);
 
-            getTimerByIdResponse = await timerController.GetTimersWithinDateRange(DateTime.UtcNow, DateTime.UtcNow);
+            DateTime tomorrow = DateTime.UtcNow + new TimeSpan(24, 0, 0);
+            getTimerByIdResponse = await timerController.GetTimersWithinDateRange(tomorrow, tomorrow);
 
             Assert.AreEqual(getTimerByIdResponse.Data.Count, 0);
         }

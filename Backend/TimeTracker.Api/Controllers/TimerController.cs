@@ -193,9 +193,12 @@ namespace Backend.Controllers
                 };
             }
 
+            startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
             List<Timer> timers = await database.Timers
                 .AsNoTracking()
-                .Where(t => t.User.Id == currentUserId && t.StartTime > startDate && endDate > t.StartTime)
+                .Where(t => t.User.Id == currentUserId && t.StartTime >= startDate && t.StartTime <= endDate)
                 .Include(t => t.Project)
                 .ToListAsync();
 
