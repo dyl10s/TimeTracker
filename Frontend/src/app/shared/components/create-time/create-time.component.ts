@@ -5,6 +5,7 @@ import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model
 import { TimeEntry } from 'src/app/core/models/TimeEntry.model';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
+import { TimerService } from 'src/app/core/services/timer.service';
 @Component({
   selector: 'app-create-time',
   templateUrl: './create-time.component.html',
@@ -26,11 +27,11 @@ export class CreateTimeComponent implements OnInit {
   constructor(
     private ref: NbDialogRef<CreateTimeComponent>,
     private projectService: ProjectService,
-    private timeEntryService: TimeEntryApiService
+    private timeEntryService: TimeEntryApiService,
+    private timerService: TimerService
   ) { }
 
   ngOnInit() {
-    console.log(this.day)
     this.projectService.getProjectsByUser().subscribe((response: GenericResponseDTO) => {
       this.projects = response.data;
     });
@@ -40,26 +41,33 @@ export class CreateTimeComponent implements OnInit {
     this.ref.close({ update: false });
   }
 
-  startTimer() { }
-
-  addTime(timeForm: FormGroup) {
-    if(!parseFloat(timeForm.value.time)){
-      timeForm.controls['time'].reset();
-      return;
-    }
-
-    const time: TimeEntry = {
-      Length: parseFloat(timeForm.value.time),
-      Notes: timeForm.value.notes,
-      ProjectId: timeForm.value.projectName,
-      Day: this.day
-    };
-
-    this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
-      if(response.success){
-        this.ref.close({ success: true, update: true });
+  submit(timeForm: FormGroup) {
+    if(timeForm.value.time == ''){
+      //Start Timer
+      this.timerService.startTimer(timeForm.value.notes, timeForm.value.projectName).subscribe((response: GenericResponseDTO) => {
+        if(response.success){
+          this.ref.close({ success: true, update: true, item: 'timer' });
+        }
+      })
+    }else{
+      if(!parseFloat(timeForm.value.time)){
+        timeForm.controls['time'].reset();
+        return;
       }
-    })
+  
+      const time: TimeEntry = {
+        Length: parseFloat(timeForm.value.time),
+        Notes: timeForm.value.notes,
+        ProjectId: timeForm.value.projectName,
+        Day: this.day
+      };
+  
+      this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
+        if(response.success){
+          this.ref.close({ success: true, update: true, item: 'time entry' });
+        }
+      })
+    }
   }
 
 }

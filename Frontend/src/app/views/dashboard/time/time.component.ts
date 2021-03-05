@@ -190,7 +190,7 @@ export class TimeComponent implements OnInit {
       }
     }).onClose.subscribe((x: any) => {
       if(x.success){
-        this.toastrService.show("Success", 'New time has been added', {status:'success', duration: 4000});
+        this.toastrService.show("Success", `New ${x.item} created!`, {status:'success', duration: 4000});
       }
     });
   }
