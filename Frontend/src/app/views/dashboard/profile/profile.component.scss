@@ -1,7 +1,10 @@
+.container {
+  padding: 0px 20px 20px 20px;
+}
 
 .line {
-  border-top: 1px solid black;
-  margin-bottom: 20px !important;
+  border-top: 1px solid;
+  margin-bottom: 20px;
 }
 
 input,
@@ -9,24 +12,12 @@ textarea,
 button {
   width: 100%;
   padding: 12px;
-  border: 1px solid gray !important;
   resize: vertical;
-}
-
-input:focus,
-textarea:focus {
-  border: 2px solid black !important;
-  border-radius: 4px;
 }
 
 label {
   padding: 10px 10px 10px 5px;
   display: inline-block;
-}
-
-.container {
-  border-radius: 5px;
-  padding: 0px 20px 20px 20px;
 }
 
 .col-25,
@@ -43,8 +34,8 @@ label {
 }
 button {
   width: 100%;
-  margin-top: 13px !important;
-  margin-bottom: 5px !important;
+  margin-top: 13px;
+  margin-bottom: 5px;
 }
 
 .header {
@@ -53,11 +44,6 @@ button {
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-  
-  .colored-column-success {
-    background-color: white;
-  }
-
   button {
     width: unset;
   }
@@ -83,8 +69,4 @@ button {
   .row {
     padding: 10px;
   }
-}
-
-/* Media query for desktop viewport targets screens a minimum width of 830px. */
-@media only screen and (min-width: 830px) {
 }

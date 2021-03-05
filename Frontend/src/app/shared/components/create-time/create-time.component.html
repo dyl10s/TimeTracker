@@ -4,7 +4,7 @@
   <form [formGroup]="createTimeForm" (ngSubmit)="startTimer()">
     <div class="form-field">
       <label for="Project">Project</label>
-      <nb-select placeholder="Projects" [(selected)]="selectedItem" formControlName="projectName">
+      <nb-select placeholder="Projects" status="primary" [(selected)]="selectedItem" formControlName="projectName">
         <nb-option value="0">Option 0</nb-option>
         <nb-option value="1">Option 1</nb-option>
       </nb-select>
@@ -12,12 +12,12 @@
 
     <div class="form-field">
       <label for="notes">Notes</label>
-      <textarea nbInput id="notes" placeholder="Notes (optional)" fullWidth formControlName="notes"></textarea>
+      <textarea nbInput id="notes" status="primary" placeholder="Notes (optional)" fullWidth formControlName="notes"></textarea>
     </div>
 
     <div class="form-field">
       <label for="time">Time</label>
-      <input type="text" id="time" nbInput placeholder="0:00" formControlName="time"/>
+      <input type="text" id="time" nbInput status="primary" placeholder="0:00" formControlName="time"/>
     </div>
 
     <div class="actions-footer">

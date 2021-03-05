@@ -10,6 +10,7 @@
       <label for="Project">Project</label>
       <nb-select
         placeholder="Projects"
+        status="primary"
         [(selected)]="selectedItem"
         formControlName="projectName"
       >
@@ -24,6 +25,7 @@
         nbInput
         id="notes"
         placeholder="Notes (optional)"
+        status="primary"
         fullWidth
         formControlName="notes"
       ></textarea>
@@ -35,6 +37,7 @@
         type="text"
         id="time"
         nbInput
+        status="primary"
         placeholder="0:00"
         formControlName="time"
       />
