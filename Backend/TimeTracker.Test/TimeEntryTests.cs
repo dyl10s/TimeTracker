@@ -93,29 +93,17 @@ namespace TimeTracker.Test
 
             // Search for projects
 
-            var singleDayNoResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
-            {
-                 StartDate = DateTime.Now, 
-                 EndDate = DateTime.Now
-            });
+            var singleDayNoResults = await timeEntryController.GetInDateRange(DateTime.Now, DateTime.Now);
 
             Assert.AreEqual(singleDayNoResults.Success, true);
             Assert.AreEqual(singleDayNoResults.Data.Count, 0);
 
-            var singleDayResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
-            {
-                 StartDate = updatedTimeEntry.Day, 
-                 EndDate = updatedTimeEntry.Day
-            });
+            var singleDayResults = await timeEntryController.GetInDateRange(updatedTimeEntry.Day, updatedTimeEntry.Day);
 
             Assert.AreEqual(singleDayResults.Success, true);
             Assert.AreEqual(singleDayResults.Data.Count, 1);
 
-            var multipleDayResults = await timeEntryController.GetInDateRange(new DateRangeDTO()
-            {
-                 StartDate = updatedTimeEntry.Day.AddDays(-10), 
-                 EndDate = updatedTimeEntry.Day.AddDays(123)
-            });
+            var multipleDayResults = await timeEntryController.GetInDateRange(updatedTimeEntry.Day.AddDays(-10), updatedTimeEntry.Day.AddDays(123));
 
             Assert.AreEqual(multipleDayResults.Success, true);
             Assert.AreEqual(multipleDayResults.Data.Count, 1);

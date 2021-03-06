@@ -57,17 +57,17 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<GenericResponseDTO<List<TimeEntry>>> GetInDateRange(DateRangeDTO data)
+        public async Task<GenericResponseDTO<List<TimeEntry>>> GetInDateRange(DateTime startDate, DateTime endDate)
         {
             var currentUserId = authHelper.GetCurrentUserId(User);
 
             // Set times to beginning and end of days
-            data.StartDate = new DateTime(data.StartDate.Year, data.StartDate.Month, data.StartDate.Day, 0, 0, 0);
-            data.EndDate = new DateTime(data.EndDate.Year, data.EndDate.Month, data.EndDate.Day, 23, 59, 59);
+            startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
 
             var entries = await database.TimeEntries
                 .AsNoTracking()
-                .Where(x => x.User.Id == currentUserId && x.Day >= data.StartDate && x.Day <= data.EndDate)
+                .Where(x => x.User.Id == currentUserId && x.Day >= startDate && x.Day <= endDate)
                 .ToListAsync();
 
             return new GenericResponseDTO<List<TimeEntry>>()
