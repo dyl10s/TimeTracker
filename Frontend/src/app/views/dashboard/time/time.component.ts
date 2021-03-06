@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDateService, NbDialogService } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
+import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
 
@@ -38,7 +39,8 @@ export class TimeComponent implements OnInit {
 
   constructor(
     private dialogService: NbDialogService,
-    private dateService: NbDateService<Date>
+    private dateService: NbDateService<Date>,
+    private timeEntryService: TimeEntryApiService
   ) {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
@@ -52,6 +54,10 @@ export class TimeComponent implements OnInit {
         this.updateDates()
       }
     );
+
+    this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((data) => {
+      console.log(data);
+    })
   }
 
   /* Increases date using arrow buttons */

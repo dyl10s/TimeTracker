@@ -12,8 +12,8 @@ export class TimeEntryApiService {
 
     constructor(private http: HttpClient) { }
 
-    getTimeEntry() {
-        return this.http.get(`${this.api}/TimeEntry`);
+    getTimeEntry(startDate: Date, endDate: Date) {
+        return this.http.get(`${this.api}/TimeEntry?startDate=${encodeURIComponent(startDate.toDateString())}&endDate=${encodeURIComponent(endDate.toDateString())}`);
     }
 
     postTimeEntry(timeEntry: TimeEntry) {
