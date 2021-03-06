@@ -17,11 +17,12 @@ export class CreateTimeComponent implements OnInit {
   projects: any;
   showLoadingSpinner: boolean = false;
   selectedItem = '0';
+  error: string;
 
   createTimeForm: FormGroup = new FormGroup({
     projectName: new FormControl('', [Validators.required]),
     notes: new FormControl(''),
-    time: new FormControl('', [Validators.required])
+    time: new FormControl('')
   });
 
   constructor(
@@ -42,12 +43,17 @@ export class CreateTimeComponent implements OnInit {
   }
 
   submit(timeForm: FormGroup) {
+    this.showLoadingSpinner = true;
     if(timeForm.value.time == ''){
       //Start Timer
       this.timerService.startTimer(timeForm.value.notes, timeForm.value.projectName).subscribe((response: GenericResponseDTO) => {
         if(response.success){
+          this.showLoadingSpinner = false;
           this.ref.close({ success: true, update: true, item: 'timer' });
         }
+      }, (err) => {
+        this.showLoadingSpinner = false;
+        this.error = err.message;
       })
     }else{
       if(!parseFloat(timeForm.value.time)){
@@ -64,8 +70,12 @@ export class CreateTimeComponent implements OnInit {
   
       this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
         if(response.success){
+          this.showLoadingSpinner = false;
           this.ref.close({ success: true, update: true, item: 'time entry' });
         }
+      }, (err) => {
+        this.showLoadingSpinner = false;
+        this.error = err.message;
       })
     }
   }
