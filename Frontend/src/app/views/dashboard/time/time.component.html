@@ -65,31 +65,31 @@
         <nb-card-body>
           <ul>
             <nb-button-group outline>
-              <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}">
+              <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}" (click)="returnDayView(1)">
                 M<br />
               </button>
 
-              <button nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}">
+              <button nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}" (click)="returnDayView(2)">
                 T<br />
               </button>
 
-              <button nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}">
+              <button nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}" (click)="returnDayView(3)">
                 W<br />
               </button>
 
-              <button nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}">
+              <button nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}" (click)="returnDayView(4)">
                 R<br />
               </button>
 
-              <button nbButtonToggle id="friday" pressed="{{ daysActive[5] }}">
+              <button nbButtonToggle id="friday" pressed="{{ daysActive[5] }}" (click)="returnDayView(5)">
                 F<br />
               </button>
 
-              <button nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}">
+              <button nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}" (click)="returnDayView(6)">
                 S<br />
               </button>
 
-              <button nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}">
+              <button nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}" (click)="returnDayView(0)">
                 S<br />
               </button>
 
