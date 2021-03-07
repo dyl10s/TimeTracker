@@ -4,12 +4,14 @@
 
       <div id="home-nav" *ngIf="routeCheck('home')">
         <nb-action class="logo" aria-label="NTime" (click)="routeClick('')">NTIME</nb-action>
+        <div class= "login-register-remove" *ngIf="routeCheck('logreg')">
           <button nbButton class="mob" [nbContextMenu]="homeItems">
             <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
           </button>
           <div class="right-aligned" class="desk">
             <nb-action class="desk" (click)="routeClick('login')">Login</nb-action>
             <button nbButton class="desk" (click)="routeClick('register')">Sign up</button>
+          </div>
           </div>
       </div>
 
@@ -18,7 +20,6 @@
           <nb-action (click)="routeClick('time')">Time</nb-action>
           <nb-action (click)="routeClick('projects')">Projects</nb-action>
           <nb-action (click)="routeClick('reports')">Reports</nb-action>
-          <nb-action (click)="routeClick('manage')">Manage</nb-action>
           <nb-action class="right-aligned" [nbContextMenu]="deskAppItems">Name
           <nb-icon class="adaptive-button-icon" icon="chevron-down-outline"></nb-icon>
           </nb-action>

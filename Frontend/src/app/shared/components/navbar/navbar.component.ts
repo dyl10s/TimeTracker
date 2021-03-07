@@ -19,11 +19,6 @@ export class NavbarComponent implements OnInit {
 
   routeCheck(route: string) {
     let check: boolean = true;
-    // no nav display for login components //
-    if (this.router.url.includes('register') ||
-      this.router.url.includes('login')) {
-      check = false;
-    }
     // in app nav display //
     if (route == 'app') {
       if (!(this.router.url.includes('dashboard'))) {
@@ -33,6 +28,13 @@ export class NavbarComponent implements OnInit {
     // home nav display //
     if (route == 'home') {
       if ((this.router.url.includes('dashboard'))) {
+        check = false;
+      }
+    }
+    // limited home nav display //
+    if (route == 'logreg') {
+      if (this.router.url.includes('register') ||
+        this.router.url.includes('login')) {
         check = false;
       }
     }
@@ -50,10 +52,7 @@ export class NavbarComponent implements OnInit {
     else if (route == 'time' ||
       route == "projects" ||
       route == "reports" ||
-      route == "manage" ||
-      route == "profile" ||
-      route == "help" ||
-      route == "settings") {
+      route == "profile") {
       this.router.navigateByUrl('/dashboard/' + route);
     }
     else if (route == 'logout') {
@@ -78,14 +77,6 @@ export class NavbarComponent implements OnInit {
       link: '/dashboard/profile'
     },
     {
-      title: 'Help',
-      link: '/dashboard/help'
-    },
-    {
-      title: 'Settings',
-      link: '/dashboard/settings'
-    },
-    {
       title: 'Logout',
       link: '/logout'
     },
@@ -105,20 +96,8 @@ export class NavbarComponent implements OnInit {
       link: '/dashboard/reports'
     },
     {
-      title: 'Manage',
-      link: '/dashboard/manage'
-    },
-    {
       title: 'Profile',
       link: '/dashboard/profile'
-    },
-    {
-      title: 'Help',
-      link: '/dashboard/help'
-    },
-    {
-      title: 'Settings',
-      link: '/dashboard/settings'
     },
     {
       title: 'Logout',

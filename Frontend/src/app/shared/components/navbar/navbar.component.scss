@@ -61,7 +61,6 @@
 }
 
 ::ng-deep .nb-theme-default nb-menu {
-  width: 100% !important;
   background-color: #232d9a;
   background-image: linear-gradient(#3045c9, #232d9a);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
@@ -136,12 +135,6 @@
     nb-icon {
       height: inherit !important;
       color: white;
-    }
-  }
-
-  ::ng-deep .nb-theme-default nb-menu {
-    a {
-      font-size: inherit !important;
     }
   }
 }
