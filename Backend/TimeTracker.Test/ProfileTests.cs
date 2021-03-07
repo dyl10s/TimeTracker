@@ -32,7 +32,8 @@ namespace TimeTracker.Test {
             UserDTO newUser = new UserDTO {
                 Email = "moxie@123.net",
                 Password = "Ag00dPassw0rd",
-                Name = "Moxie"
+                FirstName = "Moxie",
+                LastName = "Bespin"
             };
 
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
@@ -41,14 +42,16 @@ namespace TimeTracker.Test {
             TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
 
             ProfileDTO expectedProfileInfo = new ProfileDTO {
-                Name = "Moxie",
+                FirstName = "Moxie",
+                LastName = "Bespin",
                 Email = "moxie@123.net",
                 Projects = new List<string>()
             };
 
             GenericResponseDTO<ProfileDTO> response = await profileController.GetUserProfile();
             Assert.IsTrue(response.Success);
-            Assert.AreEqual(response.Data.Name, expectedProfileInfo.Name);
+            Assert.AreEqual(response.Data.FirstName, expectedProfileInfo.FirstName);
+            Assert.AreEqual(response.Data.LastName, expectedProfileInfo.LastName);
             Assert.AreEqual(response.Data.Email, expectedProfileInfo.Email);
             Assert.IsTrue(response.Data.Projects.SequenceEqual(expectedProfileInfo.Projects));
         }
@@ -58,7 +61,8 @@ namespace TimeTracker.Test {
             UserDTO newUser = new UserDTO {
                 Email = "moxie@123.net",
                 Password = "Ag00dPassw0rd",
-                Name = "Moxie"
+                FirstName = "Moxie",
+                LastName = "Bespin"
             };
 
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
@@ -67,13 +71,15 @@ namespace TimeTracker.Test {
             TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
 
             ProfileDTO expectedProfileInfo = new ProfileDTO {
-                Name = "Changed Name",
+                FirstName = "Changed",
+                LastName = "Name",
                 Projects = new List<string>()
             };
 
             GenericResponseDTO<ProfileDTO> response1 = await profileController.GetUserProfile();
             Assert.IsTrue(response1.Success);
-            Assert.AreEqual(response1.Data.Name, newUser.Name);
+            Assert.AreEqual(response1.Data.FirstName, newUser.FirstName);
+            Assert.AreEqual(response1.Data.LastName, newUser.LastName);
 
             await profileController.UpdateUserProfile(new ProfileUpdateDTO()
             {
@@ -83,7 +89,8 @@ namespace TimeTracker.Test {
 
             GenericResponseDTO<ProfileDTO> response2 = await profileController.GetUserProfile();
             Assert.IsTrue(response2.Success);
-            Assert.AreEqual(response2.Data.Name, expectedProfileInfo.Name);
+            Assert.AreEqual(response2.Data.FirstName, expectedProfileInfo.FirstName);
+            Assert.AreEqual(response2.Data.LastName, expectedProfileInfo.LastName);
             Assert.IsTrue(response2.Data.Projects.SequenceEqual(expectedProfileInfo.Projects));
         }
 
@@ -99,7 +106,8 @@ namespace TimeTracker.Test {
             UserDTO newUser = new UserDTO {
                 Email = "phoebe@123.net",
                 Password = "Aquarius13",
-                Name = "Phoebe"
+                FirstName = "Phoebe",
+                LastName = "S."
             };
 
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
@@ -145,7 +153,8 @@ namespace TimeTracker.Test {
             UserDTO newUser = new UserDTO {
                 Email = "belford@123.net",
                 Password = "sand_Boa13",
-                Name = "Belford"
+                FirstName = "Belford",
+                LastName = "McAlister"
             };
 
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);
@@ -179,7 +188,8 @@ namespace TimeTracker.Test {
             UserDTO newUser = new UserDTO {
                 Email = "basther@123.net",
                 Password = "1fOur3niNe7",
-                Name = "Basther"
+                FirstName = "Basther",
+                LastName = "H."
             };
 
             GenericResponseDTO<int> registerResponse = await authController.Register(newUser);

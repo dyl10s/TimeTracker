@@ -19,6 +19,14 @@ namespace TimeTracker.Test.Helpers
     {
         public static async Task LogInUser(MainDb db, IConfiguration configuration, ControllerBase controller) 
         {
+            await LogInUser(db, configuration, new List<ControllerBase>() 
+            {
+                controller
+            });
+        }
+
+        public static async Task LogInUser(MainDb db, IConfiguration configuration, List<ControllerBase> controllers) 
+        {
             var authController = new AuthController(db, configuration, new AuthHelper());
             var userEmail = Guid.NewGuid().ToString();
 
@@ -36,10 +44,13 @@ namespace TimeTracker.Test.Helpers
                 })
             });
 
-            controller.ControllerContext.HttpContext = new DefaultHttpContext()
+            foreach(var controller in controllers)
             {
-                User = user
-            };
+                controller.ControllerContext.HttpContext = new DefaultHttpContext()
+                {
+                    User = user
+                };
+            }
         }
 
         public static void attachUserToContext(int userID, List<ControllerBase> controllers) {

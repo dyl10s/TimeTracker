@@ -1,6 +1,6 @@
 export interface TimeEntry {
-    Id?: number;
-    StartTime: Date;
-    EndTime: Date;
-    Message: string;
+    id?: number;
+    startTime: Date;
+    endTime: Date;
+    message: string;
 }

@@ -66,6 +66,8 @@ export class CreateProjectComponent {
       }
 
       this.showLoadingSpinner = false;
+    }, (err) => {
+      console.log(err);
     });
   }
 }
