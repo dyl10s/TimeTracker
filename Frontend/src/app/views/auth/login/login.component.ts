@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
     } 
 
     this.authService.login({ 
-      Email: loginForm.email, 
-      Password: loginForm.password 
+      email: loginForm.email, 
+      password: loginForm.password 
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Login

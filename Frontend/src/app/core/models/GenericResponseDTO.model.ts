@@ -1,5 +1,5 @@
-export interface GenericResponseDTO {
-    data: any;
+export interface GenericResponseDTO<T = any> {
+    data: T;
     message: string;
     success: boolean;
 }

@@ -48,10 +48,12 @@
             <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
             <span class="adaptive-button-text">Copy Invite Code</span>
           </button>
-          <button nbButton status="primary">
-            <nb-icon class="adaptive-button-icon" icon="eye-outline"></nb-icon>
-            <span class="adaptive-button-text">View Details</span>
-          </button>
+          <a [routerLink]="'/dashboard/projects/' + row.data['id']">
+            <button nbButton status="primary">
+              <nb-icon class="adaptive-button-icon" icon="eye-outline"></nb-icon>
+              <span class="adaptive-button-text">View Details</span>
+            </button>
+          </a>
         </div>
       </td>
     </ng-container>

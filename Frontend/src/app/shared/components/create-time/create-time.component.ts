@@ -63,10 +63,10 @@ export class CreateTimeComponent implements OnInit {
       }
   
       const time: TimeEntry = {
-        Length: parseFloat(timeForm.value.time),
-        Notes: timeForm.value.notes,
-        ProjectId: timeForm.value.projectName,
-        Day: this.day
+        length: parseFloat(timeForm.value.time),
+        notes: timeForm.value.notes,
+        projectId: timeForm.value.projectName,
+        day: this.day
       };
   
       this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {

@@ -1,56 +1,62 @@
-<div class="container">
-    <div class="header">
-        <div class="title">
-            <h1>
-                <input *ngIf="pageMode == 'edit'" nbInput placeholder="Project Name" status="primary" fieldSize="giant" [value]="details.name" fullWidth>
-                <span *ngIf="pageMode == 'view'">{{ details.name }}</span>
-            </h1>
-            <h5>
-                <input *ngIf="pageMode == 'edit'" nbInput placeholder="Client Name" status="primary" fieldSize="large" [value]="details.clientName" fullWidth>
-                <span *ngIf="pageMode == 'view'">{{ details.clientName }}</span>
-            </h5>
+<div class="container" [nbSpinner]="loadingProject">
+    <div *ngIf="details !== null" [formGroup]="updateProjectForm">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    <span>{{ details.name }}</span>
+                </h1>
+                <h5>
+                    <span>{{ details.clientName }}</span>
+                </h5>
+            </div>
+            <div class="actions">
+                <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="copyInviteCode(details.inviteCode)">
+                    <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
+                    <span class="adaptive-button-text">Copy Invite Code</span>
+                </button>
+                <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="pageMode = 'edit'">
+                    <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
+                    <span class="adaptive-button-text">Edit Project</span>
+                </button>
+                <button *ngIf="pageMode == 'edit'" nbButton status="warning" (click)="cancelEdit()">
+                    <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
+                    <span class="adaptive-button-text">Cancel Edit</span>
+                </button>
+                <button nbSpinnerStatus="success" *ngIf="pageMode == 'edit'" nbButton status="success" (click)="saveProjectChange()">
+                    <nb-icon class="adaptive-button-icon" icon="save-outline"></nb-icon>
+                    <span class="adaptive-button-text">Save Changes</span>
+                </button>
+            </div>
         </div>
-        <div class="actions">
-            <button *ngIf="pageMode == 'view'" nbButton status="primary">
-                <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
-                <span class="adaptive-button-text">Copy Invite Code</span>
-            </button>
-            <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="pageMode = 'edit'">
-                <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
-                <span class="adaptive-button-text">Edit Project</span>
-            </button>
-            <button *ngIf="pageMode == 'edit'" nbButton status="warning" (click)="pageMode = 'view'">
-                <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
-                <span class="adaptive-button-text">Cancel Edit</span>
-            </button>
-            <button *ngIf="pageMode == 'edit'" nbButton status="success" (click)="pageMode = 'view'">
-                <nb-icon class="adaptive-button-icon" icon="save-outline"></nb-icon>
-                <span class="adaptive-button-text">Save Changes</span>
-            </button>
-        </div>
-    </div>
-
-    <nb-tag-list (tagRemove)="onTagRemove($event)">
-        <nb-tag size="tiny" *ngIf="details.archivedData && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + details.archivedData"></nb-tag>
-        <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of details.tags" status="info" appearance="filled" [text]="tag"></nb-tag>
-        <input *ngIf="pageMode == 'edit'" type="text" status="primary" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
-    </nb-tag-list>
-
-    <p>
-        <textarea rows="5" *ngIf="pageMode == 'edit'" nbInput status="primary" placeholder="Description" [value]="details.description" fullWidth></textarea>
-        <span *ngIf="pageMode == 'view'">{{ details.description }}</span>
-    </p>
-
-    <h4>Team Members</h4>
-    <table [nbTreeGrid]="teamDataSource">
-        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
-        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
     
-        <ng-container nbTreeGridColumnDef="Name">
-          <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
-            Name
-          </th>
-          <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["FirstName"] + " " + row.data["LastName"] || '-'}}</td>
-        </ng-container>
-    </table>
+        <nb-tag-list (tagRemove)="onTagRemove($event)">
+            <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'dd/MM/yyyy')"></nb-tag>
+            <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
+            <input *ngIf="pageMode == 'edit'" type="text" status="primary" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+        </nb-tag-list>
+    
+        <p>
+            <span>{{ details.description }}</span>
+        </p>
+    
+        <h4>Team Members</h4>
+        <table [nbTreeGrid]="teamDataSource">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+        
+            <ng-container nbTreeGridColumnDef="Name">
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Name
+              </th>
+              <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["firstName"] + " " + row.data["lastName"] || '-'}}</td>
+            </ng-container>
+    
+            <ng-container nbTreeGridColumnDef="Role">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Role
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
+              </ng-container>
+        </table>
+    </div>
 </div>

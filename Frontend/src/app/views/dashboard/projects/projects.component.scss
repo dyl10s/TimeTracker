@@ -57,6 +57,10 @@
   }
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 @media only screen and (max-width: 830px) {
   .adaptive-button-text{
     display: none;
