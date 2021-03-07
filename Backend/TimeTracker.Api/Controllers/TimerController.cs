@@ -34,7 +34,9 @@ namespace Backend.Controllers
             User currentUser = await authHelper.GetCurrentUser(User, database);
 
             Project project = await database.Projects
-                .FirstOrDefaultAsync(p => p.Id == timerInfo.ProjectId && p.Students.Contains(currentUser));
+                .FirstOrDefaultAsync(
+                    p => p.Id == timerInfo.ProjectId && 
+                    (p.Students.Any(s => s.Id == currentUser.Id) || p.Teacher.Id == currentUser.Id));
 
             if(project == null) {
                 return new GenericResponseDTO<TimerDTO> {
