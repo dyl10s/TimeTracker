@@ -19,10 +19,6 @@
       <input type="text" id="time" nbInput status="primary" placeholder="0.00" formControlName="time"/>
     </div>
 
-    <div class="form-field">
-      <p class="error" *ngIf="error"></p>
-    </div>
-
     <div class="actions-footer">
       <button nbButton status="success" type="submit" (click)="submit(createTimeForm)" [disabled]="!createTimeForm.valid">{{ createTimeForm.controls['time'].value != '' ? 'Add Entry' : 'Start Timer' }}</button>
       <button nbButton status="warning" type="button" (click)="closeDialog()">Cancel</button>

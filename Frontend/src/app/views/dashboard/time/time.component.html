@@ -39,8 +39,8 @@
 
       <div class="view-options-section">
         <nb-button-group outline>
-          <button nbButtonToggle (click)="setDayView()">Day</button>
-          <button nbButtonToggle (click)="setWeekView()">Week</button>
+          <button nbButtonToggle [pressed]="dayView" (click)="setDayView()">Day</button>
+          <button nbButtonToggle [pressed]="weekView" (click)="setWeekView()">Week</button>
         </nb-button-group>
       </div>
 

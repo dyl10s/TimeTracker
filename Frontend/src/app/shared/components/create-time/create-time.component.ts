@@ -17,7 +17,6 @@ export class CreateTimeComponent implements OnInit {
   projects: any;
   showLoadingSpinner: boolean = false;
   selectedItem = '0';
-  error: string;
 
   createTimeForm: FormGroup = new FormGroup({
     projectName: new FormControl('', [Validators.required]),
@@ -29,7 +28,8 @@ export class CreateTimeComponent implements OnInit {
     private ref: NbDialogRef<CreateTimeComponent>,
     private projectService: ProjectService,
     private timeEntryService: TimeEntryApiService,
-    private timerService: TimerService
+    private timerService: TimerService,
+    private toastrService: NbToastrService
   ) { }
 
   ngOnInit() {
@@ -49,11 +49,12 @@ export class CreateTimeComponent implements OnInit {
       this.timerService.startTimer(timeForm.value.notes, timeForm.value.projectName).subscribe((response: GenericResponseDTO) => {
         if(response.success){
           this.showLoadingSpinner = false;
+          this.toastrService.success("Timer successfully started", "Success");
           this.ref.close({ success: true, update: true, item: 'timer' });
         }
       }, (err) => {
         this.showLoadingSpinner = false;
-        this.error = err.message;
+        this.toastrService.danger("There was an error starting the timer", "Error");
       })
     }else{
       if(!parseFloat(timeForm.value.time)){
@@ -71,11 +72,12 @@ export class CreateTimeComponent implements OnInit {
       this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
         if(response.success){
           this.showLoadingSpinner = false;
+          this.toastrService.success("Time entry successfully created", "Success");
           this.ref.close({ success: true, update: true, item: 'time entry' });
         }
       }, (err) => {
         this.showLoadingSpinner = false;
-        this.error = err.message;
+        this.toastrService.danger("There was an error creating the time entry", "Error");
       })
     }
   }
