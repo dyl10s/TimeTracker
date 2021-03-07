@@ -69,7 +69,7 @@ export class CreateTimeComponent implements OnInit {
         Day: this.day
       };
   
-      this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
+      this.timeEntryService.createTimeEntry(time).subscribe((response: GenericResponseDTO) => {
         if(response.success){
           this.showLoadingSpinner = false;
           this.toastrService.success("Time entry successfully created", "Success");

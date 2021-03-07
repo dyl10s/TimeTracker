@@ -16,8 +16,16 @@ export class TimeEntryApiService {
         return this.http.get(`${this.api}/TimeEntry?startDate=${encodeURIComponent(startDate.toDateString())}&endDate=${encodeURIComponent(endDate.toDateString())}`);
     }
 
-    postTimeEntry(timeEntry: TimeEntry) {
+    createTimeEntry(timeEntry: TimeEntry) {
         return this.http.post(`${this.api}/TimeEntry`, timeEntry);
+    }
+
+    updateTimeEntry(timeEntry: TimeEntry) {
+        return this.http.patch(`${this.api}/TimeEntry`, timeEntry);
+    }
+
+    deleteTimeEntry(timeEntry: TimeEntry) {
+        return this.http.delete(`${this.api}/TimeEntry/${timeEntry.Id}`)
     }
 
 }

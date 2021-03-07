@@ -68,6 +68,7 @@ namespace Backend.Controllers
             var entries = await database.TimeEntries
                 .AsNoTracking()
                 .Where(x => x.User.Id == currentUserId && x.Day >= startDate && x.Day <= endDate)
+                .Include(x => x.Project)
                 .ToListAsync();
 
             return new GenericResponseDTO<List<TimeEntry>>()

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDateService, NbDialogService, NbToastrService } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
+import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
@@ -37,6 +38,9 @@ export class TimeComponent implements OnInit {
   // Week view button dates //
   monDate: Date; tueDate: Date; wedDate: Date; thurDate: Date; friDate: Date; satDate: Date; sunDate: Date;
 
+  allEvents: any = [];
+  displayEvents: any = [];
+
   constructor(
     private dialogService: NbDialogService,
     private dateService: NbDateService<Date>,
@@ -56,8 +60,9 @@ export class TimeComponent implements OnInit {
       }
     );
 
-    this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((data) => {
-      console.log(data);
+    this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+      this.allEvents = response.data;
+      console.log(response.data)
     })
   }
 
@@ -198,8 +203,12 @@ export class TimeComponent implements OnInit {
   }
 
   /* Method to open edit time entry screen */
-  openEditTimeEntry() {
-    this.dialogService.open(EditTimeComponent, {}).onClose.subscribe((x: any) => {
+  openEditTimeEntry(event: any) {
+    this.dialogService.open(EditTimeComponent, {
+      context: {
+        event: event
+      }
+    }).onClose.subscribe((x: any) => {
     });
   }
 

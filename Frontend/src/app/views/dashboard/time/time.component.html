@@ -104,16 +104,16 @@
           <div class="entryListExist" *ngIf="dayView">
             <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
               <tbody>
-                <tr>
+                <tr *ngFor="let e of allEvents">
                   <td id="details">
-                    <div class="projectName">Project Name</div>
-                    <div class="projectNotes">Project Notes</div>
+                    <div class="projectName">{{ e.project?.name }}</div>
+                    <div class="projectNotes">{{ e.notes }}</div>
                   </td>
 
-                  <td id="time">{{ timeSpent }}</td>
+                  <td id="time">{{ e.length }}</td>
 
                   <td id="buttons">
-                    <button
+                    <!-- <button
                       (click)="startStopTimer()"
                       nbButton
                       status="primary"
@@ -125,9 +125,9 @@
                       <span class="adaptive-button-text">{{
                         timerBtnText
                       }}</span>
-                    </button>
+                    </button> -->
 
-                    <button (click)="openEditTimeEntry()" nbButton outline>
+                    <button (click)="openEditTimeEntry(e)" nbButton outline>
                       <nb-icon
                         style
                         class="adaptive-button-icon"
