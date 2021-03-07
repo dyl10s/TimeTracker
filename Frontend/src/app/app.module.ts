@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule} from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule, NbActionsModule, NbContextMenuModule} from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -75,6 +75,8 @@ export function tokenGetter() {
     NbDatepickerModule.forRoot(),
     NbPopoverModule,
     NbCalendarModule,
+    NbActionsModule,
+    NbContextMenuModule,
 
     JwtModule.forRoot({
       config: {
