@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NbMenuItem } from '@nebular/theme';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
+  styleUrls: ['./navbar.component.scss']
 })
 
 export class NavbarComponent implements OnInit {
@@ -14,82 +13,95 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  hasRoute(route: string){
-    return this.router.url.includes(route);
+  routeCheck(route: string) {
+    let check: boolean = true;
+    // in app nav display //
+    if (route == 'app') {
+      if (!(this.router.url.includes('dashboard'))) {
+        check = false;
+      }
+    }
+    // home nav display //
+    if (route == 'home') {
+      if ((this.router.url.includes('dashboard'))) {
+        check = false;
+      }
+    }
+    // limited home nav display //
+    if (route == 'logreg') {
+      if (this.router.url.includes('register') ||
+        this.router.url.includes('login')) {
+        check = false;
+      }
+    }
+    return check;
   }
 
-  homeClick = function () {
-    this.router.navigateByUrl('');
-  }
-  loginClick = function () {
-    this.router.navigateByUrl('/auth/login');
-  }
-  signupClick = function () {
-    this.router.navigateByUrl('/auth/register');
+  routeClick(route: string) {
+    if (route == '') {
+      this.router.navigateByUrl('');
+    }
+    else if (route == 'login' || route == "register") {
+      this.router.navigateByUrl('/auth/' + route);
+    }
+
+    else if (route == 'time' ||
+      route == "projects" ||
+      route == "reports" ||
+      route == "profile") {
+      this.router.navigateByUrl('/dashboard/' + route);
+    }
+    else if (route == 'logout') {
+      this.router.navigateByUrl('/logout');
+    }
   }
 
-  changeTab(event){
-    switch(event.tabTitle) {
-      case('Name'):
-        this.isMenuOpen = !this.isMenuOpen;
-        break;
-      default:
-        break;
-    };
-  }
-
-  deskItems: NbMenuItem[] = [
+  homeItems = [
     {
-      title: 'My Profile',
+      title: 'Login',
+      link: '/auth/login'
     },
     {
-      title: 'Settings',
+      title: 'Sign Up',
+      link: '/auth/register'
+    },
+  ];
+
+  deskAppItems = [
+    {
+      title: 'Profile',
+      link: '/dashboard/profile'
     },
     {
       title: 'Logout',
-    }
+      link: '/logout'
+    },
   ];
 
-  mobItems: NbMenuItem[] = [
+  mobAppItems = [
     {
-      title: "Menu",
-      expanded: false,
-      children: [
-        {
-          title: 'Time',
-        },
-        {
-          title: 'Projects',
-        },
-        {
-          title: 'Reports',
-        },
-        {
-          title: 'Manage',
-        },
-        {
-          title: 'Help',
-        },
-        {
-          title: 'Name',
-          expanded: false,
-          children: [
-            {
-              title: 'My Profile',
-            },
-            {
-              title: 'Settings',
-            },
-            {
-              title: 'Logout',
-            },
-          ],
-        },
-      ],
+      title: 'Time',
+      link: '/dashboard/time'
+    },
+    {
+      title: 'Projects',
+      link: '/dashboard/projects'
+    },
+    {
+      title: 'Reports',
+      link: '/dashboard/reports'
+    },
+    {
+      title: 'Profile',
+      link: '/dashboard/profile'
+    },
+    {
+      title: 'Logout',
+      link: '/logout'
     },
   ];
 

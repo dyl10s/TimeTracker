@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbDateService, NbDialogService } from '@nebular/theme';
+import { NbDateService, NbDialogService, NbToastrService } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
@@ -38,7 +38,8 @@ export class TimeComponent implements OnInit {
 
   constructor(
     private dialogService: NbDialogService,
-    private dateService: NbDateService<Date>
+    private dateService: NbDateService<Date>,
+    private toastrService: NbToastrService
   ) {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
@@ -183,7 +184,10 @@ export class TimeComponent implements OnInit {
 
   /* Method to open create time entry screen */
   openCreateNewTimeEntry() {
-    this.dialogService.open(CreateTimeComponent, {}).onClose.subscribe((x: any) => {
+    this.dialogService.open(CreateTimeComponent, {
+      context: {
+        day: this.today
+      }
     });
   }
 
