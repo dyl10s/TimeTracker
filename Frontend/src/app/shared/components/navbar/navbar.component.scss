@@ -1,8 +1,5 @@
 .nav-container {
-  background-color: #232d9a;
-  background-image: linear-gradient(#232d9a, #3045c9);
   overflow: hidden;
-
   nb-action {
     cursor: pointer;
   }
@@ -100,26 +97,25 @@
   }
 
   #in-app-nav {
-    padding: 0px 10px 0px 10px;
+    margin: 0px 20px 0px 30px;
     nb-actions {
       width: 100%;
 
       .right-aligned {
         position: absolute;
-        right: 10px;
+        right: 40px;
+        padding-top: unset! important;
+        padding-bottom: unset! important;
       }
       nb-action {
         overflow: hidden;
         color: white;
         border-left: none;
         width: 100px;
-        padding-top: 30px;
-        padding-bottom: 30px;
       }
       nb-action:link,
       nb-action:visited {
-        background-color: #929cff;
-        border: none;
+        border-bottom: 2px solid #929cff;
         color: #ffffff;
         padding: 15px 32px;
         text-align: center;
@@ -134,7 +130,7 @@
       nb-action:hover,
       nb-action:active,
       nb-action:focus {
-        background-color: rgba(146, 156, 255, 0.3);
+        border-bottom: 2px solid #929cff;
       }
     }
     nb-icon {
