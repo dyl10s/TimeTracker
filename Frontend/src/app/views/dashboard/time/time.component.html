@@ -193,9 +193,10 @@
             </thead>
 
             <tbody>
-              <tr>
+              <tr *ngFor="let e of allEvents">
                 <td class="name">
-                  <div class="projectName">Project Name</div>
+                  <div class="projectName">{{ e.project?.name }}</div>
+                  <div class="projectNotes">{{ e.notes }}</div>
                 </td>
                 <td class="day">
                   <input

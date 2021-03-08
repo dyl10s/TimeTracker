@@ -62,7 +62,9 @@ export class TimeComponent implements OnInit {
 
     this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allEvents = response.data;
-      console.log(response.data)
+      console.log(response.data);
+      this.displayEvents = this.allEvents.filter(x => new Date(x.day) == new Date(this.today));
+      console.log(this.displayEvents)
     })
   }
 
@@ -75,6 +77,8 @@ export class TimeComponent implements OnInit {
       this.weekStartDate = this.dateService.addDay(this.weekStartDate, 7)
       this.weekEndDate = this.dateService.addDay(this.weekEndDate, 7)
     }
+
+    this.switchedDate();
   }
 
   /* Decreases date using arrow buttons */
@@ -86,6 +90,15 @@ export class TimeComponent implements OnInit {
       this.weekStartDate = this.dateService.addDay(this.weekStartDate, -7)
       this.weekEndDate = this.dateService.addDay(this.weekEndDate, -7)
     }
+
+    this.switchedDate();
+  }
+
+  switchedDate(){
+    console.log(new Date(this.today))
+    console.log(new Date(this.allEvents[0].day));
+    this.displayEvents = this.allEvents.filter(x => new Date(x.day) == new Date(this.today));
+    console.log(this.displayEvents)
   }
 
   /* Returns to date using return button */
@@ -129,6 +142,8 @@ export class TimeComponent implements OnInit {
         console.log("Error");
         break;
     }
+
+    this.switchedDate();
   }
 
   /* Updates screen for day view button click */
