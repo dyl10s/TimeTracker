@@ -121,6 +121,11 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Adds a user to a project
+        /// </summary>
+        /// <param name="projectInvite">The invite code of the project that the user is added to</param>
+        /// <returns>The Id of the project the user was added to</returns>
         [Authorize]
         [HttpPost("AddUserToProject")]
         public async Task<GenericResponseDTO<int>> AddUserToProject(string projectInvite)
