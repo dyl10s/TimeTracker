@@ -48,10 +48,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.login({ 
       email: loginForm.email, 
-      password: loginForm.password 
+      password: loginForm.password,
+      inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode') ?? null
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
-        const inviteCode = this.activatedRoute.snapshot.queryParamMap.get('inviteCode');
         // Handle Successful Login
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
   
