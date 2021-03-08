@@ -34,6 +34,6 @@ export class ProjectService {
   }
 
   public addUserToProject(inviteCode: string) {
-    return this.http.post(`${this.api}/Project/AddUserToProject`, inviteCode)
+    return this.http.post(`${this.api}/Project/AddUserToProject`, { inviteCode })
   }
 }
