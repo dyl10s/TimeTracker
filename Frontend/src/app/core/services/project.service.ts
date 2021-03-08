@@ -28,4 +28,8 @@ export class ProjectService {
   public createProject(projectCreateInfo: ProjectCreateDTO) {
     return this.http.post(`${this.api}/Project`, projectCreateInfo);
   }
+
+  public addUserToProject(inviteCode: string) {
+    return this.http.post(`${this.api}/Project/AddUserToProject`, inviteCode)
+  }
 }

@@ -121,6 +121,38 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        [Authorize]
+        [HttpPost("AddUserToProject")]
+        public async Task<GenericResponseDTO<int>> AddUserToProject(string projectInvite)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var project = await database.Projects
+                .FirstAsync(x => x.InviteCode == projectInvite);
+
+            var curUser = await database.Users
+                .FirstAsync(x => x.Id == currentUserId);
+            
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            curUser.Projects.Add(project);
+            
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>()
+            {
+                Data = project.Id,
+                Success = true
+            };
+        }
+
         /// <summary>
         /// Create a new project
         /// </summary>
