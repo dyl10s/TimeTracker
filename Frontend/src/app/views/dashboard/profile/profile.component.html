@@ -10,9 +10,11 @@
           </div>
           <div class="col-75">
             <input
+              nbInput
               type="text"
               id="firstName"
-              nbInput
+              fullWidth
+              status="primary"
               placeholder="First Name"
               formControlName="firstName"
             />
@@ -27,9 +29,11 @@
           </div>
           <div class="col-75">
             <input
+              nbInput
               type="text"
               id="lastName"
-              nbInput
+              fullWidth
+              status="primary"
               placeholder="Last Name"
               formControlName="lastName"
             />
@@ -44,10 +48,12 @@
           </div>
           <div class="col-75">
             <input
+              nbInput
               type="email"
               id="email"
-              nbInput
+              fullWidth
               placeholder="Email"
+              status="primary"
               [value]="emailAddress"
               formControlName="email"
             />
@@ -62,7 +68,8 @@
               nbButton
               status="success"
               [nbSpinner]="disableNameSubmitButton"
-              (click)="setName(updateNameForm)">
+              (click)="setName(updateNameForm)"
+            >
               Update Info
             </button>
           </div>
@@ -79,19 +86,22 @@
           </nb-card-body>
         </div>
       </span>
-      <span *ngFor="let project of projects;">
+      <span *ngFor="let project of projects">
         <div class="row">
           <nb-card-body>
-            <p>{{project}}</p>
+            <p>{{ project }}</p>
           </nb-card-body>
         </div>
-      </span>  
+      </span>
     </div>
 
     <div class="line" [formGroup]="setPasswordForm">
       <div class="row">
-        <nb-card-body>
-          <h4>Change Password</h4>
+        <nb-card-body class="form">
+          <h3>Change Password</h3>
+          <div class="col-25">
+            <label for="password">Current Password</label>
+          </div>
           <div class="col-75">
             <input
               type="password"
@@ -106,11 +116,14 @@
       </div>
 
       <div class="row">
-        <nb-card-body>
+        <nb-card-body class="form">
+          <div class="col-25">
+            <label for="password">New Password</label>
+          </div>
           <div class="col-75">
             <input
-              type="password"
               nbInput
+              type="password"
               fullWidth
               status="primary"
               placeholder="New Password"
@@ -121,11 +134,14 @@
       </div>
 
       <div class="row">
-        <nb-card-body>
+        <nb-card-body class="form">
+          <div class="col-25">
+            <label for="password">Verify New Password</label>
+          </div>
           <div class="col-75">
             <input
-              type="password"
               nbInput
+              type="password"
               fullWidth
               status="primary"
               placeholder="Verify New Password"
@@ -140,16 +156,16 @@
           <div class="col-25">
             <button
               nbButton
-              status="control"
+              status="danger"
               (click)="setPassword(setPasswordForm)"
               [disabled]="disablePasswordSubmitButton"
-              [nbSpinner]="disablePasswordSubmitButton">
+              [nbSpinner]="disablePasswordSubmitButton"
+            >
               Change Password
             </button>
           </div>
         </nb-card-body>
       </div>
-
     </div>
   </nb-layout-column>
 </div>

@@ -4,22 +4,22 @@
   <form [formGroup]="createProjectForm" (ngSubmit)="submitDialog(createProjectForm.value)">
     <div class="form-field">
       <label for="client">Client</label>
-      <input type="text" id="client" nbInput placeholder="Client" fullWidth formControlName="clientName"/>
+      <input type="text" id="client" nbInput status="primary" placeholder="Client" fullWidth formControlName="clientName"/>
     </div>
   
     <div class="form-field">
       <label for="projectName">Project Name</label>
-      <input type="text" id="projectName" nbInput placeholder="Project Name" fullWidth formControlName="projectName"/>
+      <input type="text" id="projectName" nbInput status="primary" placeholder="Project Name" fullWidth formControlName="projectName"/>
     </div>
   
     <div class="form-field">
       <label for="projectTags">Tags (Comma separated)</label>
-      <input type="text" id="projectTags" nbInput placeholder="Project Tags (optional)" fullWidth formControlName="tags"/>
+      <input type="text" id="projectTags" nbInput status="primary"placeholder="Project Tags (optional)" fullWidth formControlName="tags"/>
     </div>
   
     <div class="form-field">
       <label for="notes">Description</label>
-      <textarea nbInput id="notes" placeholder="Description (optional)" fullWidth formControlName="description"></textarea>
+      <textarea nbInput id="notes" status="primary" placeholder="Description (optional)" fullWidth formControlName="description"></textarea>
     </div>
   
     <div class="actions-footer">

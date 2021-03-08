@@ -5,8 +5,8 @@ export interface ProjectDTO {
     students: any[];
     clientName: string;
     description: string;
-    archivedData: string;
-    createdTime: string;
+    archivedDate: Date;
+    createdTime: Date;
     inviteCode: string;
     tags: any[];
 }

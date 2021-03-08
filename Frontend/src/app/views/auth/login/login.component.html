@@ -4,7 +4,8 @@
         <h4 class="text-black">Login</h4>
       </nb-card-header>
 
-      <nb-card-body [formGroup]="loginForm">
+      <nb-card-body>
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
           <div class="form-group">
             <input
               type="email"
@@ -34,7 +35,6 @@
               nbButton 
               fullWidth 
               status="success" 
-              (click)="login(loginForm.value)"
               [nbSpinner]="isLoading"
               [disabled]="isLoading"
               nbSpinnerStatus="success">
@@ -44,6 +44,7 @@
           <nb-actions>
             <nb-action>Not a member? <span class="clickable" routerLink="/auth/register" [queryParams]="{inviteCode: activatedRoute.snapshot.queryParamMap.get('inviteCode')}">Register</span></nb-action>
           </nb-actions>
+        </form>
       </nb-card-body>
     </nb-card>
   </nb-layout-column>

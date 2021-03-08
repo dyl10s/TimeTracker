@@ -23,8 +23,8 @@ export class CreateProjectComponent {
   constructor(
     private ref: NbDialogRef<CreateProjectComponent>,
     private projectService: ProjectService,
-    private toastrService: NbToastrService) { 
-  }
+    private toastrService: NbToastrService
+  ) { }
 
   closeDialog() {
     this.ref.close({update: false});
@@ -66,6 +66,8 @@ export class CreateProjectComponent {
       }
 
       this.showLoadingSpinner = false;
+    }, (err) => {
+      console.log(err);
     });
   }
 }

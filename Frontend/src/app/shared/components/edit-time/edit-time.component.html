@@ -1,0 +1,54 @@
+<div
+  class="container"
+  [nbSpinner]="showLoadingSpinner"
+  nbSpinnerStatus="success"
+>
+  <h4 class="text-black">Edit Time Entry</h4>
+
+  <form [formGroup]="EditTimeForm" (ngSubmit)="editTimer()">
+    <div class="form-field">
+      <label for="Project">Project</label>
+      <nb-select
+        placeholder="Projects"
+        status="primary"
+        [(selected)]="selectedItem"
+        formControlName="projectName"
+      >
+        <nb-option value="0">Option 0</nb-option>
+        <nb-option value="1">Option 1</nb-option>
+      </nb-select>
+    </div>
+
+    <div class="form-field">
+      <label for="notes">Notes</label>
+      <textarea
+        nbInput
+        id="notes"
+        placeholder="Notes (optional)"
+        status="primary"
+        fullWidth
+        formControlName="notes"
+      ></textarea>
+    </div>
+
+    <div class="form-field">
+      <label for="time">Time</label>
+      <input
+        type="text"
+        id="time"
+        nbInput
+        status="primary"
+        placeholder="0:00"
+        formControlName="time"
+      />
+    </div>
+
+    <div class="actions-footer">
+      <button nbButton status="success" type="submit">Update Entry</button>
+      <button nbButton status="danger" type="submit">Delete Entry</button>
+      <button nbButton status="warning" type="button" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

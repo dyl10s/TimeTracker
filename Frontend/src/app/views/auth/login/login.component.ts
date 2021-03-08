@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
     private JwtService: JwtService,
     private router: Router,
     public activatedRoute: ActivatedRoute,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -46,13 +47,23 @@ export class LoginComponent implements OnInit {
     } 
 
     this.authService.login({ 
-      Email: loginForm.email, 
-      Password: loginForm.password 
+      email: loginForm.email, 
+      password: loginForm.password 
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         const inviteCode = this.activatedRoute.snapshot.queryParamMap.get('inviteCode');
         // Handle Successful Login
         this.JwtService.setTokens(response.data.accessToken, response.data.refreshToken);
+  
+        this.route.queryParamMap.subscribe(
+          (paramMap) => {
+            if(paramMap.get('returnUrl'))
+              this.router.navigate([paramMap.get('returnUrl')]);
+            else
+              this.router.navigate(['/dashboard/profile']);
+          }
+        )
+        
       } else {
         this.loginForm.controls['password'].reset();
         this.error = response.message;

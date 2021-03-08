@@ -81,6 +81,46 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        [Authorize]
+        [HttpPost("Tags")]
+        public async Task<GenericResponseDTO<bool>> SetTags(List<CreateTagDTO> tags){
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            // Only allow the teacher to tag a project
+            var project = await database.Projects
+                .Include(x => x.Tags)
+                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId);
+            
+            if (project == null)
+            {
+                return new GenericResponseDTO<bool>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            project.Tags = new List<Tag>();
+
+            foreach(var newTag in tags){
+                var tag = new Tag()
+                {
+                    Name = newTag.Tag,
+                    Project = project
+                };
+                
+                project.Tags.Add(tag);
+            }
+            
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<bool>()
+            {
+                Data = true,
+                Success = true
+            };
+        }
+
         /// <summary>
         /// Add a tag to a project
         /// </summary>
