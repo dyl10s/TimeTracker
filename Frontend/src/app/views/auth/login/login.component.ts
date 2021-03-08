@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     this.authService.login({ 
       email: loginForm.email, 
       password: loginForm.password,
-      inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode') ?? null
+      inviteCode: loginForm.inviteCode
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Login
