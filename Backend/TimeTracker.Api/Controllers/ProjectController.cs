@@ -172,7 +172,7 @@ namespace TimeTracker.Api.Controllers
         {
             var currentUserId = authHelper.GetCurrentUserId(User);
 
-            var project = await database.Projects
+            Project project = await database.Projects
                 .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
 
             var curUser = await database.Users
