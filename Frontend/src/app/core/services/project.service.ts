@@ -25,6 +25,10 @@ export class ProjectService {
     return this.http.post(`${this.api}/Project/Tag`, newTagInfo);
   }
 
+  public setProjectTags(newTagsInfo: CreateTagDTO[]) {
+    return this.http.post(`${this.api}/Project/Tags`, newTagsInfo);
+  }
+
   public createProject(projectCreateInfo: ProjectCreateDTO) {
     return this.http.post(`${this.api}/Project`, projectCreateInfo);
   }
