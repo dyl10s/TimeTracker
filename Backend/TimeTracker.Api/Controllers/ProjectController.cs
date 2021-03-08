@@ -128,10 +128,10 @@ namespace TimeTracker.Api.Controllers
             var currentUserId = authHelper.GetCurrentUserId(User);
 
             var project = await database.Projects
-                .FirstAsync(x => x.InviteCode == projectInvite);
+                .FirstOrDefaultAsync(x => x.InviteCode == projectInvite);
 
             var curUser = await database.Users
-                .FirstAsync(x => x.Id == currentUserId);
+                .FirstOrDefaultAsync(x => x.Id == currentUserId);
             
             if (project == null)
             {

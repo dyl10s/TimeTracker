@@ -28,10 +28,9 @@ export class AuthGuard implements CanActivate {
       // logged in true and isAuth
       if(next.queryParams.inviteCode){
         this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
-          
-        })
-        this.router.navigate(['/dashboard/profile']);
+          this.router.navigate(['/dashboard/profile']);
           return false;
+        })
       }
     }
     
