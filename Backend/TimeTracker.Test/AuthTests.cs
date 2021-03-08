@@ -42,7 +42,8 @@ namespace TimeTracker.Test
             var registerResults = await authController.Register(new UserDTO()
             {
                 Email = "test@gmail.com",
-                Name = "test",
+                FirstName = "test",
+                LastName = "test",
                 Password = "testPass1"
             });
 
@@ -88,7 +89,8 @@ namespace TimeTracker.Test
             UserDTO registrationInfo = new UserDTO {
                 Email = "suzuya@321.org",
                 Password = "decentPassword7",
-                Name = "Suzuya",
+                FirstName = "Suzuya",
+                LastName = "Z.",
                 InviteCode = projectInviteCode
             };
 
@@ -109,7 +111,8 @@ namespace TimeTracker.Test
             var registerResults = await authController.Register(new UserDTO()
             {
                 Email = "test@gmail.com",
-                Name = "test",
+                FirstName = "test",
+                LastName = "test",
                 Password = "testpass"
             });
 
@@ -122,7 +125,8 @@ namespace TimeTracker.Test
             var registerResults = await authController.Register(new UserDTO()
             {
                 Email = "testgmail.com",
-                Name = "test",
+                FirstName = "test",
+                LastName = "test",
                 Password = "testPass1"
             });
 
@@ -135,7 +139,8 @@ namespace TimeTracker.Test
             var registerResults = await authController.Register(new UserDTO()
             {
                 Email = "match1@gmail.com",
-                Name = "test",
+                FirstName = "test",
+                LastName = "test",
                 Password = "testPass1"
             });
 
@@ -144,7 +149,8 @@ namespace TimeTracker.Test
             var registerResults2 = await authController.Register(new UserDTO()
             {
                 Email = "match1@gmail.com",
-                Name = "test",
+                FirstName = "test",
+                LastName = "test",
                 Password = "testPass1"
             });
 

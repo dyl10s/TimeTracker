@@ -1,0 +1,281 @@
+<div class="container">
+  <nb-layout-column>
+    <div class="date-section">
+      <button nbButton outline (click)="decDate()">
+        <nb-icon icon="chevron-left-outline"></nb-icon>
+      </button>
+
+      <div class="center-date">
+        <h4 *ngIf="dayView">
+          {{ today | date: "fullDate" }}
+        </h4>
+        <h4 *ngIf="weekView">
+          {{ weekStartDate | date }} - {{ weekEndDate | date }}
+        </h4>
+      </div>
+
+      <button nbButton outline (click)="incDate()">
+        <nb-icon icon="chevron-right-outline"></nb-icon>
+      </button>
+    </div>
+
+    <div class="button-control-section">
+      <div class="calendar-section">
+        <button
+          nbButton
+          [nbPopover]="tabs"
+          nbPopoverTrigger="hover"
+          nbPopoverPlacement="bottom"
+          outline
+        >
+          <nb-icon icon="calendar"></nb-icon>
+        </button>
+        <ng-template #tabs>
+          <nb-card-body>
+            <nb-calendar [(date)]="today"> </nb-calendar>
+          </nb-card-body>
+        </ng-template>
+      </div>
+
+      <div class="view-options-section">
+        <nb-button-group outline>
+          <button nbButtonToggle [pressed]="dayView" (click)="setDayView()">Day</button>
+          <button nbButtonToggle [pressed]="weekView" (click)="setWeekView()">Week</button>
+        </nb-button-group>
+      </div>
+
+      <button (click)="openCreateNewTimeEntry()" nbButton status="success">
+        <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
+        <span class="adaptive-button-text">New Entry</span>
+      </button>
+
+      <div class="return-date-section" *ngIf="notDate">
+        <button nbButton status="primary" (click)="returnDate()">
+          <nb-icon
+            class="adaptive-button-icon"
+            icon="arrow-forward-outline"
+          ></nb-icon>
+          <span class="adaptive-button-text">{{ returnText }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="entry-detail-section" *ngIf="dayView">
+      <nb-card>
+        <nb-card-body>
+          <ul>
+            <nb-button-group outline>
+              <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}" (click)="returnDayView(1)">
+                M<br />
+              </button>
+
+              <button nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}" (click)="returnDayView(2)">
+                T<br />
+              </button>
+
+              <button nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}" (click)="returnDayView(3)">
+                W<br />
+              </button>
+
+              <button nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}" (click)="returnDayView(4)">
+                R<br />
+              </button>
+
+              <button nbButtonToggle id="friday" pressed="{{ daysActive[5] }}" (click)="returnDayView(5)">
+                F<br />
+              </button>
+
+              <button nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}" (click)="returnDayView(6)">
+                S<br />
+              </button>
+
+              <button nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}" (click)="returnDayView(0)">
+                S<br />
+              </button>
+
+              <div class="weekTime">
+                <button nbButtonToggle class="weekTimeSpent" disabled>
+                  Total: {{ weekTimeSpent }}
+                </button>
+              </div>
+            </nb-button-group>
+          </ul>
+
+          <div class="entryListExist" *ngIf="dayView">
+            <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
+              <tbody>
+                <tr>
+                  <td id="details">
+                    <div class="projectName">Project Name</div>
+                    <div class="projectNotes">Project Notes</div>
+                  </td>
+
+                  <td id="time">{{ timeSpent }}</td>
+
+                  <td id="buttons">
+                    <button
+                      (click)="startStopTimer()"
+                      nbButton
+                      status="primary"
+                    >
+                      <nb-icon
+                        class="adaptive-button-icon"
+                        icon="{{ timerBtnIcon }}"
+                      ></nb-icon>
+                      <span class="adaptive-button-text">{{
+                        timerBtnText
+                      }}</span>
+                    </button>
+
+                    <button (click)="openEditTimeEntry()" nbButton outline>
+                      <nb-icon
+                        style
+                        class="adaptive-button-icon"
+                        id="edit-icon"
+                        icon="edit"
+                      ></nb-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div class="week-details-section" *ngIf="weekView">
+      <nb-card>
+        <nb-card-body>
+          <table>
+            <thead>
+              <tr>
+                <td class="name"></td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(1)">
+                    M<br />{{ monDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(2)">
+                    T<br />{{ tueDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(3)">
+                    W<br />{{ wedDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(4)">
+                    R<br />{{ thurDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(5)">
+                    F<br />{{ friDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(6)">
+                    S<br />{{ satDate | date: "LLL d" }}
+                  </button>
+                </td>
+                <td class="day">
+                  <button nbButton outline (click)="returnDayView(0)">
+                    S<br />{{ sunDate | date: "LLL d" }}
+                  </button>
+                </td>
+
+                <td class="total">0:00</td>
+                <td class="delete"></td>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td class="name">
+                  <div class="projectName">Project Name</div>
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="day">
+                  <input
+                    type="text"
+                    nbInput
+                    fullWidth
+                    status="basic"
+                    placeholder="0:00"
+                  />
+                </td>
+                <td class="total">0:00</td>
+                <td class="delete">
+                  <button nbButton status="danger">
+                    <nb-icon
+                      class="adaptive-button-icon"
+                      icon="close-outline"
+                    ></nb-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+            <tfoot></tfoot>
+          </table>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-layout-column>
+</div>

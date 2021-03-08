@@ -1,0 +1,64 @@
+.container {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 30px;
+}
+
+.header {
+    display: flex;
+}
+
+.title {
+    flex: 1 0 50%;
+    h1, h5 {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    h5 {
+        input {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.actions {
+    flex: 1 0 50%;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-content: flex-start;
+
+    button {
+        height: 40px;
+    }
+}
+
+p, nb-tag-list {
+    max-width: min(100%, 500px);
+}
+
+@media only screen and (max-width: 830px) {
+    .adaptive-button-text{
+      display: none;
+    }
+  
+    .adaptive-button-icon{
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .container {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
