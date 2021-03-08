@@ -209,6 +209,14 @@ export class TimeComponent implements OnInit {
         event: event
       }
     }).onClose.subscribe((x: any) => {
+      if(x.success){
+        this.toastrService.show("Time entry updated", 'Success', {status:'success', duration: 5000});
+        this.allEvents = null;
+        this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+          this.allEvents = response.data;
+          console.log(response.data)
+        })
+      }
     });
   }
 

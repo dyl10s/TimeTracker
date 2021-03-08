@@ -110,9 +110,9 @@ namespace Backend.Controllers
         }
 
         [HttpPatch]
-        public async Task<GenericResponseDTO<int>> UpdateTime(TimeEntryDTO data)
+        public async Task<GenericResponseDTO<TimeEntry>> UpdateTime(TimeEntryDTO data)
         {
-            var results = new GenericResponseDTO<int>() 
+            var results = new GenericResponseDTO<TimeEntry>() 
             { 
                 Success = true  
             };
@@ -137,7 +137,7 @@ namespace Backend.Controllers
 
             await database.SaveChangesAsync();
 
-            results.Data = currentTimeEntry.Id;
+            results.Data = currentTimeEntry;
             return results;
         }
 

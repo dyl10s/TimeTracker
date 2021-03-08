@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
+import { TimeEntry } from 'src/app/core/models/TimeEntry.model';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
 
@@ -49,8 +50,16 @@ export class EditTimeComponent implements OnInit {
   editTimer() { }
 
   updateEntry(form) {
-    this.timeEntryService.updateTimeEntry(form.value).subscribe((response: GenericResponseDTO) => {
-      console.log(response)
+    const entry: TimeEntry = {
+      Id: this.event.id,
+      Day: this.event.day,
+      Length: parseFloat(form.value.time),
+      Notes: form.value.notes,
+      ProjectId: this.event.project.id
+    };
+
+    this.timeEntryService.updateTimeEntry(entry).subscribe((response: GenericResponseDTO) => {
+      this.ref.close({ success: response.success, data: response.data });
     });
   }
 
