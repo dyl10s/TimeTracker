@@ -8,6 +8,8 @@ namespace TimeTracker.Api.DTOs
     public class TimeEntryDTO
     {
         public int Id { get; set; }
+        public DateTime LastModified { get; set; }
+        public DateTime CreatedTime { get; set; }
         public double Length { get; set; }
         public string Notes { get; set; }
         public int ProjectId { get; set;}
