@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { NbToastrService } from '@nebular/theme';
 import { Observable } from 'rxjs';
 import { GenericResponseDTO } from '../models/GenericResponseDTO.model';
 import { JwtService } from '../services/auth/jwt.service';
@@ -13,7 +14,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router, 
     private jwtService: JwtService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private toastrService: NbToastrService
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
@@ -28,6 +30,7 @@ export class AuthGuard implements CanActivate {
       // logged in true and isAuth
       if(next.queryParams.inviteCode){
         this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
+          this.toastrService.success("You have been added to a project", "Success")
           this.router.navigate(['/dashboard/profile']);
           return false;
         })

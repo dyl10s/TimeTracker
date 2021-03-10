@@ -170,7 +170,9 @@ namespace TimeTracker.Api.Controllers
         [HttpPost("AddUserToProject")]
         public async Task<GenericResponseDTO<int>> AddUserToProject(AddUserToProjectDTO inviteCode)
         {
-            var curUser = await authHelper.GetCurrentUser(User, database);
+            var curUser = await database.Users
+                .Include(x => x.Projects)
+                .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
 
             Project project = await database.Projects
                 .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
