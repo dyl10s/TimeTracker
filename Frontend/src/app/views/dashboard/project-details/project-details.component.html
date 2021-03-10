@@ -1,4 +1,17 @@
+
 <div class="container" [nbSpinner]="loadingProject">
+    <p>
+        <ngx-charts-line-chart
+            showXAxisLabel="true"
+            showYAxisLabel="true"
+            xAxis="true"
+            yAxis="true"
+            xAxisLabel="week"
+            yAxisLabel="total hours spent"
+            [results]="data"
+            autoScale="true" >
+        </ngx-charts-line-chart>
+    </p>
     <div *ngIf="details !== null" [formGroup]="updateProjectForm">
         <div class="header">
             <div class="title">

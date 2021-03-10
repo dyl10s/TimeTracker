@@ -8,6 +8,7 @@ import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
+import { ReportService } from 'src/app/core/services/report.service';
 
 @Component({
   selector: 'app-project-details',
@@ -15,6 +16,12 @@ import { ProjectService } from 'src/app/core/services/project.service';
   styleUrls: ['./project-details.component.scss']
 })
 export class ProjectDetailsComponent {
+
+  data: any = [{
+    'name': 'Total Hours Spent',
+    'series': [
+    ]
+  }];
 
   pageMode: string = "view";
 
@@ -37,13 +44,14 @@ export class ProjectDetailsComponent {
     private route: ActivatedRoute,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<UserDto>,
     private toastrService: NbToastrService,
-    private router: Router){
+    private router: Router,
+    private reportService: ReportService){
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
       (results: GenericResponseDTO<ProjectDTO>) => {
         if(results.success){
-          console.log(results.data);
+          //console.log(results.data);
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
 
@@ -73,6 +81,36 @@ export class ProjectDetailsComponent {
       (error) => {
         this.router.navigateByUrl("/dashboard/projects");
       });
+
+    this.reportService.getDetailsReport(this.projectId, new Date(2019, 1, 1), new Date()).subscribe(
+      (results: GenericResponseDTO) => {
+        console.log(results);
+        let total = 0;
+        let startDate: Date = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+        let endDate = new Date();
+        endDate.setMonth(endDate.getMonth() - 1);
+        endDate.setDate(endDate.getDate() + 7);
+        for(let i = 0; i < 5; i++) {
+          console.log(startDate);
+          console.log(endDate);
+          let filteredResults = results.data[0].timeEntries.filter(entry => new Date(entry.day) >= startDate && new Date(entry.day) < endDate);
+          filteredResults.forEach((entry) => {
+            console.log(entry.day);
+            total += entry.length;
+          });
+          let label = startDate.toDateString();
+          label = label.substring(label.indexOf(' '));
+          this.data[0].series.push({
+            'name': label,
+            'value': total 
+          });
+          startDate.setDate(startDate.getDate() + 7);
+          endDate.setDate(endDate.getDate() + 7);
+        }
+        this.data = [...this.data];
+      }
+    );
   }
 
   getAllTags() : string[] {
