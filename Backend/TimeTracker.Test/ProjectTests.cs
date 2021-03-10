@@ -72,5 +72,37 @@ namespace TimeTracker.Test
             Assert.AreEqual(projectById.Data.Tags.Count, 3);
             Assert.IsTrue(projectById.Data.Tags.Any(x => x.Name == "New Tag"));
         }
+
+
+        [TestMethod]
+        public async Task UpdateProjectDetails() {
+            var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "Test Client",
+                Description = "Test Description",
+                ProjectName = "Test Name",
+                Tags = new List<string>()
+                {
+                    "Test Tag 1",
+                    "Test Tag 2"
+                }
+            });
+
+            Assert.IsTrue(createResult.Success);
+
+            var project = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(project.Data.Description == "Test Description");
+
+            await projectController.UpdateProjectDetails(new ProjectDetailsDTO()
+            {
+                Description = "Updated Description",
+                ProjectId = createResult.Data
+            });
+
+            var projectUpdated = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(projectUpdated.Data.Description == "Updated Description");
+        }
     }
 }
