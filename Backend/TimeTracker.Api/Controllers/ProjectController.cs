@@ -176,6 +176,7 @@ namespace TimeTracker.Api.Controllers
                 .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
 
             var curUser = await database.Users
+                .Include(x => x.Projects)
                 .FirstOrDefaultAsync(x => x.Id == currentUserId);
             
             if (project == null)
