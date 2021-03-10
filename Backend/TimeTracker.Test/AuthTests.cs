@@ -155,6 +155,51 @@ namespace TimeTracker.Test
             });
 
             Assert.IsFalse(registerResults2.Success);
+        }
+
+        [TestMethod]
+        public async Task AddUserToProjectOnLogin()
+        {
+            await TestAuthHelpers.LogInUser(database, configuration, projectController);
+
+            ProjectCreateDTO projectInfo = new ProjectCreateDTO {
+                ProjectName = "Soup Delivery Website",
+                ClientName = "Soup Delivery LLC"
+            };
+
+            GenericResponseDTO<int> createProjectResponse = await projectController.CreateProject(projectInfo);
+            Assert.IsTrue(createProjectResponse.Success);
+
+            int projectID = createProjectResponse.Data;
+            Project project = await database.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == projectID);
+            string projectInviteCode = project.InviteCode;
+
+            UserDTO registrationInfo = new UserDTO {
+                Email = "suzuya@321.org",
+                Password = "decentPassword7",
+                FirstName = "Suzuya",
+                LastName = "Z."
+            };
+
+            GenericResponseDTO<int> registerResponse = await authController.Register(registrationInfo);
+            Assert.IsTrue(registerResponse.Success);
+
+            UserDTO loginInfo = new UserDTO {
+                Email = "suzuya@321.org",
+                Password = "decentPassword7",
+                InviteCode = projectInviteCode
+            };
+
+            await authController.Login(loginInfo);
+
+            User user = await database.Users
+                .Include(x => x.Projects)
+                .FirstOrDefaultAsync(u => u.Id == registerResponse.Data);
+
+            Assert.IsTrue(user.Projects.Count == 1);
+            Assert.IsTrue(user.Projects[0].Id == project.Id);
         }  
     }
 }
