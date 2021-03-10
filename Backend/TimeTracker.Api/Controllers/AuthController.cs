@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers
             {
                 // Get user with a matching username and password hash
                 var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
-                User curUser = await database.Users
+                var curUser = await database.Users
                     .Include(x => x.Projects)
                     .FirstOrDefaultAsync(u => u.Email == loginData.Email && u.Password.SequenceEqual(hashedPassword));
 
