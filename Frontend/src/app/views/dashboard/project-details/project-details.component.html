@@ -35,9 +35,19 @@
             <input *ngIf="pageMode == 'edit'" type="text" status="primary" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
         </nb-tag-list>
     
-        <p>
+        <p *ngIf="pageMode == 'view'">
             <span>{{ details.description }}</span>
         </p>
+
+        <input 
+            *ngIf="pageMode == 'edit'" 
+            style="margin: 20px 0;"
+            type="text" 
+            status="primary" 
+            placeholder="Project Description" 
+            nbInput 
+            formControlName="details"
+            fullWidth>
     
         <h4>Team Members</h4>
         <table [nbTreeGrid]="teamDataSource">

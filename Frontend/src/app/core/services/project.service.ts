@@ -32,4 +32,9 @@ export class ProjectService {
   public createProject(projectCreateInfo: ProjectCreateDTO) {
     return this.http.post(`${this.api}/Project`, projectCreateInfo);
   }
+
+  public updateProjectDetails(description: string, projectId: number) {
+    return this.http.patch(`${this.api}/Project`, { description, projectId })
+  }
+
 }

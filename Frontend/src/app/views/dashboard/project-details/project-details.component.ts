@@ -27,9 +27,11 @@ export class ProjectDetailsComponent {
 
   loadingProject: boolean = true;
   details: ProjectDTO = null;
+  copyDetails: ProjectDTO = null;
 
   updateProjectForm: FormGroup = new FormGroup({
-    tags: new FormControl({value: '', disabled: false})
+    tags: new FormControl({value: '', disabled: false}),
+    details: new FormControl({value: '', disabled: false})
   });
 
   constructor(
@@ -46,6 +48,7 @@ export class ProjectDetailsComponent {
           console.log(results.data);
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
+          this.copyDetails = results.data;
 
           results.data.teacher.role = "Teacher";
           this.teamMembers.push({
@@ -60,7 +63,8 @@ export class ProjectDetailsComponent {
           });
 
           this.updateProjectForm.setValue({
-            tags: this.details.tags
+            tags: this.details.tags,
+            details: this.details.description
           });
 
         }else{
@@ -120,6 +124,19 @@ export class ProjectDetailsComponent {
 
     this.loadingProject = true;
 
+    this.projectService.updateProjectDetails(
+      this.updateProjectForm.get("details").value,
+      this.projectId
+    ).subscribe((response: GenericResponseDTO) => {
+      if(response.success == true){
+        this.details.description = this.updateProjectForm.get("details").value;
+        this.pageMode = 'view';
+        this.toastrService.success("The project has been saved successfully", "Project Saved");
+      }else{
+        this.toastrService.danger("There was an error updating the project", "Error");
+      }
+    })
+
     this.projectService.setProjectTags(this.updateProjectForm.get("tags").value.map((x: string) => {
       return {
         projectId: this.projectId,
@@ -165,6 +182,16 @@ export class ProjectDetailsComponent {
     }else{
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
     }
+  }
+
+  copy(mainObj) {
+    let objCopy = {}; // objCopy will store a copy of the mainObj
+    let key;
+
+    for (key in mainObj) {
+      objCopy[key] = mainObj[key]; // copies each property to the objCopy object
+    }
+    return objCopy;
   }
 }
 

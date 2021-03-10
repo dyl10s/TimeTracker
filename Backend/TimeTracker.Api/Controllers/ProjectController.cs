@@ -220,5 +220,34 @@ namespace TimeTracker.Api.Controllers
 
             return response;
         }
+
+        /// <summary>
+        /// Update project details
+        /// </summary>
+        /// <param name="projectDetails">The details of the existing project to update</param>
+        /// <returns>The Id of the project that was updated</returns>
+        [Authorize]
+        [HttpPatch]
+        public async Task<GenericResponseDTO<int>> UpdateProjectDetails(ProjectDetailsDTO projectDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<int>() 
+            { 
+                Success = false
+            };
+
+            Project project = await database.Projects
+                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
+
+            project.Description = projectDetails.Description;
+
+            await database.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = project.Id;
+
+            return response;
+        }
     }
 }
