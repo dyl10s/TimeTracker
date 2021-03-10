@@ -1,4 +1,15 @@
 <div class="container">
+  <ngx-charts-line-chart
+    legend="true"
+    showXAxisLabel="true"
+    showYAxisLabel="true"
+    xAxis="true"
+    yAxis="true"
+    xAxisLabel="x axis"
+    yAxisLabel="y axis"
+    [results]="testData"
+    autoScale="true" >
+  </ngx-charts-line-chart>
   <nb-layout-column>
     <h3>Basic Info</h3>
 

@@ -15,6 +15,25 @@ export class ProfileComponent implements OnInit {
   lastName: string;
   emailAddress: string;
   projects: string[] = [];
+  testData: any = [
+    {
+      'name': 'Test Series',
+      'series': [
+        {
+          'name': 'point 1',
+          'value': 8000
+        },
+        {
+          'name': 'point 2',
+          'value': 7000 
+        },
+        {
+          'name': 'point 3',
+          'value': 10000
+        }
+      ]
+    }
+  ]
 
   disableNameSubmitButton: boolean = true;
   disablePasswordSubmitButton: boolean = false;

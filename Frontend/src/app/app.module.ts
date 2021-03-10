@@ -28,6 +28,8 @@ import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 import { HomeComponent } from './shared/components/home/home.component';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 export function tokenGetter() {
   return localStorage.getItem('token');
 }
@@ -46,7 +48,7 @@ export function tokenGetter() {
     TimeComponent,
     CreateTimeComponent,
     EditTimeComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -77,6 +79,7 @@ export function tokenGetter() {
     NbCalendarModule,
     NbActionsModule,
     NbContextMenuModule,
+    NgxChartsModule,
 
     JwtModule.forRoot({
       config: {
