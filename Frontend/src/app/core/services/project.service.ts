@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { CreateTagDTO } from '../models/CreateTagDTO.model';
 import { ProjectCreateDTO } from '../models/ProjectCreateDTO.model';
+import { UpdateProjectDTO } from '../models/UpdateProjectDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +34,8 @@ export class ProjectService {
     return this.http.post(`${this.api}/Project`, projectCreateInfo);
   }
 
-  public updateProjectDetails(description: string, projectId: number) {
-    return this.http.patch(`${this.api}/Project`, { description, projectId })
+  public updateProjectDetails(updateProject: UpdateProjectDTO) {
+    return this.http.patch(`${this.api}/Project`, updateProject)
   }
 
   public addUserToProject(inviteCode: string) {
