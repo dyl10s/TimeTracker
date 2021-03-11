@@ -76,6 +76,38 @@ namespace TimeTracker.Test
 
         [TestMethod]
         public async Task UpdateProjectDetails() {
+                        var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "Test Client",
+                Description = "Test Description",
+                ProjectName = "Test Name",
+                Tags = new List<string>()
+                {
+                    "Test Tag 1",
+                    "Test Tag 2"
+                }
+            });
+
+            Assert.IsTrue(createResult.Success);
+
+            var project = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(project.Data.Description == "Test Description");
+
+            await projectController.UpdateProjectDetails(new ProjectDetailsDTO()
+            {
+                Description = "Updated Description",
+                ProjectId = createResult.Data
+            });
+
+            var projectUpdated = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(projectUpdated.Data.Description == "Updated Description");
+        }
+        
+        [TestMethod]
+        public async Task AddUserToProject()
+        {
             var createResult = await projectController.CreateProject(new ProjectCreateDTO()
             {
                 ClientName = "Test Client",
@@ -103,6 +135,14 @@ namespace TimeTracker.Test
             var projectUpdated = await projectController.GetProjectById(createResult.Data);
 
             Assert.IsTrue(projectUpdated.Data.Description == "Updated Description");
+            await projectController.AddUserToProject(new AddUserToProjectDTO(){
+                InviteCode = project.Data.InviteCode
+            });
+
+            var userProjects = await projectController.GetProjectsByUser();
+
+            Assert.IsTrue(userProjects.Data.Count == 1);
+            Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);
         }
     }
 }

@@ -37,4 +37,7 @@ export class ProjectService {
     return this.http.patch(`${this.api}/Project`, { description, projectId })
   }
 
+  public addUserToProject(inviteCode: string) {
+    return this.http.post(`${this.api}/Project/AddUserToProject`, { inviteCode })
+  }
 }
