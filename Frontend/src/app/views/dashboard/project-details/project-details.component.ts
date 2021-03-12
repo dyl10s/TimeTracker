@@ -23,6 +23,9 @@ export class ProjectDetailsComponent {
     ]
   }];
 
+  lineChartYMin: number;
+  lineChartYMax: number;
+
   pageMode: string = "view";
 
   teamDataSource: NbTreeGridDataSource<UserDto>;
@@ -104,12 +107,16 @@ export class ProjectDetailsComponent {
             return 1;
           return 0;
         });
-        
-        let earliestDate = allEntries[0];
+
+        // variables
         let total = 0;
-        let startDate = new Date(earliestDate.day);
+        let startDate = new Date(allEntries[0].day);
+        
+        // set the date range
         let endDate = new Date(startDate.toDateString());
         endDate.setDate(endDate.getDate() + 7);
+
+        // plot the times on the chart
         allEntries.forEach((entry) => {
           if(new Date(entry.day).getTime() > endDate.getTime()) {
             let label = startDate.toDateString();
@@ -117,17 +124,20 @@ export class ProjectDetailsComponent {
               'name': label.substring(label.indexOf(' ')),
               'value': total 
             });
-            startDate.setDate(endDate.getDate());
+            startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
           }
           total += entry.length;
         });
 
+        // last label
         let label = startDate.toDateString();
             this.data[0].series.push({
               'name': label.substring(label.indexOf(' ')),
               'value': total 
             });
+
+        this.lineChartYMax = total * 1.1;
 
         this.data = [...this.data];
       }
