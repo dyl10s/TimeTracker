@@ -82,32 +82,53 @@ export class ProjectDetailsComponent {
         this.router.navigateByUrl("/dashboard/projects");
       });
 
-    this.reportService.getDetailsReport(this.projectId, new Date(2019, 1, 1), new Date()).subscribe(
+    this.reportService.getDetailsReport(this.projectId, new Date(1970, 1, 1), new Date()).subscribe(
       (results: GenericResponseDTO) => {
         console.log(results);
+
+        // put all the entries for all users into a single array
+        let allEntries = [];
+        results.data.forEach((user) => {
+          user.timeEntries.forEach((entry) => {
+            allEntries.push(entry);
+          });
+        });
+
+        // sort the big list
+        allEntries.sort((x, y) => {
+          let xDate = new Date(x.day);
+          let yDate = new Date(y.day);
+          if(xDate.getTime() < yDate.getTime())
+            return -1;
+          else if(xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+        
+        let earliestDate = allEntries[0];
         let total = 0;
-        let startDate: Date = new Date();
-        startDate.setMonth(startDate.getMonth() - 1);
-        let endDate = new Date();
-        endDate.setMonth(endDate.getMonth() - 1);
+        let startDate = new Date(earliestDate.day);
+        let endDate = new Date(startDate.toDateString());
         endDate.setDate(endDate.getDate() + 7);
-        for(let i = 0; i < 5; i++) {
-          console.log(startDate);
-          console.log(endDate);
-          let filteredResults = results.data[0].timeEntries.filter(entry => new Date(entry.day) >= startDate && new Date(entry.day) < endDate);
-          filteredResults.forEach((entry) => {
-            console.log(entry.day);
-            total += entry.length;
-          });
-          let label = startDate.toDateString();
-          label = label.substring(label.indexOf(' '));
-          this.data[0].series.push({
-            'name': label,
-            'value': total 
-          });
-          startDate.setDate(startDate.getDate() + 7);
-          endDate.setDate(endDate.getDate() + 7);
-        }
+        allEntries.forEach((entry) => {
+          if(new Date(entry.day).getTime() > endDate.getTime()) {
+            let label = startDate.toDateString();
+            this.data[0].series.push({
+              'name': label.substring(label.indexOf(' ')),
+              'value': total 
+            });
+            startDate.setDate(endDate.getDate());
+            endDate.setDate(endDate.getDate() + 7);
+          }
+          total += entry.length;
+        });
+
+        let label = startDate.toDateString();
+            this.data[0].series.push({
+              'name': label.substring(label.indexOf(' ')),
+              'value': total 
+            });
+
         this.data = [...this.data];
       }
     );
