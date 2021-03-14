@@ -4,12 +4,11 @@
             <nb-icon icon="arrow-ios-back-outline"></nb-icon>
         </button>
         <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="startDayPicker" [(ngModel)]="startDate">
-        <nb-datepicker #startDayPicker (dateChange)="startDateChanged($event)"></nb-datepicker>
         <span>
             <h4>-</h4>
         </span>
         <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="endDayPicker" [(ngModel)]="endDate">
-        <nb-datepicker #endDayPicker></nb-datepicker>
+        
         <button status="basic" nbButton outline (click)="rightButton()">
             <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
         </button>
@@ -24,4 +23,6 @@
             <nb-option value="custom">Custom</nb-option>
         </nb-select>
     </div>
+    <nb-datepicker #startDayPicker (dateChange)="startDateChanged($event)"></nb-datepicker>
+    <nb-datepicker #endDayPicker (dateChange)="endDateChanged($event)"></nb-datepicker>
 </div>
