@@ -39,15 +39,15 @@
             <span>{{ details.description }}</span>
         </p>
 
-        <textarea 
+        <input 
             *ngIf="pageMode == 'edit'" 
-            class="description"
+            style="margin: 20px 0;"
             type="text" 
             status="primary" 
             placeholder="Project Description" 
             nbInput 
             formControlName="details"
-            fullWidth></textarea>
+            fullWidth>
     
         <h4>Team Members</h4>
         <table [nbTreeGrid]="teamDataSource">

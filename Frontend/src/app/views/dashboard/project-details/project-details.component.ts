@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbTagComponent, NbTagInputAddEvent, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
-import { forkJoin } from 'rxjs';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
@@ -125,32 +124,40 @@ export class ProjectDetailsComponent {
 
     this.loadingProject = true;
 
-    forkJoin([
-      this.projectService.updateProjectDetails(
-        {
-          description: this.updateProjectForm.get("details").value,
-          projectId: this.projectId
-        }
-      ),
-      this.projectService.setProjectTags(this.updateProjectForm.get("tags").value.map((x: string) => {
-        return {
-          projectId: this.projectId,
-          tag: x
-        };
-      }))
-    ]).subscribe((res: [GenericResponseDTO, GenericResponseDTO]) => {
-      if(res[0].success == true && res[1].success == true){
+    this.projectService.updateProjectDetails(
+      this.updateProjectForm.get("details").value,
+      this.projectId
+    ).subscribe((response: GenericResponseDTO) => {
+      if(response.success == true){
         this.details.description = this.updateProjectForm.get("details").value;
-        this.details.tags = this.updateProjectForm.get("tags").value;
+        this.pageMode = 'view';
         this.toastrService.success("The project has been saved successfully", "Project Saved");
       }else{
         this.toastrService.danger("There was an error updating the project", "Error");
       }
-      this.loadingProject = false;
-    }, (err) => {
-      this.toastrService.danger("There was an error updating the project", "Error");
-      this.loadingProject = false;
     })
+
+    this.projectService.setProjectTags(this.updateProjectForm.get("tags").value.map((x: string) => {
+      return {
+        projectId: this.projectId,
+        tag: x
+      };
+    })).subscribe(
+      (res: GenericResponseDTO) => {
+        if(res.success === true){
+          this.details.tags = this.updateProjectForm.get("tags").value;
+          this.pageMode = 'view';
+          this.toastrService.success("The project has been saved successfully", "Project Saved");
+        }else{
+          this.toastrService.danger("There was an error updating the project", "Error");
+        }
+        this.loadingProject = false;
+      },
+      (error) => {
+        this.toastrService.danger("There was an error updating the project", "Error");
+        this.loadingProject = false;
+      }
+    );
   }
 
   cancelEdit() {
@@ -175,6 +182,16 @@ export class ProjectDetailsComponent {
     }else{
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
     }
+  }
+
+  copy(mainObj) {
+    let objCopy = {}; // objCopy will store a copy of the mainObj
+    let key;
+
+    for (key in mainObj) {
+      objCopy[key] = mainObj[key]; // copies each property to the objCopy object
+    }
+    return objCopy;
   }
 }
 
