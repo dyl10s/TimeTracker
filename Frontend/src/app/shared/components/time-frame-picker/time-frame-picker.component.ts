@@ -1,0 +1,179 @@
+import { Component, Input, OnInit, SimpleChange } from '@angular/core';
+
+@Component({
+  selector: 'app-time-frame-picker',
+  templateUrl: './time-frame-picker.component.html',
+  styleUrls: ['./time-frame-picker.component.scss']
+})
+export class TimeFramePickerComponent {
+
+  @Input() startDate: Date;
+  @Input() endDate: Date;
+
+  timeframe: string = "weekly";
+
+  constructor() {
+    // Default to the current week
+    this.startDate = new Date();
+    this.selectCurrentWeek(this.startDate);
+  }
+
+  timeFrameChanged(e: string) {
+    this.startDate = new Date();
+    switch (e) {
+      case "weekly":
+        this.selectCurrentWeek(this.startDate);
+        break;
+      case "bi-weekly":
+        this.selectCurrentBiWeek(this.startDate);
+        break;
+      case "monthly":
+        this.selectCurrentMonth(this.startDate);
+        break;
+      case "yearly":
+        this.selectCurrentYear(this.startDate);
+        break;
+      case "alltime":
+        this.selectAllTime();
+        break;
+    }
+    
+    this.timeframe = e;
+  }
+
+  startDateChanged(e: Date) {
+    switch (this.timeframe) {
+      case "weekly":
+        this.startDate = e;
+        this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 7);
+        console.log(this.endDate);
+        break;
+      case "bi-weekly":
+        this.startDate = e;
+        this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 14);
+        break;
+      case "monthly":
+        this.startDate = e;
+        this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth() + 1, this.startDate.getDate());
+        break;
+      case "yearly":
+        this.startDate = e;
+        this.endDate = new Date(this.startDate.getFullYear() + 1, this.startDate.getMonth(), this.startDate.getDate());
+        break;
+      default:
+        this.startDate = e;
+        if(this.startDate > this.endDate) {
+          this.endDate = this.startDate;
+        }
+    }
+  }
+
+  endDateChanged(e: Date) {
+    switch (this.timeframe) {
+      case "weekly":
+        this.endDate = e;
+        this.startDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 7);
+        console.log(this.endDate);
+        break;
+      case "bi-weekly":
+        this.endDate = e;
+        this.startDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 14);
+        break;
+      case "monthly":
+        this.endDate = e;
+        this.startDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth() - 1, this.endDate.getDate());
+        break;
+      case "yearly":
+        this.endDate = e;
+        this.startDate = new Date(this.endDate.getFullYear() - 1, this.endDate.getMonth(), this.endDate.getDate());
+        break;
+      default:
+        this.endDate = e;
+        if(this.startDate > this.endDate) {
+          this.startDate = this.endDate;
+        }
+    }
+  }
+
+  rightButton() {
+    switch (this.timeframe) {
+      case "weekly":
+        this.startDate.setDate(this.startDate.getDate() + 7);
+        this.selectCurrentWeek(this.startDate);
+        break;
+      case "bi-weekly":
+        this.startDate.setDate(this.startDate.getDate() + 7);
+        this.selectCurrentBiWeek(this.startDate);
+        break;
+      case "monthly":
+        this.startDate.setMonth(this.startDate.getMonth() + 1);
+        this.selectCurrentMonth(this.startDate);
+        break;
+      case "yearly":
+        this.startDate.setFullYear(this.startDate.getFullYear() + 1);
+        this.selectCurrentYear(this.startDate);
+        break;
+      case "alltime":
+        this.selectAllTime();
+        break;
+      case "custom":
+        this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 1);
+        this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() + 1);
+    }
+  }
+
+  leftButton() {
+    switch (this.timeframe) {
+      case "weekly":
+        this.startDate.setDate(this.startDate.getDate() - 7);
+        this.selectCurrentWeek(this.startDate);
+        break;
+      case "bi-weekly":
+        this.startDate.setDate(this.startDate.getDate() - 7);
+        this.selectCurrentBiWeek(this.startDate);
+        break;
+      case "monthly":
+        this.startDate.setMonth(this.startDate.getMonth() - 1);
+        this.selectCurrentMonth(this.startDate);
+        break;
+      case "yearly":
+        this.startDate.setFullYear(this.startDate.getFullYear() - 1);
+        this.selectCurrentYear(this.startDate);
+        break;
+      case "alltime":
+        this.selectAllTime();
+        break;
+      case "custom":
+        this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - 1);
+        this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 1);
+    }
+  }
+
+  selectCurrentWeek(referenceDate: Date) {
+    this.startDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate() - referenceDate.getDay());
+    this.endDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate() + 7 - referenceDate.getDay());
+  }
+
+  selectCurrentBiWeek(referenceDate: Date) {
+    this.startDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate() + referenceDate.getDay());
+    this.endDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate() + 14 - referenceDate.getDay());
+  }
+
+  selectCurrentMonth(referenceDate: Date) {
+    this.startDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1);
+    this.endDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth() + 1, 1);
+    this.endDate.setDate(this.endDate.getDate() - 1);
+  }
+
+  selectCurrentYear(referenceDate: Date) {
+    this.startDate = new Date(referenceDate.getFullYear(), 0, 1);
+    this.endDate = new Date(referenceDate.getFullYear() + 1, 0, 1);
+    this.endDate.setDate(this.endDate.getDate() - 1);
+  }
+
+  selectAllTime() {
+    this.startDate = new Date("01/01/1900");
+    this.endDate = new Date("01/01/2100");
+  }
+
+}
