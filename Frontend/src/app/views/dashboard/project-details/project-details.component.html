@@ -1,19 +1,5 @@
 
 <div class="container" [nbSpinner]="loadingProject">
-    <p>
-        <ngx-charts-line-chart
-            showXAxisLabel="true"
-            showYAxisLabel="true"
-            xAxis="true"
-            yAxis="true"
-            yScaleMin = "0"
-            [yScaleMax] = "lineChartYMax"
-            xAxisLabel="week"
-            yAxisLabel="total hours spent"
-            [results]="data"
-            autoScale="true" >
-        </ngx-charts-line-chart>
-    </p>
     <div *ngIf="details !== null" [formGroup]="updateProjectForm">
         <div class="header">
             <div class="title">
@@ -73,5 +59,19 @@
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
               </ng-container>
         </table>
+        <p>
+            <ngx-charts-line-chart
+                showXAxisLabel="true"
+                showYAxisLabel="true"
+                xAxis="true"
+                yAxis="true"
+                yScaleMin = "0"
+                [yScaleMax] = "lineChartYMax"
+                xAxisLabel="week"
+                yAxisLabel="total hours spent"
+                [results]="data"
+                autoScale="true" >
+            </ngx-charts-line-chart>
+        </p>
     </div>
 </div>
