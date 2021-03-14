@@ -27,8 +27,6 @@ import { EditTimeComponent } from './shared/components/edit-time/edit-time.compo
 import { CustomTreeBuilder } from './core/services/customTreeBuilder.service';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 import { HomeComponent } from './shared/components/home/home.component';
-import { TimeFramePickerComponent } from './shared/components/time-frame-picker/time-frame-picker.component';
-import { ReportComponent } from './views/dashboard/report/report.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -48,9 +46,7 @@ export function tokenGetter() {
     TimeComponent,
     CreateTimeComponent,
     EditTimeComponent,
-    ProjectDetailsComponent,
-    TimeFramePickerComponent,
-    ReportComponent
+    ProjectDetailsComponent
   ],
   imports: [
     CommonModule,
