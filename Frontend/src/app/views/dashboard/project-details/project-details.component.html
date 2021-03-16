@@ -75,13 +75,11 @@
             </button>
         </div>
 
-        <span id="charts">
+        <div class="charts">
             <ngx-charts-line-chart
                 *ngIf="displayBarChart === false"
-                id="line-chart"
                 showXAxisLabel="true"
                 showYAxisLabel="true"
-                xAxis="true"
                 yAxis="true"
                 yScaleMin = "0"
                 [yScaleMax] = "lineChartYMax"
@@ -90,21 +88,36 @@
                 yAxisLabel="Total Hours Spent"
                 [results]="data"
                 autoScale="true" >
+                <ng-template #tooltipTemplate let-model="model">
+                    <div class="chart-tooltip">
+                        <p>Week ending {{model.name}}</p>
+                        <hr>
+                        <p>{{model.value}} hours</p>
+                    </div>
+                </ng-template>
             </ngx-charts-line-chart>
         
             <ngx-charts-bar-vertical
                 *ngIf="displayBarChart === true"
-                id="bar-chart"
                 showXAxisLabel="true"
                 showYAxisLabel="true"
-                xAxis="true"
                 yAxis="true"
                 autoscale="true"
-                xAxisLabel="Hours Spent"
-                yAxisLabel="Week"
+                showXAxisLabel="true"
+                xAxisLabel="Week"
+                yAxisLabel="Weekly Hours Spent"
+                [yScaleMax]="barChartYMax"
                 [scheme]="colorScheme"
-                [results]="barGraphData" >
+                [results]="barGraphData"
+                barPadding="15" >
+                <ng-template #tooltipTemplate let-model="model">
+                    <div class="chart-tooltip">
+                        <p>Week ending {{model.name}}</p>
+                        <hr>
+                        <p>{{model.value}} hours</p>
+                    </div>
+                </ng-template>
             </ngx-charts-bar-vertical>
-        </span>
+        </div>
     </div>
 </div>

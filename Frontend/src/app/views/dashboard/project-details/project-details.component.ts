@@ -29,8 +29,8 @@ export class ProjectDetailsComponent {
     'domain': ['#0095ff']
   }
 
-  lineChartYMin: number;
   lineChartYMax: number;
+  barChartYMax: number = 0;
 
   pageMode: string = "view";
 
@@ -94,7 +94,6 @@ export class ProjectDetailsComponent {
 
     this.reportService.getDetailsReport(this.projectId, new Date(1970, 1, 1), new Date()).subscribe(
       (results: GenericResponseDTO) => {
-        console.log(results);
 
         // put all the entries for all users into a single array
         let allEntries = [];
@@ -104,7 +103,7 @@ export class ProjectDetailsComponent {
           });
         });
 
-        // sort the big list
+        // sort the array
         allEntries.sort((x, y) => {
           let xDate = new Date(x.day);
           let yDate = new Date(y.day);
@@ -124,28 +123,30 @@ export class ProjectDetailsComponent {
         endDate.setDate(endDate.getDate() + 7);
 
         let subtotal = 0;
+        let currentWeek = 1;
 
         // plot the times on the chart
         allEntries.forEach((entry) => {
           if(new Date(entry.day).getTime() > endDate.getTime()) {
             let label = startDate.toDateString();
             this.data[0].series.push({
-              'name': label.substring(label.indexOf(' ')),
+              'name': label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')',
               'value': total 
             });
             this.barGraphData.push({
-              'name': label.substring(label.indexOf(' ')),
+              'name': label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')',
               'value': subtotal
             });
             startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
+            if(subtotal * 1.1 > this.barChartYMax)
+              this.barChartYMax = subtotal * 1.1;
             subtotal = 0;
+            currentWeek++;
           }
           subtotal += entry.length;
           total += entry.length;
         });
-
-        console.log(this.barGraphData);
 
         // last label
         let label = startDate.toDateString();
@@ -158,6 +159,7 @@ export class ProjectDetailsComponent {
               'value': subtotal 
             });
 
+        // set the height of the chart
         this.lineChartYMax = total * 1.1;
 
         this.data = [...this.data];
