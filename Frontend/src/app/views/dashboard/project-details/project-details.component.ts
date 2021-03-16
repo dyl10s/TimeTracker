@@ -23,6 +23,12 @@ export class ProjectDetailsComponent {
     ]
   }];
 
+  barGraphData: any = [];
+
+  colorScheme: any = {
+    'domain': ['#0095ff']
+  }
+
   lineChartYMin: number;
   lineChartYMax: number;
 
@@ -37,6 +43,8 @@ export class ProjectDetailsComponent {
 
   loadingProject: boolean = true;
   details: ProjectDTO = null;
+
+  displayBarChart: boolean = false;
 
   updateProjectForm: FormGroup = new FormGroup({
     tags: new FormControl({value: '', disabled: false})
@@ -54,7 +62,6 @@ export class ProjectDetailsComponent {
     projectService.getProjectById(this.projectId).subscribe(
       (results: GenericResponseDTO<ProjectDTO>) => {
         if(results.success){
-          //console.log(results.data);
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
 
@@ -116,6 +123,8 @@ export class ProjectDetailsComponent {
         let endDate = new Date(startDate.toDateString());
         endDate.setDate(endDate.getDate() + 7);
 
+        let subtotal = 0;
+
         // plot the times on the chart
         allEntries.forEach((entry) => {
           if(new Date(entry.day).getTime() > endDate.getTime()) {
@@ -124,11 +133,19 @@ export class ProjectDetailsComponent {
               'name': label.substring(label.indexOf(' ')),
               'value': total 
             });
+            this.barGraphData.push({
+              'name': label.substring(label.indexOf(' ')),
+              'value': subtotal
+            });
             startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
+            subtotal = 0;
           }
+          subtotal += entry.length;
           total += entry.length;
         });
+
+        console.log(this.barGraphData);
 
         // last label
         let label = startDate.toDateString();
@@ -136,10 +153,15 @@ export class ProjectDetailsComponent {
               'name': label.substring(label.indexOf(' ')),
               'value': total 
             });
+            this.barGraphData.push({
+              'name': label.substring(label.indexOf(' ')),
+              'value': subtotal 
+            });
 
         this.lineChartYMax = total * 1.1;
 
         this.data = [...this.data];
+        this.barGraphData = [...this.barGraphData];
       }
     );
   }
@@ -235,6 +257,7 @@ export class ProjectDetailsComponent {
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
     }
   }
+
 }
 
 interface TreeNode<T> {
