@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="start">
+        <button status="basic" nbButton outline (click)="leftButton()">
+            <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+        </button>
+        <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="startDayPicker" [(ngModel)]="startDate">
+        <span>
+            <h4>-</h4>
+        </span>
+        <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="endDayPicker" [(ngModel)]="endDate">
+        
+        <button status="basic" nbButton outline (click)="rightButton()">
+            <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+        </button>
+    </div>
+    <div class="end">
+        <nb-select fullWidth class="timeFramePicker" size="large" selected="weekly" (selectedChange)="timeFrameChanged($event)">
+            <nb-option value="weekly">Weekly</nb-option>
+            <nb-option value="bi-weekly">Bi-Weekly</nb-option>
+            <nb-option value="monthly">Monthly</nb-option>
+            <nb-option value="yearly">Yearly</nb-option>
+            <nb-option value="alltime">All Time</nb-option>
+            <nb-option value="custom">Custom</nb-option>
+        </nb-select>
+    </div>
+</div>
+
+<nb-datepicker #startDayPicker (dateChange)="startDateChanged($event)"></nb-datepicker>
+<nb-datepicker #endDayPicker (dateChange)="endDateChanged($event)"></nb-datepicker>
