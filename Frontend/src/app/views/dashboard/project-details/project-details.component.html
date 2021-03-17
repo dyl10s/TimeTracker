@@ -61,13 +61,13 @@
         </table>
 
         <h4>
-            Hourly Breakdown
+            Time Breakdown
         </h4>
 
         <div class="actions chart-actions">
             <button nbButton (click)="displayBarChart = false" status="primary">
                 <nb-icon class="adaptive-button-icon" icon="trending-up-outline"></nb-icon>
-                <span class="adaptive-button-text">Total Hours Spent</span>
+                <span class="adaptive-button-text">Cumulative Hours Spent</span>
             </button>
             <button nbButton (click)="displayBarChart = true" status="primary">
                 <nb-icon class="adaptive-button-icon" icon="bar-chart-outline"></nb-icon>
@@ -78,16 +78,13 @@
         <div class="charts">
             <ngx-charts-line-chart
                 *ngIf="displayBarChart === false"
-                showXAxisLabel="true"
                 showYAxisLabel="true"
                 yAxis="true"
+                yAxisLabel="Cumulative Hours Spent"
                 yScaleMin = "0"
                 [yScaleMax] = "lineChartYMax"
-                xAxisLabel="Week"
                 [scheme]="colorScheme"
-                yAxisLabel="Total Hours Spent"
-                [results]="data"
-                autoScale="true" >
+                [results]="lineChartData" >
                 <ng-template #tooltipTemplate let-model="model">
                     <div class="chart-tooltip">
                         <p>Week ending {{model.name}}</p>
@@ -99,17 +96,13 @@
         
             <ngx-charts-bar-vertical
                 *ngIf="displayBarChart === true"
-                showXAxisLabel="true"
+                barPadding="15"
                 showYAxisLabel="true"
                 yAxis="true"
-                autoscale="true"
-                showXAxisLabel="true"
-                xAxisLabel="Week"
-                yAxisLabel="Weekly Hours Spent"
+                yAxisLabel="Hours Spent By Week"
                 [yScaleMax]="barChartYMax"
                 [scheme]="colorScheme"
-                [results]="barGraphData"
-                barPadding="15" >
+                [results]="barChartData" >
                 <ng-template #tooltipTemplate let-model="model">
                     <div class="chart-tooltip">
                         <p>Week ending {{model.name}}</p>

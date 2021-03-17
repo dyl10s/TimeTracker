@@ -17,13 +17,13 @@ import { ReportService } from 'src/app/core/services/report.service';
 })
 export class ProjectDetailsComponent {
 
-  data: any = [{
+  lineChartData: any = [{
     'name': 'Total Hours Spent',
     'series': [
     ]
   }];
 
-  barGraphData: any = [];
+  barChartData: any = [];
 
   colorScheme: any = {
     'domain': ['#0095ff']
@@ -90,82 +90,11 @@ export class ProjectDetailsComponent {
       },
       (error) => {
         this.router.navigateByUrl("/dashboard/projects");
-      });
-
-    this.reportService.getDetailsReport(this.projectId, new Date(1970, 1, 1), new Date()).subscribe(
-      (results: GenericResponseDTO) => {
-
-        // put all the entries for all users into a single array
-        let allEntries = [];
-        results.data.forEach((user) => {
-          user.timeEntries.forEach((entry) => {
-            allEntries.push(entry);
-          });
-        });
-
-        // sort the array
-        allEntries.sort((x, y) => {
-          let xDate = new Date(x.day);
-          let yDate = new Date(y.day);
-          if(xDate.getTime() < yDate.getTime())
-            return -1;
-          else if(xDate.getTime() > yDate.getTime())
-            return 1;
-          return 0;
-        });
-
-        // variables
-        let total = 0;
-        let startDate = new Date(allEntries[0].day);
-        
-        // set the date range
-        let endDate = new Date(startDate.toDateString());
-        endDate.setDate(endDate.getDate() + 7);
-
-        let subtotal = 0;
-        let currentWeek = 1;
-
-        // plot the times on the chart
-        allEntries.forEach((entry) => {
-          if(new Date(entry.day).getTime() > endDate.getTime()) {
-            let label = startDate.toDateString();
-            this.data[0].series.push({
-              'name': label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')',
-              'value': total 
-            });
-            this.barGraphData.push({
-              'name': label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')',
-              'value': subtotal
-            });
-            startDate.setDate(startDate.getDate() + 7);
-            endDate.setDate(endDate.getDate() + 7);
-            if(subtotal * 1.1 > this.barChartYMax)
-              this.barChartYMax = subtotal * 1.1;
-            subtotal = 0;
-            currentWeek++;
-          }
-          subtotal += entry.length;
-          total += entry.length;
-        });
-
-        // last label
-        let label = startDate.toDateString();
-            this.data[0].series.push({
-              'name': label.substring(label.indexOf(' ')),
-              'value': total 
-            });
-            this.barGraphData.push({
-              'name': label.substring(label.indexOf(' ')),
-              'value': subtotal 
-            });
-
-        // set the height of the chart
-        this.lineChartYMax = total * 1.1;
-
-        this.data = [...this.data];
-        this.barGraphData = [...this.barGraphData];
       }
     );
+
+    this.setUpCharts();
+    
   }
 
   getAllTags() : string[] {
@@ -258,6 +187,92 @@ export class ProjectDetailsComponent {
     }else{
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
     }
+  }
+
+  setUpCharts() {
+
+    // get all time entries associated with a specific project
+    this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
+      (results: GenericResponseDTO) => {
+
+        // put all the entries for all users into a single array
+        let allEntries = [];
+        results.data.forEach((user) => {
+          user.timeEntries.forEach((entry) => {
+            entry.day += 'Z'; // append a Z to the datetime strings to signify that they're in UTC time
+            allEntries.push(entry);
+          });
+        });
+
+        // sort the array in ascending order by date
+        allEntries.sort((x, y) => {
+          let xDate = new Date(x.day);
+          let yDate = new Date(y.day);
+          if(xDate.getTime() < yDate.getTime())
+            return -1;
+          else if(xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+
+        // set the date range for each week
+        let startDate = new Date(allEntries[0].day);
+        startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
+        startDate.setHours(0, 0, 0, 0);
+        let endDate = new Date(startDate.toDateString());
+        endDate.setDate(endDate.getDate() + 6);
+        endDate.setHours(23, 59, 59, 999);
+
+        // variables used in the chart
+        let total = 0;
+        let subtotal = 0;
+        let currentWeek = 1;
+
+        // plot the times and totals on the charts
+        allEntries.forEach((entry) => {
+          if(new Date(entry.day).getTime() > endDate.getTime()) {
+            let label = endDate.toDateString();
+            label = label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')';
+            this.lineChartData[0].series.push({
+              'name': label,
+              'value': total
+            });
+            this.barChartData.push({
+              'name': label,
+              'value': subtotal
+            });
+            startDate.setDate(startDate.getDate() + 7);
+            endDate.setDate(endDate.getDate() + 7);
+            if(subtotal * 1.1 > this.barChartYMax)
+              this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
+            subtotal = 0;
+            currentWeek++;
+          }
+          subtotal += entry.length;
+          total += entry.length;
+        });
+
+        // plot the last point on the charts
+        let label = startDate.toDateString();
+        label = label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')';
+        this.lineChartData[0].series.push({
+          'name': label,
+          'value': total 
+        });
+        this.barChartData.push({
+          'name': label,
+          'value': subtotal 
+        });
+
+        // set the height of the line chart
+        this.lineChartYMax = total * 1.1;
+
+        // apply the changes made to the graphs' data structures
+        this.lineChartData = [...this.lineChartData];
+        this.barChartData = [...this.barChartData];
+      }
+    );
+
   }
 
 }
