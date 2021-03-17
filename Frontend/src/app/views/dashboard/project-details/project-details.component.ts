@@ -295,8 +295,6 @@ export class ProjectDetailsComponent {
         // apply the changes made to the graphs' data structures
         this.lineChartData = [...this.lineChartData];
         this.barChartData = [...this.barChartData];
-
-        console.log(this.barChartData);
       }
     );
 
