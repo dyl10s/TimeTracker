@@ -231,15 +231,26 @@ export class ProjectDetailsComponent {
         // plot the times and totals on the charts
         allEntries.forEach((entry) => {
           if(new Date(entry.day).getTime() > endDate.getTime()) {
-            let label = endDate.toDateString();
-            label = label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')';
+            let endDateString = endDate.toDateString();
+            endDateString = endDateString.substring(endDateString.indexOf(' '));
+            let startDateString = startDate.toDateString();
+            startDateString = startDateString.substring(startDateString.indexOf(' '));
+            if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+              startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
+            }
             this.lineChartData[0].series.push({
-              'name': label,
-              'value': total
+              'name': endDateString,
+              'value': total,
+              'week': currentWeek,
+              'startDate': startDateString
             });
             this.barChartData.push({
-              'name': label,
-              'value': subtotal
+              'name': endDateString,
+              'value': subtotal,
+              'extra': {
+                'week': currentWeek,
+                'startDate': startDateString
+              }
             });
             startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
@@ -253,16 +264,30 @@ export class ProjectDetailsComponent {
         });
 
         // plot the last point on the charts
-        let label = startDate.toDateString();
-        label = label.substring(label.indexOf(' ')) + ' (Week ' + currentWeek + ')';
+        let endDateString = endDate.toDateString();
+        endDateString = endDateString.substring(endDateString.indexOf(' '));
+        let startDateString = startDate.toDateString();
+        startDateString = startDateString.substring(startDateString.indexOf(' '));
+        if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+          startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
+        }
         this.lineChartData[0].series.push({
-          'name': label,
-          'value': total 
+          'name': endDateString,
+          'value': total,
+          'week': currentWeek,
+          'startDate': startDateString
         });
         this.barChartData.push({
-          'name': label,
-          'value': subtotal 
+          'name': endDateString,
+          'value': subtotal,
+          'extra': {
+            'week': currentWeek,
+            'startDate': startDateString
+          }
         });
+
+        if(subtotal * 1.1 > this.barChartYMax)
+          this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
 
         // set the height of the line chart
         this.lineChartYMax = total * 1.1;
@@ -270,6 +295,8 @@ export class ProjectDetailsComponent {
         // apply the changes made to the graphs' data structures
         this.lineChartData = [...this.lineChartData];
         this.barChartData = [...this.barChartData];
+
+        console.log(this.barChartData);
       }
     );
 

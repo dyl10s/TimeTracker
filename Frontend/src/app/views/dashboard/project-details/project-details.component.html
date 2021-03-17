@@ -64,53 +64,47 @@
             Time Breakdown
         </h4>
 
-        <div class="actions chart-actions">
-            <button nbButton (click)="displayBarChart = false" status="primary">
-                <nb-icon class="adaptive-button-icon" icon="trending-up-outline"></nb-icon>
-                <span class="adaptive-button-text">Cumulative Hours Spent</span>
-            </button>
-            <button nbButton (click)="displayBarChart = true" status="primary">
-                <nb-icon class="adaptive-button-icon" icon="bar-chart-outline"></nb-icon>
-                <span class="adaptive-button-text">Hours Spent By Week</span>
-            </button>
-        </div>
-
-        <div class="charts">
-            <ngx-charts-line-chart
-                *ngIf="displayBarChart === false"
-                showYAxisLabel="true"
-                yAxis="true"
-                yAxisLabel="Cumulative Hours Spent"
-                yScaleMin = "0"
-                [yScaleMax] = "lineChartYMax"
-                [scheme]="colorScheme"
-                [results]="lineChartData" >
-                <ng-template #tooltipTemplate let-model="model">
-                    <div class="chart-tooltip">
-                        <p>Week ending {{model.name}}</p>
-                        <hr>
-                        <p>{{model.value}} hours</p>
-                    </div>
-                </ng-template>
-            </ngx-charts-line-chart>
-        
-            <ngx-charts-bar-vertical
-                *ngIf="displayBarChart === true"
-                barPadding="15"
-                showYAxisLabel="true"
-                yAxis="true"
-                yAxisLabel="Hours Spent By Week"
-                [yScaleMax]="barChartYMax"
-                [scheme]="colorScheme"
-                [results]="barChartData" >
-                <ng-template #tooltipTemplate let-model="model">
-                    <div class="chart-tooltip">
-                        <p>Week ending {{model.name}}</p>
-                        <hr>
-                        <p>{{model.value}} hours</p>
-                    </div>
-                </ng-template>
-            </ngx-charts-bar-vertical>
-        </div>
+        <nb-tabset>
+            <nb-tab tabTitle="Cumulative Hours Spent" tabIcon="trending-up-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-line-chart
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        yScaleMin = "0"
+                        [yScaleMax] = "lineChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="lineChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.startDate}} to {{model.name}} (Week {{model.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-line-chart>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Hours Spent By Week" tabIcon="bar-chart-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-bar-vertical
+                        barPadding="15"
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        [yScaleMax]="barChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="barChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.extra.startDate}} to {{model.name}} (Week {{model.extra.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                </div>
+            </nb-tab>
+        </nb-tabset>
     </div>
 </div>
