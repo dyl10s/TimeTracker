@@ -7,7 +7,7 @@ import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time
 @Component({
   selector: 'app-time',
   templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss', '../../../../app/styles/display.scss']
+  styleUrls: ['./time.component.scss']
 })
 export class TimeComponent implements OnInit {
   updateSubscription: Subscription;
