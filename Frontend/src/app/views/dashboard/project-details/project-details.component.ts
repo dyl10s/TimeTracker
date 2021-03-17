@@ -12,7 +12,7 @@ import { ProjectService } from 'src/app/core/services/project.service';
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
-  styleUrls: ['./project-details.component.scss']
+  styleUrls: ['./project-details.component.scss', '../../../../app/styles/display.scss']
 })
 export class ProjectDetailsComponent {
 

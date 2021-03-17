@@ -7,7 +7,7 @@ import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time
 @Component({
   selector: 'app-time',
   templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss']
+  styleUrls: ['./time.component.scss', '../../../../app/styles/display.scss']
 })
 export class TimeComponent implements OnInit {
   updateSubscription: Subscription;
@@ -27,12 +27,13 @@ export class TimeComponent implements OnInit {
   weekTimeSpent = '0:00'
   // Timer button icons //
   timerBtnIcon = 'play-circle-outline';
-  timerBtnText = "Start"
+  timerBtnText = 'Start';
+  timerBtnStatus = 'primary';
   // Controls view //
   dayView: boolean = true;
   weekView: boolean = false;
   // Return button text //
-  returnText: String = "Today";
+  returnText: string = 'Today';
   // Week view button dates //
   monDate: Date; tueDate: Date; wedDate: Date; thurDate: Date; friDate: Date; satDate: Date; sunDate: Date;
 
@@ -200,11 +201,13 @@ export class TimeComponent implements OnInit {
   /* Method to update timer button view */
   startStopTimer() {
     if (this.timerBtnText == 'Start') {
-      this.timerBtnText = 'Stop'
-      this.timerBtnIcon = 'stop-circle-outline'
+      this.timerBtnText = 'Stop';
+      this.timerBtnIcon = 'stop-circle-outline';
+      this.timerBtnStatus = 'danger';
     } else {
-      this.timerBtnText = 'Start'
+      this.timerBtnText = 'Start';
       this.timerBtnIcon = 'play-circle-outline';
+      this.timerBtnStatus = 'primary';
     }
   }
 

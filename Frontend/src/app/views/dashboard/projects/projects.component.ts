@@ -11,7 +11,7 @@ import { CreateProjectComponent } from 'src/app/shared/components/create-project
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss']
+  styleUrls: ['./projects.component.scss', '../../../../app/styles/display.scss']
 })
 
 export class ProjectsComponent {

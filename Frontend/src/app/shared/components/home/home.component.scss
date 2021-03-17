@@ -1,17 +1,19 @@
+.color-container {
+  background-color: #232d9a;
+  background-image:
+  linear-gradient(
+    #3045c9,  #232d9a
+  );
+  height: 246px;
+}
+
 .container {
-  overflow: hidden;
-  width: 100%;
   nb-action {
     cursor: pointer;
   }
 }
 
 .intro-section {
-  background-color: #232d9a;
-  background-image:
-  linear-gradient(
-    #3045c9,  #232d9a
-  );
   display: block;
   text-align: center;
   padding: 50px 20px 50px 20px;
@@ -77,12 +79,19 @@
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
+  .color-container {
+    height: 299px;
+  }
+
   .intro-section {
     padding: 70px 40px 70px 40px;
     .intro-text,
     .intro-text-bottom {
       line-height: 1.5em;
       .text-break {
+        display: none;
+      }
+      #desk {
         display: none;
       }
     }
@@ -117,3 +126,13 @@
     }
   }
 }
+
+/* Media query for desktop viewport targets screens a minimum width of 830px. */
+@media only screen and (min-width: 830px) {
+  .intro-section {
+      #desk {
+        display: inline! important;
+      }
+    }
+}
+

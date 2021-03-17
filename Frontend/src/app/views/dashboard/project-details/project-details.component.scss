@@ -1,7 +1,5 @@
 .container {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 30px;
+    padding: 20px;
 }
 
 .header {
@@ -58,7 +56,6 @@ p, nb-tag-list {
 
 @media only screen and (max-width: 1000px) {
     .container {
-        padding-left: 5%;
-        padding-right: 5%;
+        padding: 40px;
     }
 }

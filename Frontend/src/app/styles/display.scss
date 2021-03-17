@@ -1,0 +1,13 @@
+.container,
+.nav-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Media query for desktop viewport targets screens a minimum width of 1000px. */
+@media only screen and (min-width: 1000px) {
+    .container,
+    .nav-container {
+      width: 1000px;
+    }
+  }

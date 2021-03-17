@@ -1,5 +1,4 @@
 .nav-container {
-  overflow: hidden;
   nb-action {
     cursor: pointer;
   }
@@ -96,15 +95,14 @@
   }
 
   #in-app-nav {
-    margin: 0px 20px 0px 30px;
+    position: relative;
+    margin: 0px 20px 0px 20px;
     nb-actions {
       width: 100%;
 
       .right-aligned {
         position: absolute;
-        right: 40px;
-        padding-top: unset! important;
-        padding-bottom: unset! important;
+        right: 20px;
       }
       nb-action {
         overflow: hidden;
