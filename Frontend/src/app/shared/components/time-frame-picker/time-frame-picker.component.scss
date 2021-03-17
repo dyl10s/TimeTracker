@@ -1,0 +1,58 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.end { 
+    display: flex;
+    justify-content: flex-end;
+}
+
+.start {
+    max-width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    gap: 10px;
+
+    button {
+        height: 100%;
+    }
+
+    input {
+        flex: 1;
+        max-width: 200px;
+    }
+}
+
+h4 {
+    display: inline;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+@media only screen and (max-width: 960px) {
+    .end { 
+        display: flex;
+        justify-content: center;
+        flex: 1 0 100%;
+        flex-wrap: wrap;
+    }
+
+    .start {
+        flex: 1 0 100%;
+        gap: 1px;
+
+        input {
+            flex: 1;
+            max-width: unset;
+        }
+    }
+
+    h4 {
+        display: none;
+    }
+}
