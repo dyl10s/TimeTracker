@@ -43,13 +43,17 @@ p, nb-tag-list {
 .charts {
     display: flex;
     height: 500px;
-    margin-bottom: 30px;
 }
 
 .chart-tooltip {
     * {
         color: #ffffff;
     }
+}
+
+nb-tabset {
+    background-color: white;
+    margin-bottom: 30px;
 }
 
 @media only screen and (max-width: 830px) {
