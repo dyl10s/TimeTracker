@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers
                 var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
                 var curUser = await database.Users
                     .Include(x => x.Projects)
-                    .FirstOrDefaultAsync(u => u.Email == loginData.Email && u.Password.SequenceEqual(hashedPassword));
+                    .FirstOrDefaultAsync(u => u.Email.ToLower() == loginData.Email.ToLower() && u.Password.SequenceEqual(hashedPassword));
 
                 // If there was not a matching user then return an error
                 if(curUser == null)
