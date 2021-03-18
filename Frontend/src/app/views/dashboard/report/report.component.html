@@ -26,7 +26,15 @@
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
                 <label class="header-row" *ngIf="row.data.name">{{row.data.hours}}</label>
-                <label *ngIf="!row.data.name">{{row.data.hours}}</label>
+                <div class="hours-breakdown" *ngIf="!row.data.name">
+                    <label>
+                        {{row.data.hours}}
+                    </label>
+                    <button (click)="navigateToReport(row.data.projId, row.data.userId)" nbButton status="primary">
+                        <nb-icon class="adaptive-button-icon" icon="bar-chart"></nb-icon>
+                        <span class="adaptive-button-text">Detailed Report</span>
+                    </button>
+                </div>
             </td>
         </ng-container>
     </table>
