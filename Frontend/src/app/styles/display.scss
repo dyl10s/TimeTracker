@@ -1,13 +1,14 @@
 .container {
-    width: 100%;
-    margin: 0 auto;
+  margin: 0 auto;
+  padding: 5%;
+  width: 100%;
 }
 
-/* Media query for desktop viewport targets screens a minimum width of 1000px. */
-@media only screen and (min-width: 1000px) {
-    .container {
-      width: calc(100%-1000px);
-      max-width: calc(2000px);
-    }
+@media only screen and (min-width: 1280px) {
+  .container {
+    width: 80%;
+    max-width: 2560px;
   }
+}
+
 
