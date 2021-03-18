@@ -40,6 +40,22 @@ p, nb-tag-list {
     max-width: min(100%, 500px);
 }
 
+.charts {
+    display: flex;
+    height: 500px;
+}
+
+.chart-tooltip {
+    * {
+        color: #ffffff;
+    }
+}
+
+nb-tabset {
+    background-color: white;
+    margin-bottom: 30px;
+}
+
 @media only screen and (max-width: 830px) {
     .adaptive-button-text{
       display: none;

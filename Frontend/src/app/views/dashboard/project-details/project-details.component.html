@@ -1,3 +1,4 @@
+
 <div class="container" [nbSpinner]="loadingProject">
     <div *ngIf="details !== null" [formGroup]="updateProjectForm">
         <div class="header">
@@ -58,5 +59,52 @@
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
               </ng-container>
         </table>
+
+        <h4>
+            Time Breakdown
+        </h4>
+
+        <nb-tabset>
+            <nb-tab tabTitle="Cumulative Hours Spent" tabIcon="trending-up-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-line-chart
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        yScaleMin = "0"
+                        [yScaleMax] = "lineChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="lineChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.startDate}} to {{model.name}} (Week {{model.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-line-chart>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Hours Spent By Week" tabIcon="bar-chart-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-bar-vertical
+                        barPadding="15"
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        [yScaleMax]="barChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="barChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.extra.startDate}} to {{model.name}} (Week {{model.extra.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                </div>
+            </nb-tab>
+        </nb-tabset>
     </div>
 </div>
