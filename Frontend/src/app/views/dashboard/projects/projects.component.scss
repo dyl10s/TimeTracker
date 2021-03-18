@@ -1,9 +1,11 @@
 @import "../../../../app/styles/display.scss";
 
 .header {
+    display: flex;
+    justify-content: space-between;
+
   button {
-    float: right;
-    display: inline;
+    margin: 25px 0px 25px 0px;
   }
 }
 
