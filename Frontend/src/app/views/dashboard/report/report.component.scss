@@ -4,6 +4,16 @@
     padding-top: 30px;
 }
 
+.report-button {
+    justify-self: flex-end;
+}
+
+.hours-breakdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .header-row {
     font-weight: bolder;
     font-size: large;
@@ -13,6 +23,15 @@
     .container {
         padding-left: 5px;
         padding-right: 5px;
+    }
+
+    .adaptive-button-text{
+        display: none;
+    }
+
+    .adaptive-button-icon{
+    padding: 0 !important;
+    margin: 0 !important;
     }
 }
 

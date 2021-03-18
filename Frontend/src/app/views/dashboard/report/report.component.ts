@@ -3,6 +3,7 @@ import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } fr
 import { ProjectService } from 'src/app/core/services/project.service';
 import { ReportService } from 'src/app/core/services/report.service';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report',
@@ -23,6 +24,7 @@ export class ReportComponent {
 
   constructor(
     private projectService: ProjectService,
+    private router: Router,
     private reportService: ReportService,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
     private tostrService: NbToastrService) {
@@ -57,6 +59,10 @@ export class ReportComponent {
     });
   }
 
+  navigateToReport(projectId: number, userId: number) {
+    this.router.navigateByUrl(`/dashboard/reports/details?projectId=${projectId}&userId=${userId}`)
+  }
+
   getProjectHours(proj: any, hoursReport: any) {
       // Total Hours
       let totalHours: number = 0;
@@ -70,6 +76,7 @@ export class ReportComponent {
           hours: totalHours
         },
         children: hoursReport.data.map(s => {
+          s.projId = proj.id;
           return {
             data: s,
             expanded: false
