@@ -8,7 +8,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule, NbActionsModule, NbContextMenuModule} from '@nebular/theme';
-import { JwtModule } from '@auth0/angular-jwt';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -106,7 +106,8 @@ export function tokenGetter() {
       useClass: TokenInterceptorService,
       multi: true
     },
-    NbDialogService
+    NbDialogService,
+    JwtHelperService
   ],
   bootstrap: [AppComponent],
   entryComponents: [CreateProjectComponent, CreateTimeComponent]

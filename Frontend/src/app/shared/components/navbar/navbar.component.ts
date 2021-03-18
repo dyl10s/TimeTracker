@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PayloadDTO } from 'src/app/core/models/auth/PayloadDto.model';
 import { JwtService } from '../../../core/services/auth/jwt.service';
 
 @Component({
@@ -12,18 +13,12 @@ export class NavbarComponent implements OnInit {
 
   isMenuOpen: boolean = false;
   firstName: string;
-  userInfo;
+  userInfo: PayloadDTO;
 
   constructor(
     private router: Router,
     private jwtService: JwtService
-  ) {
-    this.userInfo = this.jwtService.decode();
-    this.firstName = this.userInfo.given_name.replace(/ .*/,'');
-
-  }
-
-  ngOnInit(): void { }
+  ) { }
 
   routeCheck(route: string) {
     let check: boolean = true;
@@ -113,6 +108,12 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
+  ngOnInit(): void {
+    this.setUserName();
+   }
 
-
+  setUserName() {
+      this.userInfo = this.jwtService.decode();
+      this.firstName = this.userInfo.given_name.replace(/ .*/,'');
+  }
 }
