@@ -8,10 +8,19 @@ import { NbMenuModule, NbMenuService, NbTabsetModule, NbThemeModule } from '@neb
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { JwtService } from 'src/app/core/services/auth/jwt.service';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
+
+  let mockJwtService = {
+    decode() {
+      return {
+        given_name: "Test Name"
+      }
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,7 +28,8 @@ describe('NavbarComponent', () => {
       providers: [
         NbThemeModule.forRoot({ name: 'default' }).providers,
         NbMenuModule.forRoot().providers,
-        RouterModule.forRoot([]).providers
+        RouterModule.forRoot([]).providers,
+        { provide: JwtService, useValue: mockJwtService }
       ],
       imports: [
         NbMenuModule,
