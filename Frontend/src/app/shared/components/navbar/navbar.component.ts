@@ -18,7 +18,12 @@ export class NavbarComponent implements OnInit {
   constructor(
     private router: Router,
     private jwtService: JwtService
-  ) { }
+  ) {
+    this.userInfo = this.jwtService.decode();
+    this.firstName = this.userInfo.given_name.replace(/ .*/, '');
+  }
+
+  ngOnInit(): void { }
 
   routeCheck(route: string) {
     let check: boolean = true;
@@ -108,12 +113,5 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
-  ngOnInit(): void {
-    this.setUserName();
-   }
-
-  setUserName() {
-      this.userInfo = this.jwtService.decode();
-      this.firstName = this.userInfo.given_name.replace(/ .*/,'');
-  }
 }
+
