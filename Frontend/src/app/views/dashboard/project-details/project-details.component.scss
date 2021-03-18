@@ -5,22 +5,14 @@
 }
 
 .title {
-    flex: 1 0 50%;
     h1, h5 {
         margin-top: 0px;
         margin-bottom: 0px;
     }
-
-    h5 {
-        input {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-    }
 }
 
 .actions {
-    flex: 1 0 50%;
+    flex: 1 0 40%;
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
@@ -29,6 +21,7 @@
 
     button {
         height: 40px;
+        margin: 25px 0px 25px 0px;
     }
 }
 
@@ -60,11 +53,6 @@ nb-tabset {
     .adaptive-button-icon{
       padding: 0 !important;
       margin: 0 !important;
-    }
-
-    .container {
-        padding-left: 5px;
-        padding-right: 5px;
     }
 }
 
