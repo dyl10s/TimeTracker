@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtService } from '../../../core/services/auth/jwt.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,10 +11,17 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   isMenuOpen: boolean = false;
+  firstName: string;
+  userInfo;
 
   constructor(
     private router: Router,
-  ) { }
+    private jwtService: JwtService
+  ) {
+    this.userInfo = this.jwtService.decode();
+    this.firstName = this.userInfo.given_name.replace(/ .*/,'');
+
+  }
 
   ngOnInit(): void { }
 
