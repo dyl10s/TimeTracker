@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
 
 @Component({
   selector: 'app-time-frame-picker',
@@ -8,7 +8,12 @@ import { Component, Input, OnInit, SimpleChange } from '@angular/core';
 export class TimeFramePickerComponent {
 
   @Input() startDate: Date;
+  @Output() startDateChange: EventEmitter<Date> = new EventEmitter<Date>();
+
   @Input() endDate: Date;
+  @Output() endDateChange: EventEmitter<Date> = new EventEmitter<Date>();
+
+  @Output() datesChanged = new EventEmitter();
 
   timeframe: string = "weekly";
 
@@ -16,6 +21,10 @@ export class TimeFramePickerComponent {
     // Default to the current week
     this.startDate = new Date();
     this.selectCurrentWeek(this.startDate);
+
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   timeFrameChanged(e: string) {
@@ -39,6 +48,9 @@ export class TimeFramePickerComponent {
     }
     
     this.timeframe = e;
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   startDateChanged(e: Date) {
@@ -66,6 +78,10 @@ export class TimeFramePickerComponent {
           this.endDate = this.startDate;
         }
     }
+
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   endDateChanged(e: Date) {
@@ -93,6 +109,10 @@ export class TimeFramePickerComponent {
           this.startDate = this.endDate;
         }
     }
+
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   rightButton() {
@@ -120,6 +140,10 @@ export class TimeFramePickerComponent {
         this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 1);
         this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() + 1);
     }
+
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   leftButton() {
@@ -144,9 +168,11 @@ export class TimeFramePickerComponent {
         this.selectAllTime();
         break;
       case "custom":
-        this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - 1);
-        this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 1);
     }
+
+    this.startDateChange.emit(this.startDate);
+    this.endDateChange.emit(this.endDate);
+    this.datesChanged.emit(null);
   }
 
   selectCurrentWeek(referenceDate: Date) {

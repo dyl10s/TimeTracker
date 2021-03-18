@@ -150,6 +150,7 @@ namespace TimeTracker.Api.Controllers
 
             var timeEntries = await database.TimeEntries
                 .AsNoTracking()
+                .Where(x => x.Project.Id == projectId)
                 .Where(x => usersInProject.Contains(x.User))
                 .Where(x => x.Day >= startDate && x.Day <= endDate)
                 .Include(x => x.User)
