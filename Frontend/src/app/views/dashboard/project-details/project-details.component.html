@@ -3,13 +3,14 @@
     <div *ngIf="details !== null" [formGroup]="updateProjectForm">
         <div class="header">
             <div class="title">
-                <h1>
+                <h2>
                     <span>{{ details.name }}</span>
-                </h1>
+                </h2>
                 <h5>
                     <span>{{ details.clientName }}</span>
                 </h5>
             </div>
+
             <div class="actions">
                 <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="copyInviteCode(details.inviteCode)">
                     <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
@@ -33,9 +34,9 @@
         <nb-tag-list (tagRemove)="onTagRemove($event)">
             <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'dd/MM/yyyy')"></nb-tag>
             <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
-            <input *ngIf="pageMode == 'edit'" type="text" status="primary" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+            <input *ngIf="pageMode == 'edit'" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
         </nb-tag-list>
-    
+
         <p>
             <span>{{ details.description }}</span>
         </p>

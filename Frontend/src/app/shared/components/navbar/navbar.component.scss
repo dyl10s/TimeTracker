@@ -1,5 +1,7 @@
 .nav-container {
-  overflow: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
+
   nb-action {
     cursor: pointer;
   }
@@ -72,6 +74,11 @@
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
+  .nav-container {
+    padding-left: 20px;
+    padding-right: 20px;
+
+  }
   .mob {
     display: none !important;
   }
@@ -96,15 +103,14 @@
   }
 
   #in-app-nav {
-    margin: 0px 20px 0px 30px;
+    position: relative;
+    margin: 0px 20px 0px 20px;
     nb-actions {
       width: 100%;
 
       .right-aligned {
         position: absolute;
-        right: 40px;
-        padding-top: unset! important;
-        padding-bottom: unset! important;
+        right: 20px;
       }
       nb-action {
         overflow: hidden;

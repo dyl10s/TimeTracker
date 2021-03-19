@@ -1,6 +1,6 @@
 <div class="container">
     <div class="start">
-        <button status="basic" nbButton outline (click)="leftButton()">
+        <button status="basic" nbButton (click)="leftButton()">
             <nb-icon icon="arrow-ios-back-outline"></nb-icon>
         </button>
         <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="startDayPicker" [(ngModel)]="startDate">
@@ -9,7 +9,7 @@
         </span>
         <input fullWidth class="dateDisplay" nbInput fieldSize="large" [nbDatepicker]="endDayPicker" [(ngModel)]="endDate">
         
-        <button status="basic" nbButton outline (click)="rightButton()">
+        <button status="basic" nbButton (click)="rightButton()">
             <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
         </button>
     </div>

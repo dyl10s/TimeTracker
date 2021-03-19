@@ -44,10 +44,12 @@
       </th>
       <td nbTreeGridCell *nbTreeGridCellDef="let row">
         <div class="actions">
+        <a>
           <button nbButton status="primary" (click)="copyInviteCode(row.data['inviteCode'])">
             <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
             <span class="adaptive-button-text">Copy Invite Code</span>
           </button>
+        </a>
           <a [routerLink]="'/dashboard/projects/' + row.data['id']">
             <button nbButton status="primary">
               <nb-icon class="adaptive-button-icon" icon="eye-outline"></nb-icon>

@@ -1,20 +1,11 @@
-.container {
-  padding: 40px;
-
-  @media only screen and (max-width: 830px) {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
+@import "../../../../app/styles/display.scss";
 
 .header {
-  h2 {
-    display: inline;
-  }
+    display: flex;
+    justify-content: space-between;
 
   button {
-    float: right;
-    display: inline;
+    margin: 25px 0px 25px 0px;
   }
 }
 
