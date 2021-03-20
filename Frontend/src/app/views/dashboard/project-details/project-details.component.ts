@@ -53,7 +53,7 @@ export class ProjectDetailsComponent {
     tags: new FormControl({value: '', disabled: false})
   });
 
-  detailsReport: any;
+  detailsReport: any = {};
 
   constructor(
     private projectService: ProjectService, 
@@ -100,7 +100,6 @@ export class ProjectDetailsComponent {
     );
 
     this.setUpCharts();
-    this.setHours();
 
   }
 
@@ -219,6 +218,7 @@ export class ProjectDetailsComponent {
     this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
       (results: GenericResponseDTO) => {
         this.detailsReport = results;
+        this.setHours();
         // put all the entries for all users into a single array
         let allEntries = [];
         results.data.forEach((user) => {
