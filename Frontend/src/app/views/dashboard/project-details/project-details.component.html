@@ -30,7 +30,7 @@
                 </button>
             </div>
         </div>
-    
+
         <nb-tag-list (tagRemove)="onTagRemove($event)">
             <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'dd/MM/yyyy')"></nb-tag>
             <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
@@ -40,8 +40,9 @@
         <p>
             <span>{{ details.description }}</span>
         </p>
-    
+
         <h4>Team Members</h4>
+        <div class="time-frame-picker"><app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="setHours()"></app-time-frame-picker></div>
         <table [nbTreeGrid]="teamDataSource">
             <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
             <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
@@ -58,6 +59,13 @@
                   Role
                 </th>
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
+              </ng-container>
+
+              <ng-container nbTreeGridColumnDef="Hours">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Hours
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["hours"]}}</td>
               </ng-container>
         </table>
 
