@@ -84,7 +84,7 @@ export class ProjectDetailsComponent {
           });
 
           this.updateProjectForm.setValue({
-            tags: this.details.tags
+            tags: [...this.details.tags]
           });
 
         }else{
@@ -156,7 +156,7 @@ export class ProjectDetailsComponent {
     })).subscribe(
       (res: GenericResponseDTO) => {
         if(res.success === true){
-          this.details.tags = this.updateProjectForm.get("tags").value;
+          this.details.tags = [...this.updateProjectForm.get("tags").value];
           this.pageMode = 'view';
           this.toastrService.success("The project has been saved successfully", "Project Saved");
         }else{
@@ -173,7 +173,7 @@ export class ProjectDetailsComponent {
 
   cancelEdit() {
     this.pageMode = 'view';
-    this.updateProjectForm.get("tags").setValue(this.details.tags);
+    this.updateProjectForm.get("tags").setValue([...this.details.tags]);
   }
 
   copyInviteCode(code: string) {
