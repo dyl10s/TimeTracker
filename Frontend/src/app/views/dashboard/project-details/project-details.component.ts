@@ -156,7 +156,7 @@ export class ProjectDetailsComponent {
     })).subscribe(
       (res: GenericResponseDTO) => {
         if(res.success === true){
-          this.details.tags = this.updateProjectForm.get("tags").value;
+          this.details.tags = [...this.updateProjectForm.get("tags").value];
           this.pageMode = 'view';
           this.toastrService.success("The project has been saved successfully", "Project Saved");
         }else{
