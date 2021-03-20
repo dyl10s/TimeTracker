@@ -46,9 +46,14 @@ export class ProjectDetailsComponent {
 
   displayBarChart: boolean = false;
 
+  startDate: any = new Date();
+  endDate: any = new Date();
+
   updateProjectForm: FormGroup = new FormGroup({
     tags: new FormControl({value: '', disabled: false})
   });
+
+  detailsReport: any;
 
   constructor(
     private projectService: ProjectService, 
@@ -57,6 +62,8 @@ export class ProjectDetailsComponent {
     private toastrService: NbToastrService,
     private router: Router,
     private reportService: ReportService){
+
+      this.startDate.setDate(this.startDate.getDate() - 7);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
@@ -190,31 +197,39 @@ export class ProjectDetailsComponent {
     }
   }
 
+  setHours() {
+    let userSum = 0;
+    this.detailsReport.data.forEach((user) => {
+      user.timeEntries.forEach((entry) => {
+        let date = new Date(entry.day);
+        if(date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
+          userSum += entry.length;
+      });
+      let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
+      if(currentTeamMember) {
+        currentTeamMember.data.hours = userSum;
+      }
+      userSum = 0;
+    });
+    this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
+  }
+  
   setUpCharts() {
 
     // get all time entries associated with a specific project
     this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
       (results: GenericResponseDTO) => {
-        console.log("HERE");
-        console.log(results);
+        this.detailsReport = results;
         // put all the entries for all users into a single array
         let allEntries = [];
-        let userSum = 0;
         results.data.forEach((user) => {
           user.timeEntries.forEach((entry) => {
             entry.day += 'Z'; // append a Z to the datetime strings to signify that they're in UTC time
             allEntries.push(entry);
-            userSum += entry.length;
           });
-          let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
-          if(currentTeamMember) {
-            console.log("found something");
-            currentTeamMember.data.totalTime = userSum;
-          }
-          userSum = 0;
         });
-        this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
-        console.log(this.teamMembers);
+
+        this.setHours();
 
         // sort the array in ascending order by date
         allEntries.sort((x, y) => {
