@@ -37,7 +37,7 @@ export class ProjectDetailsComponent {
   teamDataSource: NbTreeGridDataSource<UserDto>;
   teamMembers: TreeNode<UserDto>[] = [];
 
-  gridHeaders: string[] = ["Name", "Role"];
+  gridHeaders: string[] = ["Name", "Role", "Hours"];
 
   projectId: number;
 
@@ -64,7 +64,7 @@ export class ProjectDetailsComponent {
         if(results.success){
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
-
+          console.log(results);
           results.data.teacher.role = "Teacher";
           this.teamMembers.push({
             data: results.data.teacher
@@ -95,6 +95,7 @@ export class ProjectDetailsComponent {
 
     this.setUpCharts();
     
+    console.log(this.teamMembers);
   }
 
   getAllTags() : string[] {
@@ -194,15 +195,26 @@ export class ProjectDetailsComponent {
     // get all time entries associated with a specific project
     this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
       (results: GenericResponseDTO) => {
-
+        console.log("HERE");
+        console.log(results);
         // put all the entries for all users into a single array
         let allEntries = [];
+        let userSum = 0;
         results.data.forEach((user) => {
           user.timeEntries.forEach((entry) => {
             entry.day += 'Z'; // append a Z to the datetime strings to signify that they're in UTC time
             allEntries.push(entry);
+            userSum += entry.length;
           });
+          let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
+          if(currentTeamMember) {
+            console.log("found something");
+            currentTeamMember.data.totalTime = userSum;
+          }
+          userSum = 0;
         });
+        this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
+        console.log(this.teamMembers);
 
         // sort the array in ascending order by date
         allEntries.sort((x, y) => {

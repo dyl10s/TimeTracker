@@ -59,6 +59,13 @@
                 </th>
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
               </ng-container>
+
+              <ng-container nbTreeGridColumnDef="Hours">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Hours
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["totalTime"]}}</td>
+              </ng-container>
         </table>
 
         <h4>
