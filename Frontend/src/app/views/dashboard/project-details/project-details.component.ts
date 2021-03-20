@@ -63,7 +63,7 @@ export class ProjectDetailsComponent {
     private router: Router,
     private reportService: ReportService){
 
-      this.startDate.setDate(this.startDate.getDate() - 7);
+    this.startDate.setDate(this.startDate.getDate() - 7);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
@@ -71,7 +71,6 @@ export class ProjectDetailsComponent {
         if(results.success){
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
-          console.log(results);
           results.data.teacher.role = "Teacher";
           this.teamMembers.push({
             data: results.data.teacher
@@ -101,8 +100,8 @@ export class ProjectDetailsComponent {
     );
 
     this.setUpCharts();
-    
-    console.log(this.teamMembers);
+    this.setHours();
+
   }
 
   getAllTags() : string[] {
@@ -228,8 +227,6 @@ export class ProjectDetailsComponent {
             allEntries.push(entry);
           });
         });
-
-        this.setHours();
 
         // sort the array in ascending order by date
         allEntries.sort((x, y) => {
