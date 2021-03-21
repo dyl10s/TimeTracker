@@ -1,13 +1,4 @@
-.container {
-  padding: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  overflow: hidden;
-}
-
-button {
-  height: 40px !important;
-}
+@import "../../../../app/styles/display.scss";
 
 .date-section {
   width: 100%;
@@ -17,10 +8,6 @@ button {
   padding-bottom: 50px;
   justify-content: space-between;
   text-align: center;
-
-  h4 {
-    display: inline !important;
-  }
 }
 
 .button-control-section {
@@ -85,8 +72,6 @@ button {
 
   table {
     width: 100%;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
   }
 
   th,
@@ -110,11 +95,16 @@ button {
     }
   }
 
-  [nbButton].appearance-outline.size-medium,
-  .appearance-outline.size-medium[nbButtonToggle] {
+  // [nbButton].appearance-filled.size-medium,
+  .appearance-filled.size-medium[nbButtonToggle] {
     height: 100%;
     padding: 15px;
     width: 20%;
+  }
+
+  // [nbButton].appearance-filled.status-basic[disabled],
+  .appearance-filled.status-basic[disabled][nbButtonToggle] {
+    width: initial !important;
   }
 
   nb-button-group {
@@ -122,32 +112,16 @@ button {
   }
 }
 
-.adaptive-button-text {
-  display: none;
-}
-
-.adaptive-button-icon {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
 ::ng-deep .nb-theme-default nb-card-body,
 ::ng-deep .nb-theme-default nb-card {
-  background-color: transparent;
   padding: unset !important;
   width: 100%;
-  border: unset !important;
 }
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-  .container {
-    padding: 20px;
-  }
-
   .button-control-section {
-
-    .calendar-section{
+    .calendar-section {
       margin-right: 10px;
     }
     .view-options-section {
@@ -156,7 +130,7 @@ button {
     nb-button-group {
       display: inline;
       button {
-        float: left! important;
+        float: left !important;
         margin: unset;
       }
     }
@@ -212,19 +186,21 @@ button {
   }
 
   .week-details-section {
+    width: 100%;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
     table {
       width: 100%;
-      border-collapse: collapse;
 
       th,
       td {
-        padding: 12px 5px;
-        vertical-align: middle;
+        padding: 5px;
       }
-      thead,
-      tr {
-        border-bottom: 1px solid;
-      }
+      // thead,
+      // tr {
+      // }
       tbody {
         .adaptive-button-icon {
           margin-right: 0 !important;
@@ -236,20 +212,24 @@ button {
       padding: 15px !important;
     }
 
-    .day,
-    .total,
-    .delete {
-      width: 90px;
-      padding: 5px !important;
-      text-align: center;
-    }
-  }
+    // .day,
+    // .total,
+    // .delete {
 
-  .adaptive-button-text {
-    display: inline;
-  }
-
-  .adaptive-button-icon {
-    margin-right: 0.5rem !important;
+    // }
   }
 }
+
+
+@media only screen and (max-width: 830px) {
+  .adaptive-button-text{
+    display: none;
+  }
+
+  .adaptive-button-icon{
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+

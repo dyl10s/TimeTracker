@@ -9,6 +9,7 @@ import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
+import { ReportService } from 'src/app/core/services/report.service';
 
 @Component({
   selector: 'app-project-details',
@@ -17,12 +18,27 @@ import { ProjectService } from 'src/app/core/services/project.service';
 })
 export class ProjectDetailsComponent {
 
+  lineChartData: any = [{
+    'name': 'Total Hours Spent',
+    'series': [
+    ]
+  }];
+
+  barChartData: any = [];
+
+  colorScheme: any = {
+    'domain': ['#0095ff']
+  }
+
+  lineChartYMax: number;
+  barChartYMax: number = 0;
+
   pageMode: string = "view";
 
   teamDataSource: NbTreeGridDataSource<UserDto>;
   teamMembers: TreeNode<UserDto>[] = [];
 
-  gridHeaders: string[] = ["Name", "Role"];
+  gridHeaders: string[] = ["Name", "Role", "Hours"];
 
   projectId: number;
 
@@ -30,23 +46,32 @@ export class ProjectDetailsComponent {
   details: ProjectDTO = null;
   copyDetails: ProjectDTO = null;
 
+  displayBarChart: boolean = false;
+
+  startDate: any = new Date();
+  endDate: any = new Date();
+
   updateProjectForm: FormGroup = new FormGroup({
     tags: new FormControl({value: '', disabled: false}),
     details: new FormControl({value: '', disabled: false})
   });
+
+  detailsReport: any = {};
 
   constructor(
     private projectService: ProjectService, 
     private route: ActivatedRoute,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<UserDto>,
     private toastrService: NbToastrService,
-    private router: Router){
+    private router: Router,
+    private reportService: ReportService){
+
+    this.startDate.setDate(this.startDate.getDate() - 7);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
       (results: GenericResponseDTO<ProjectDTO>) => {
         if(results.success){
-          console.log(results.data);
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
           this.copyDetails = results.data;
@@ -64,8 +89,8 @@ export class ProjectDetailsComponent {
           });
 
           this.updateProjectForm.setValue({
-            tags: this.details.tags,
-            details: this.details.description
+            details: this.details.description,
+            tags: [...this.details.tags]
           });
 
         }else{
@@ -77,7 +102,11 @@ export class ProjectDetailsComponent {
       },
       (error) => {
         this.router.navigateByUrl("/dashboard/projects");
-      });
+      }
+    );
+
+    this.setUpCharts();
+
   }
 
   getAllTags() : string[] {
@@ -155,7 +184,7 @@ export class ProjectDetailsComponent {
 
   cancelEdit() {
     this.pageMode = 'view';
-    this.updateProjectForm.get("tags").setValue(this.details.tags);
+    this.updateProjectForm.get("tags").setValue([...this.details.tags]);
   }
 
   copyInviteCode(code: string) {
@@ -176,6 +205,136 @@ export class ProjectDetailsComponent {
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
     }
   }
+
+  setHours() {
+    let userSum = 0;
+    this.detailsReport.data.forEach((user) => {
+      user.timeEntries.forEach((entry) => {
+        let date = new Date(entry.day);
+        if(date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
+          userSum += entry.length;
+      });
+      let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
+      if(currentTeamMember) {
+        currentTeamMember.data.hours = userSum;
+      }
+      userSum = 0;
+    });
+    this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
+  }
+  
+  setUpCharts() {
+
+    // get all time entries associated with a specific project
+    this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
+      (results: GenericResponseDTO) => {
+        this.detailsReport = results;
+        this.setHours();
+        // put all the entries for all users into a single array
+        let allEntries = [];
+        results.data.forEach((user) => {
+          user.timeEntries.forEach((entry) => {
+            entry.day += 'Z'; // append a Z to the datetime strings to signify that they're in UTC time
+            allEntries.push(entry);
+          });
+        });
+
+        // sort the array in ascending order by date
+        allEntries.sort((x, y) => {
+          let xDate = new Date(x.day);
+          let yDate = new Date(y.day);
+          if(xDate.getTime() < yDate.getTime())
+            return -1;
+          else if(xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+
+        // set the date range for each week
+        let startDate = new Date(allEntries[0].day);
+        startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
+        startDate.setHours(0, 0, 0, 0);
+        let endDate = new Date(startDate.toDateString());
+        endDate.setDate(endDate.getDate() + 6);
+        endDate.setHours(23, 59, 59, 999);
+
+        // variables used in the chart
+        let total = 0;
+        let subtotal = 0;
+        let currentWeek = 1;
+
+        // plot the times and totals on the charts
+        allEntries.forEach((entry) => {
+          if(new Date(entry.day).getTime() > endDate.getTime()) {
+            let endDateString = endDate.toDateString();
+            endDateString = endDateString.substring(endDateString.indexOf(' '));
+            let startDateString = startDate.toDateString();
+            startDateString = startDateString.substring(startDateString.indexOf(' '));
+            if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+              startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
+            }
+            this.lineChartData[0].series.push({
+              'name': endDateString,
+              'value': total,
+              'week': currentWeek,
+              'startDate': startDateString
+            });
+            this.barChartData.push({
+              'name': endDateString,
+              'value': subtotal,
+              'extra': {
+                'week': currentWeek,
+                'startDate': startDateString
+              }
+            });
+            startDate.setDate(startDate.getDate() + 7);
+            endDate.setDate(endDate.getDate() + 7);
+            if(subtotal * 1.1 > this.barChartYMax)
+              this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
+            subtotal = 0;
+            currentWeek++;
+          }
+          subtotal += entry.length;
+          total += entry.length;
+        });
+
+        // plot the last point on the charts
+        let endDateString = endDate.toDateString();
+        endDateString = endDateString.substring(endDateString.indexOf(' '));
+        let startDateString = startDate.toDateString();
+        startDateString = startDateString.substring(startDateString.indexOf(' '));
+        if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+          startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
+        }
+        this.lineChartData[0].series.push({
+          'name': endDateString,
+          'value': total,
+          'week': currentWeek,
+          'startDate': startDateString
+        });
+        this.barChartData.push({
+          'name': endDateString,
+          'value': subtotal,
+          'extra': {
+            'week': currentWeek,
+            'startDate': startDateString
+          }
+        });
+
+        if(subtotal * 1.1 > this.barChartYMax)
+          this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
+
+        // set the height of the line chart
+        this.lineChartYMax = total * 1.1;
+
+        // apply the changes made to the graphs' data structures
+        this.lineChartData = [...this.lineChartData];
+        this.barChartData = [...this.barChartData];
+      }
+    );
+
+  }
+
 }
 
 interface TreeNode<T> {

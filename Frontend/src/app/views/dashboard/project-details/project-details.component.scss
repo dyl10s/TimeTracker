@@ -1,25 +1,13 @@
-.container {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 30px;
-}
+@import "../../../../app/styles/display.scss";
 
 .header {
     display: flex;
 }
 
 .title {
-    flex: 1 0 50%;
     h1, h5 {
         margin-top: 0px;
         margin-bottom: 0px;
-    }
-
-    h5 {
-        input {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
     }
 }
 
@@ -30,7 +18,7 @@
 }
 
 .actions {
-    flex: 1 0 50%;
+    flex: 1 0 40%;
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
@@ -39,11 +27,32 @@
 
     button {
         height: 40px;
+        margin: 25px 0px 25px 0px;
     }
 }
 
 p, nb-tag-list {
     max-width: min(100%, 500px);
+}
+
+.charts {
+    display: flex;
+    height: 500px;
+}
+
+.chart-tooltip {
+    * {
+        color: #ffffff;
+    }
+}
+
+nb-tabset {
+    background-color: white;
+    margin-bottom: 30px;
+}
+
+table {
+    margin-top: 30px;
 }
 
 @media only screen and (max-width: 830px) {
@@ -55,16 +64,5 @@ p, nb-tag-list {
       padding: 0 !important;
       margin: 0 !important;
     }
-
-    .container {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
 }
 
-@media only screen and (max-width: 1000px) {
-    .container {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-}
