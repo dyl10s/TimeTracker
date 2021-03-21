@@ -36,26 +36,17 @@ export class JwtService {
   }
 
   public isAuthenticated() {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = this.getJWT();
 
     try {
-      if(this.jwtHelper.isTokenExpired(accessToken)){
-        this.authApiService.refresh({ email: this.decode().email, refreshToken: this.getRefreshToken() }).subscribe((response: GenericResponseDTO) => {
-          if(response.success) {
-            this.setTokens(response.data.accessToken, response.data.refreshToken);
-          }else{
-            return false;
-          }
-          return true;
-        }, (err) => {
-          return false;
-        })
-      } else {
-        return true;
-      }
+      return !this.jwtHelper.isTokenExpired(accessToken);
     } catch {
       return false;
     }
+  }
+
+  public isExpiredToken() {
+    return this.jwtHelper.isTokenExpired(this.getJWT());
   }
 
   public logout(){
