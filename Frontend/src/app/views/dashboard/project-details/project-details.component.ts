@@ -87,9 +87,6 @@ export class ProjectDetailsComponent {
 
         this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
         this.loadingProject = false;
-      },
-      (error) => {
-        this.router.navigateByUrl("/dashboard/projects");
       }
     );
 
