@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectService } from 'src/app/core/services/project.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 import { JwtService } from '../../../core/services/auth/jwt.service';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
+    inviteCode: new FormControl('')
   });
 
   error: string;
@@ -24,10 +26,15 @@ export class LoginComponent implements OnInit {
     private authService: AuthApiService,
     private JwtService: JwtService,
     private router: Router,
+    public activatedRoute: ActivatedRoute,
+    private projectService: ProjectService,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.loginForm.patchValue({
+      inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode')
+    });
   }
 
   login(loginForm: any) {
@@ -41,7 +48,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.login({ 
       email: loginForm.email, 
-      password: loginForm.password 
+      password: loginForm.password,
+      inviteCode: loginForm.inviteCode
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Login

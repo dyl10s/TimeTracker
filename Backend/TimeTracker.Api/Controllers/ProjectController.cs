@@ -162,6 +162,42 @@ namespace TimeTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Adds a user to a project
+        /// </summary>
+        /// <param name="projectInvite">The invite code of the project that the user is added to</param>
+        /// <returns>The Id of the project the user was added to</returns>
+        [Authorize]
+        [HttpPost("AddUserToProject")]
+        public async Task<GenericResponseDTO<int>> AddUserToProject(AddUserToProjectDTO inviteCode)
+        {
+            var curUser = await database.Users
+                .Include(x => x.Projects)
+                .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
+
+            Project project = await database.Projects
+                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
+
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            curUser.Projects.Add(project);
+            
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>()
+            {
+                Data = project.Id,
+                Success = true
+            };
+        }
+
+        /// <summary>
         /// Create a new project
         /// </summary>
         /// <param name="newProject">The details of the new project to create</param>
@@ -213,6 +249,35 @@ namespace TimeTracker.Api.Controllers
             };
 
             await database.AddAsync(project);
+            await database.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = project.Id;
+
+            return response;
+        }
+
+        /// <summary>
+        /// Update project details
+        /// </summary>
+        /// <param name="projectDetails">The details of the existing project to update</param>
+        /// <returns>The Id of the project that was updated</returns>
+        [Authorize]
+        [HttpPatch]
+        public async Task<GenericResponseDTO<int>> UpdateProjectDetails(ProjectDetailsDTO projectDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<int>() 
+            { 
+                Success = false
+            };
+
+            Project project = await database.Projects
+                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
+
+            project.Description = projectDetails.Description;
+
             await database.SaveChangesAsync();
 
             response.Success = true;

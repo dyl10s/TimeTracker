@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PayloadDTO } from 'src/app/core/models/auth/PayloadDto.model';
+import { JwtService } from '../../../core/services/auth/jwt.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,31 +12,41 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   isMenuOpen: boolean = false;
+  userInfo: PayloadDTO;
 
   constructor(
     private router: Router,
-  ) { }
+    private jwtService: JwtService
+  ) {
+  }
 
   ngOnInit(): void { }
 
+  getFirstName(): string {
+    this.userInfo = this.jwtService.decode();
+    return this.userInfo?.given_name.replace(/ .*/, '');
+  }
+
   routeCheck(route: string) {
+
+    let url = this.router.url.split("?")[0];
+
     let check: boolean = true;
     // in app nav display //
     if (route == 'app') {
-      if (!(this.router.url.includes('dashboard'))) {
+      if (!(url.includes('dashboard'))) {
         check = false;
       }
     }
     // home nav display //
     if (route == 'home') {
-      if ((this.router.url.includes('dashboard'))) {
+      if ((url.includes('dashboard'))) {
         check = false;
       }
     }
     // limited home nav display //
     if (route == 'logreg') {
-      if (this.router.url.includes('register') ||
-        this.router.url.includes('login')) {
+      if (url.includes('register') || url.includes('login')) {
         check = false;
       }
     }
@@ -105,6 +117,5 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
-
-
 }
+

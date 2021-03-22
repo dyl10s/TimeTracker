@@ -1,0 +1,41 @@
+<div class="container">
+    <h2>Reports</h2>
+    <app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="datesChanged($event)"></app-time-frame-picker>
+    <h4>Projects</h4>
+    <table [nbTreeGrid]="projectsDataSource">
+        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+    
+        <ng-container nbTreeGridColumnDef="name">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Name
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+
+                <nb-tree-grid-row-toggle [expanded]="row.expanded" *ngIf="row.children">
+                </nb-tree-grid-row-toggle>
+
+                <label class="header-row" *ngIf="row.data.name">{{row.data.name}}</label>
+                <label *ngIf="!row.data.name">{{row.data.firstName + " " + row.data.lastName}}</label>
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="hours">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Hours
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                <label class="header-row" *ngIf="row.data.name">{{row.data.hours}}</label>
+                <div class="hours-breakdown" *ngIf="!row.data.name">
+                    <label>
+                        {{row.data.hours}}
+                    </label>
+                    <button (click)="navigateToReport(row.data.projId, row.data.userId)" nbButton status="primary">
+                        <nb-icon class="adaptive-button-icon" icon="bar-chart"></nb-icon>
+                        <span class="adaptive-button-text">Detailed Report</span>
+                    </button>
+                </div>
+            </td>
+        </ng-container>
+    </table>
+</div>

@@ -1,14 +1,16 @@
+
 <div class="container" [nbSpinner]="loadingProject">
     <div *ngIf="details !== null" [formGroup]="updateProjectForm">
         <div class="header">
             <div class="title">
-                <h1>
+                <h2>
                     <span>{{ details.name }}</span>
-                </h1>
+                </h2>
                 <h5>
                     <span>{{ details.clientName }}</span>
                 </h5>
             </div>
+
             <div class="actions">
                 <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="copyInviteCode(details.inviteCode)">
                     <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
@@ -28,18 +30,29 @@
                 </button>
             </div>
         </div>
-    
+
         <nb-tag-list (tagRemove)="onTagRemove($event)">
             <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'dd/MM/yyyy')"></nb-tag>
             <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
-            <input *ngIf="pageMode == 'edit'" type="text" status="primary" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+            <input *ngIf="pageMode == 'edit'" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
         </nb-tag-list>
     
-        <p>
+        <p *ngIf="pageMode == 'view'">
             <span>{{ details.description }}</span>
         </p>
-    
+
+        <textarea 
+            *ngIf="pageMode == 'edit'" 
+            class="description"
+            type="text" 
+            status="primary" 
+            placeholder="Project Description" 
+            nbInput 
+            formControlName="details"
+            fullWidth></textarea>
+
         <h4>Team Members</h4>
+        <div class="time-frame-picker"><app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="setHours()"></app-time-frame-picker></div>
         <table [nbTreeGrid]="teamDataSource">
             <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
             <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
@@ -57,6 +70,60 @@
                 </th>
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
               </ng-container>
+
+              <ng-container nbTreeGridColumnDef="Hours">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Hours
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["hours"]}}</td>
+              </ng-container>
         </table>
+
+        <h4>
+            Time Breakdown
+        </h4>
+
+        <nb-tabset>
+            <nb-tab tabTitle="Cumulative Hours Spent" tabIcon="trending-up-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-line-chart
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        yScaleMin = "0"
+                        [yScaleMax] = "lineChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="lineChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.startDate}} to {{model.name}} (Week {{model.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-line-chart>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Hours Spent By Week" tabIcon="bar-chart-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-bar-vertical
+                        barPadding="15"
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        [yScaleMax]="barChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="barChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.extra.startDate}} to {{model.name}} (Week {{model.extra.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                </div>
+            </nb-tab>
+        </nb-tabset>
     </div>
 </div>
