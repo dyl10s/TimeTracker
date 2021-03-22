@@ -1,0 +1,51 @@
+@import "../../../../app/styles/display.scss";
+
+.date-filter-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.main-filter-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.filter-result-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 350px;
+  overflow-y: auto;
+}
+
+.bottom-total-section {
+  display: inline;
+  h6 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (min-width: 660px) {
+  .header {
+    display: flex;
+  }
+
+  .main-filter-section {
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+// @media only screen and (min-width: 830px) {
+//   .main-filter-section {
+//     .left-align {
+//     }
+
+//     .right-align {
+//       nb-select {
+//       }
+//     }
+//   }
+// }
