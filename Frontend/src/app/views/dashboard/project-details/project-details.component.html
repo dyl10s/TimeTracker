@@ -36,10 +36,20 @@
             <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
             <input *ngIf="pageMode == 'edit'" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
         </nb-tag-list>
-
-        <p>
+    
+        <p *ngIf="pageMode == 'view'">
             <span>{{ details.description }}</span>
         </p>
+
+        <textarea 
+            *ngIf="pageMode == 'edit'" 
+            class="description"
+            type="text" 
+            status="primary" 
+            placeholder="Project Description" 
+            nbInput 
+            formControlName="details"
+            fullWidth></textarea>
 
         <h4>Team Members</h4>
         <div class="time-frame-picker"><app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="setHours()"></app-time-frame-picker></div>

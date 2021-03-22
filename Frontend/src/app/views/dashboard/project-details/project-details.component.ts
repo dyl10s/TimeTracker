@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbTagComponent, NbTagInputAddEvent, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { forkJoin } from 'rxjs';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
@@ -43,6 +44,7 @@ export class ProjectDetailsComponent {
 
   loadingProject: boolean = true;
   details: ProjectDTO = null;
+  copyDetails: ProjectDTO = null;
 
   displayBarChart: boolean = false;
 
@@ -50,7 +52,8 @@ export class ProjectDetailsComponent {
   endDate: any = new Date();
 
   updateProjectForm: FormGroup = new FormGroup({
-    tags: new FormControl({value: '', disabled: false})
+    tags: new FormControl({value: '', disabled: false}),
+    details: new FormControl({value: '', disabled: false})
   });
 
   detailsReport: any = {};
@@ -71,6 +74,8 @@ export class ProjectDetailsComponent {
         if(results.success){
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
+          this.copyDetails = results.data;
+
           results.data.teacher.role = "Teacher";
           this.teamMembers.push({
             data: results.data.teacher
@@ -84,6 +89,7 @@ export class ProjectDetailsComponent {
           });
 
           this.updateProjectForm.setValue({
+            details: this.details.description,
             tags: [...this.details.tags]
           });
 
@@ -148,27 +154,32 @@ export class ProjectDetailsComponent {
 
     this.loadingProject = true;
 
-    this.projectService.setProjectTags(this.updateProjectForm.get("tags").value.map((x: string) => {
-      return {
-        projectId: this.projectId,
-        tag: x
-      };
-    })).subscribe(
-      (res: GenericResponseDTO) => {
-        if(res.success === true){
-          this.details.tags = [...this.updateProjectForm.get("tags").value];
-          this.pageMode = 'view';
-          this.toastrService.success("The project has been saved successfully", "Project Saved");
-        }else{
-          this.toastrService.danger("There was an error updating the project", "Error");
+    forkJoin([
+      this.projectService.updateProjectDetails(
+        {
+          description: this.updateProjectForm.get("details").value,
+          projectId: this.projectId
         }
-        this.loadingProject = false;
-      },
-      (error) => {
+      ),
+      this.projectService.setProjectTags(this.updateProjectForm.get("tags").value.map((x: string) => {
+        return {
+          projectId: this.projectId,
+          tag: x
+        };
+      }))
+    ]).subscribe((res: [GenericResponseDTO, GenericResponseDTO]) => {
+      if(res[0].success == true && res[1].success == true){
+        this.details.description = this.updateProjectForm.get("details").value;
+        this.details.tags = this.updateProjectForm.get("tags").value;
+        this.toastrService.success("The project has been saved successfully", "Project Saved");
+      }else{
         this.toastrService.danger("There was an error updating the project", "Error");
-        this.loadingProject = false;
       }
-    );
+      this.loadingProject = false;
+    }, (err) => {
+      this.toastrService.danger("There was an error updating the project", "Error");
+      this.loadingProject = false;
+    })
   }
 
   cancelEdit() {
