@@ -28,7 +28,9 @@ export class ReportComponent {
     private reportService: ReportService,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
     private tostrService: NbToastrService) {
-
+    
+    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
+    this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
     this.getAllProjects();
   }
 
