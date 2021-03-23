@@ -15,45 +15,34 @@
         <button nbButtonToggle (click)="sortDate(2)">Date Descending</button>
     </nb-button-group>
     </div>
-
     <div class="right-align">
-        <nb-select fullWidth multiple placeholder="Member" [(selected)]="selectedMember">
-        <nb-option value="0" (click)="updateMembers()">Select all</nb-option>
-        <nb-option [value]="currentUserId" (click)="updateMembers()">{{ currentUserName }}</nb-option>
-        <nb-option *ngFor="let member of members; let i = index" [value]="members[i].userId" (click)="updateMembers()">{{members[i].firstName + " " + members[i].lastName}}</nb-option>
+        <nb-select fullWidth multiple placeholder="Member" [(selected)]="selectedMembers">
+            <nb-select-label>
+                Member
+            </nb-select-label>
+            <nb-option value="0" (click)="selectAllToggle()">Select all</nb-option>
+            <nb-option [value]="currentUserId" (click)="updateMembers()">{{ currentUserName }}</nb-option>
+            <nb-option *ngFor="let member of members; let i = index" [value]="members[i].id" (click)="updateMembers()">{{members[i].firstName + " " + members[i].lastName}}</nb-option>
         </nb-select>
     </div>
-</div>
-
-
-<div class="bottom-total-section">
-    <h6>Total Hours: {{ totalHours }} </h6>
 </div>
 
 <div class="filter-result-section">
      <table [nbTreeGrid]="timeEntryDataSource">
         <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
         <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
-
         <ng-container nbTreeGridColumnDef="date">
             <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
-                Date
+                Info
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
                 <nb-tree-grid-row-toggle [expanded]="row.expanded" *ngIf="row.children">
                 </nb-tree-grid-row-toggle>
 
                 {{row.data.day | date: "MM.dd.yyyy"}}
+                {{row.data.notes}}
             </td>
         </ng-container>
-
-        <ng-container nbTreeGridColumnDef="notes">
-            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
-                Notes
-            </th>
-            <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data.notes}}</td>
-        </ng-container>
-
         <ng-container nbTreeGridColumnDef="member">
             <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
                 Member
@@ -62,10 +51,9 @@
             {{row.data["firstName"] + " " + row.data["lastName"]}}
             </td>
         </ng-container>
-
         <ng-container nbTreeGridColumnDef="hours">
             <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
-                Hours
+                Hours: {{ totalHours }}
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data.length}}</td>
         </ng-container>

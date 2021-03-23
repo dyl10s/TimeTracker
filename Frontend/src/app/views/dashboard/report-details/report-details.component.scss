@@ -9,6 +9,11 @@
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
+
+  .left-align {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 .filter-result-section {
@@ -37,15 +42,3 @@
     flex-wrap: wrap;
   }
 }
-
-// @media only screen and (min-width: 830px) {
-//   .main-filter-section {
-//     .left-align {
-//     }
-
-//     .right-align {
-//       nb-select {
-//       }
-//     }
-//   }
-// }

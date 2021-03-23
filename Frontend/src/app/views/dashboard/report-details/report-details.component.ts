@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
+import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
+import { ProjectService } from 'src/app/core/services/project.service';
 import { ReportService } from 'src/app/core/services/report.service';
 
 @Component({
@@ -13,99 +15,34 @@ import { ReportService } from 'src/app/core/services/report.service';
 export class ReportDetailsComponent implements OnInit {
   startDate: Date = new Date();
   endDate: Date = new Date();
+  gridHeaders: string[] = ["date", "member", "hours"];
   timeEntryDataSource: NbTreeGridDataSource<any>;
   allEntries: TreeNode<any>[] = [];
   members: TreeNode<UserDto>[] = [];
-  gridHeaders: string[] = ["date", "notes", "member", "hours"];
-  totalHours: number = 0;
-  sortDateOption = 1;
-  selectedMember: any[];
+  selectedMembers: any[] = [];
+  memberIds: number[] = [];
   projectId: number;
   currentUserId: number;
   currentUserName: string;
+  totalHours: number = 0;
+  sortDateOption = 1;
+  allSelected: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
+    private projectService: ProjectService,
     private reportService: ReportService,
   ) {
     this.projectId = parseInt(route.snapshot.paramMap.get('projId'));
     this.currentUserId = parseInt(route.snapshot.paramMap.get('userId'));
     this.getAllTimeEntries();
+    this.getAllMembers();
   }
 
   ngOnInit(): void {
-    this.selectedMember = [this.currentUserId];
-  }
-
-  getAllTimeEntries() {
-    this.allEntries = [];
-    this.members = [];
-    let hours: number = 0;
-
-    this.reportService.getDetailsReport(this.projectId, this.startDate, this.endDate).subscribe(
-      (results: GenericResponseDTO) => {
-        if (results.success) {
-          results.data.forEach((user) => {
-            if (user.userId != this.currentUserId) {
-              this.members.push(user)
-            } else {
-              this.currentUserName = user.firstName + " " + user.lastName;
-            }
-
-            if (this.checkMembers(user.userId)) {
-              user.timeEntries.forEach((entry) => {
-                hours += entry.length;
-                this.allEntries.push({
-                  data: {
-                    day: entry.day,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    length: entry.length,
-                    notes: entry.notes
-                  },
-                  //   children: results.data.map(s => { // WRONG
-                  //     s.notes = entry.notes
-                  //     return {
-                  //       data: s,
-                  //       expanded: false7
-                  //     }
-                  //   }),
-                  //   expanded: false
-                })
-              });
-            }
-          });
-        } else {
-          // Implement Error Checking
-        }
-        this.sortDate(this.sortDateOption);
-        this.setTotalHours(hours);
-        this.timeEntryDataSource = this.dataSourceBuilder.create(this.allEntries);
-      });
-  }
-
-  updateMembers() {
-    console.log(this.selectedMember);
-    this.selectedMember.forEach(element => {
-      if (element == '0') {
-        this.members.forEach(element2 => {
-          if (element2 != element) {
-            this.selectedMember.push(element2);
-          }
-        })
-      }
-    });
-  }
-
-  checkMembers(num: number): boolean {
-    let bool: boolean = false;
-    this.selectedMember.forEach(element => {
-      if (element == num) {
-        bool = true;
-      }
-    });
-    return bool;
+    this.selectedMembers = [this.currentUserId];
   }
 
   setTotalHours(num: number) {
@@ -120,11 +57,111 @@ export class ReportDetailsComponent implements OnInit {
     this.getAllTimeEntries();
   }
 
+  updateMembers() {
+    console.log(this.selectedMembers)
+    this.getAllTimeEntries();
+  }
+
+  checkMembers(num: number): boolean {
+    let bool: boolean = false;
+    this.selectedMembers.forEach(element => {
+      if (element == num) {
+        bool = true;
+      }
+    });
+    return bool;
+  }
+
+  selectAllToggle() {
+    this.allSelected = !this.allSelected;
+    if (this.allSelected) {
+      if (this.selectedMembers.indexOf(this.currentUserId) == -1) {
+        this.selectedMembers.push(this.currentUserId);
+      }
+      for (let i = 0; i < this.memberIds.length; i++) {
+        if (this.selectedMembers.indexOf(this.memberIds[i]) == -1) {
+          this.selectedMembers.push(this.memberIds[i]);
+        }
+      }
+    } else {
+      this.selectedMembers = [];
+    }
+    this.updateMembers();
+  }
+
+  getAllTimeEntries() {
+    this.allEntries = [];
+    let hours: number = 0;
+
+    this.reportService.getDetailsReport(this.projectId, this.startDate, this.endDate).subscribe(
+      (results: GenericResponseDTO) => {
+        if (results.success) {
+          results.data.forEach((user) => {
+            if (this.checkMembers(user.userId)) {
+              user.timeEntries.forEach((entry) => {
+                hours += entry.length;
+                this.allEntries.push({
+                  data: {
+                    day: entry.day,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    length: entry.length,
+                  },
+                  children: [
+                    {
+                      data: {
+                        notes: entry.notes,
+                        day: '',
+                        firstName: '',
+                        lastName: '',
+                        length: ''
+                      }}]})});}});
+        } else {
+          // TODO Add error handling
+        }
+        this.sortDate(this.sortDateOption);
+        this.setTotalHours(hours);
+        this.timeEntryDataSource = this.dataSourceBuilder.create(this.allEntries);
+      },
+      (error) => {
+        this.router.navigateByUrl("/dashboard/reports");
+      });
+  }
+
+  getAllMembers() {
+    this.members = [];
+    this.projectService.getProjectById(this.projectId).subscribe(
+      (results: GenericResponseDTO<ProjectDTO>) => {
+        if (results.success) {
+          if (results.data.teacher.id != this.currentUserId) {
+            this.members.push(results.data.teacher)
+            this.memberIds.push(results.data.teacher.id);
+          } else {
+            this.currentUserName = results.data.teacher.firstName +
+            " " + results.data.teacher.lastName;
+          }
+
+          results.data.students.forEach(s => {
+            if (s.id != this.currentUserId) {
+              this.members.push(s)
+              this.memberIds.push(s.id);
+            } else {
+              this.currentUserName = s.firstName + " " + s.lastName;
+            }
+          });
+        } else {
+          // TODO Add error handling
+        }
+      },
+      (error) => {
+        this.router.navigateByUrl("/dashboard/reports");
+      }
+    );
+  }
 
   sortDate(num: number) {
     // Ascending
     if (num == 1) {
-      console.log(1)
       this.sortDateOption = 1;
       this.allEntries.sort((x, y) => {
         let xDate = new Date(x.data.day);
@@ -139,7 +176,6 @@ export class ReportDetailsComponent implements OnInit {
 
     // Descending
     else if (num == 2) {
-      console.log(2)
       this.sortDateOption = 2;
       this.allEntries.sort((y, x) => {
         let xDate = new Date(x.data.day);
@@ -151,8 +187,8 @@ export class ReportDetailsComponent implements OnInit {
         return 0;
       });
     }
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.allEntries);
   }
-
 }
 
 interface TreeNode<T> {
