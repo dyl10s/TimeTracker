@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { CreateTagDTO } from '../models/CreateTagDTO.model';
 import { ProjectCreateDTO } from '../models/ProjectCreateDTO.model';
+import { UpdateProjectDTO } from '../models/UpdateProjectDTO.model';
 import { GenericResponseDTO } from '../models/GenericResponseDTO.model';
 import { Observable } from 'rxjs';
 
@@ -33,6 +34,10 @@ export class ProjectService {
 
   public createProject(projectCreateInfo: ProjectCreateDTO) {
     return this.http.post(`${this.api}/Project`, projectCreateInfo);
+  }
+
+  public updateProjectDetails(updateProject: UpdateProjectDTO) {
+    return this.http.patch(`${this.api}/Project`, updateProject)
   }
 
   public addUserToProject(inviteCode: string) {

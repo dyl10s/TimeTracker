@@ -11,6 +11,12 @@
     }
 }
 
+.description {
+    margin: 20px 0;
+    min-width: 100%;
+    max-width: 100%;
+}
+
 .actions {
     flex: 1 0 40%;
     display: flex;
@@ -43,6 +49,10 @@ p, nb-tag-list {
 nb-tabset {
     background-color: white;
     margin-bottom: 30px;
+}
+
+table {
+    margin-top: 30px;
 }
 
 @media only screen and (max-width: 830px) {
