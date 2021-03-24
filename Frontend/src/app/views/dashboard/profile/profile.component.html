@@ -74,27 +74,32 @@
     </div>
 
     <h2>Projects</h2>
-    <div class="line" [nbSpinner]="projectsLoading">
-      <span *ngIf="projects.length < 1">
-        <div class="row">
-          <nb-card-body>
-            <p>You're currently not part of any projects.</p>
-          </nb-card-body>
-        </div>
-      </span>
-      <span *ngFor="let project of projects">
-        <div class="row">
-          <nb-card-body>
-            <p>{{ project }}</p>
-          </nb-card-body>
-        </div>
-      </span>
-    </div>
+    <div class="row">
+    <table [nbTreeGrid]="projectDataSource" [nbSpinner]="projectsLoading">
+      <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+      <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+
+      <ng-container nbTreeGridColumnDef="Name">
+        <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+          Name
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["name"]}}</td>
+      </ng-container>
+
+      <ng-container nbTreeGridColumnDef="Client">
+        <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+          Client
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["clientName"]}}</td>
+      </ng-container>
+
+    </table>
+  </div>
 
     <div class="line" [formGroup]="setPasswordForm">
+      <h2>Change Password</h2>
       <div class="row">
         <nb-card-body class="form">
-          <h2>Change Password</h2>
           <div class="col-25">
             <label for="password">Current Password</label>
           </div>

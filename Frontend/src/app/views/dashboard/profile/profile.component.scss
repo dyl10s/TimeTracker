@@ -1,10 +1,5 @@
 @import "../../../../app/styles/display.scss";
 
-.line {
-  border-top: 1px solid;
-  margin-bottom: 20px;
-}
-
 input,
 textarea,
 button {
@@ -65,6 +60,6 @@ button {
   }
 
   .row {
-    padding: 10px;
+    padding-bottom: 20px;
   }
 }
