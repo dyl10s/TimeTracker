@@ -53,7 +53,6 @@ export class ProfileComponent implements OnInit {
           });
         });
         this.projectDataSource = this.dataSourceBuilder.create(this.projectNodes);
-        console.log(this.projectDataSource);
       },
       (error) => {
         this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
@@ -65,7 +64,6 @@ export class ProfileComponent implements OnInit {
         this.projectsLoading = false;
       }
     );
-    
   }
 
   public setPassword(setPasswordForm: FormGroup) {
