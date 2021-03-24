@@ -10,9 +10,9 @@
 
 <div class="main-filter-section">
     <div class="left-align">
-    <nb-button-group status="control">
-        <button nbButtonToggle pressed="true" (click)="sortDate(1)">Date Ascending</button>
-        <button nbButtonToggle (click)="sortDate(2)">Date Descending</button>
+    <nb-button-group status="control" multiple>
+        <button nbButton filled (click)="sortDate(5)">Date {{ dateToggleText }}</button>
+        <button nbButton class="mob" pressed="true" (click)="rowToggle()">{{ rowToggleText }}</button>
     </nb-button-group>
     </div>
     <div class="right-align">
@@ -28,21 +28,32 @@
 </div>
 
 <div class="filter-result-section">
-     <table [nbTreeGrid]="timeEntryDataSource">
+     <table [nbTreeGrid]="timeEntryDataSource" equalColumnsWidth>
         <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
         <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+
         <ng-container nbTreeGridColumnDef="date">
             <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
-                Info
+                <a class ="mob"> Info </a>
+                <a class ="desk"> Date </a>
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
-                <nb-tree-grid-row-toggle [expanded]="row.expanded" *ngIf="row.children">
+                <nb-tree-grid-row-toggle class= "mob" [expanded]="row.expanded" *ngIf="row.children">
+                    {{row.data.notes}}
                 </nb-tree-grid-row-toggle>
-
                 {{row.data.day | date: "MM.dd.yyyy"}}
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="notes" class="desk">
+            <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
+                Notes
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
                 {{row.data.notes}}
             </td>
         </ng-container>
+
         <ng-container nbTreeGridColumnDef="member">
             <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
                 Member

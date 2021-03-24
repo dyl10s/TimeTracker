@@ -21,6 +21,12 @@
   margin-bottom: 10px;
   height: 350px;
   overflow-y: auto;
+  table {
+    a {
+      text-decoration: none;
+      color: unset;
+    }
+  }
 }
 
 .bottom-total-section {
@@ -31,9 +37,25 @@
   }
 }
 
+.mob {
+  display: inline;
+}
+
+.desk {
+  display: none;
+}
+
 @media only screen and (min-width: 660px) {
   .header {
     display: flex;
+  }
+
+  .mob {
+    display: none;
+  }
+
+  .desk {
+    display: inline;
   }
 
   .main-filter-section {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { element } from 'protractor';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
@@ -15,9 +16,10 @@ import { ReportService } from 'src/app/core/services/report.service';
 export class ReportDetailsComponent implements OnInit {
   startDate: Date = new Date();
   endDate: Date = new Date();
-  gridHeaders: string[] = ["date", "member", "hours"];
+  gridHeaders: string[] = ["date", "notes", "member", "hours"];
   timeEntryDataSource: NbTreeGridDataSource<any>;
   allEntries: TreeNode<any>[] = [];
+  tempEntries: TreeNode<any>[] = [];
   members: TreeNode<UserDto>[] = [];
   selectedMembers: any[] = [];
   memberIds: number[] = [];
@@ -27,6 +29,10 @@ export class ReportDetailsComponent implements OnInit {
   totalHours: number = 0;
   sortDateOption = 1;
   allSelected: boolean = false;
+  rowExpand: boolean = false;
+  rowToggleText: string = "";
+  dateToggleText: string = "";
+  dateToggle: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,10 +49,9 @@ export class ReportDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedMembers = [this.currentUserId];
-  }
-
-  setTotalHours(num: number) {
-    this.totalHours = num;
+    this.rowToggleText = "Expand";
+    this.dateToggleText = "Descend"
+    this.dateToggle = true;
   }
 
   datesChanged(event) {
@@ -57,9 +62,12 @@ export class ReportDetailsComponent implements OnInit {
     this.getAllTimeEntries();
   }
 
-  updateMembers() {
-    console.log(this.selectedMembers)
-    this.getAllTimeEntries();
+  getTotalHours() {
+    let hours: number = 0;
+    this.tempEntries.forEach(element => {
+      hours += element.data.length
+    })
+    this.totalHours = hours;
   }
 
   checkMembers(num: number): boolean {
@@ -72,7 +80,33 @@ export class ReportDetailsComponent implements OnInit {
     return bool;
   }
 
+  updateMembers() {
+    this.tempEntries = [];
+    console.log(this.selectedMembers)
+    this.allEntries.forEach(element => {
+      if(this.checkMembers(element.data.id)){
+        this.tempEntries.push(element);
+      }
+    })
+    this.getTotalHours();
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
+  }
+
+  rowToggle() {
+    this.rowExpand =!this.rowExpand;
+    if(this.rowToggleText == "Expand"){
+      this.rowToggleText = "Collapse";
+    }else {
+      this.rowToggleText = "Expand";
+    }
+    this.tempEntries.forEach( x => {
+      x.expanded = this.rowExpand;
+    })
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
+  }
+
   selectAllToggle() {
+    let selectEntries = [];
     this.allSelected = !this.allSelected;
     if (this.allSelected) {
       if (this.selectedMembers.indexOf(this.currentUserId) == -1) {
@@ -86,26 +120,25 @@ export class ReportDetailsComponent implements OnInit {
     } else {
       this.selectedMembers = [];
     }
-    this.updateMembers();
+   this.updateMembers();
   }
 
   getAllTimeEntries() {
     this.allEntries = [];
-    let hours: number = 0;
 
     this.reportService.getDetailsReport(this.projectId, this.startDate, this.endDate).subscribe(
       (results: GenericResponseDTO) => {
         if (results.success) {
           results.data.forEach((user) => {
-            if (this.checkMembers(user.userId)) {
               user.timeEntries.forEach((entry) => {
-                hours += entry.length;
                 this.allEntries.push({
                   data: {
                     day: entry.day,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     length: entry.length,
+                    notes: entry.notes,
+                    id: user.userId
                   },
                   children: [
                     {
@@ -114,14 +147,19 @@ export class ReportDetailsComponent implements OnInit {
                         day: '',
                         firstName: '',
                         lastName: '',
-                        length: ''
-                      }}]})});}});
+                        length: '',
+                        expanded: false
+                      }}],
+                    expanded: false})});
+                });
         } else {
           // TODO Add error handling
         }
-        this.sortDate(this.sortDateOption);
-        this.setTotalHours(hours);
-        this.timeEntryDataSource = this.dataSourceBuilder.create(this.allEntries);
+        this.updateMembers();
+        this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
+        this.sortDate(1);
+        this.getTotalHours();
+
       },
       (error) => {
         this.router.navigateByUrl("/dashboard/reports");
@@ -161,9 +199,12 @@ export class ReportDetailsComponent implements OnInit {
 
   sortDate(num: number) {
     // Ascending
-    if (num == 1) {
-      this.sortDateOption = 1;
-      this.allEntries.sort((x, y) => {
+    if (num == 1 || 5 && !this.dateToggle) {
+      if(num == 5) {
+      this.dateToggleText = "Descend";
+      this.dateToggle = !this.dateToggle;
+      }
+      this.tempEntries.sort((x, y) => {
         let xDate = new Date(x.data.day);
         let yDate = new Date(y.data.day);
         if (xDate.getTime() < yDate.getTime())
@@ -175,9 +216,10 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     // Descending
-    else if (num == 2) {
-      this.sortDateOption = 2;
-      this.allEntries.sort((y, x) => {
+    else if (5 && this.dateToggle) {
+      this.dateToggleText = "Ascend";
+      this.dateToggle = !this.dateToggle;
+      this.tempEntries.sort((y, x) => {
         let xDate = new Date(x.data.day);
         let yDate = new Date(y.data.day);
         if (xDate.getTime() < yDate.getTime())
@@ -187,7 +229,7 @@ export class ReportDetailsComponent implements OnInit {
         return 0;
       });
     }
-    this.timeEntryDataSource = this.dataSourceBuilder.create(this.allEntries);
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
   }
 }
 
