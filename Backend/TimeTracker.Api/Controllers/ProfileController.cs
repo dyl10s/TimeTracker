@@ -69,6 +69,7 @@ namespace TimeTracker.Api.Controllers {
 
             projects.ForEach((project) => {
                 data.Projects.Add(new ProjectNameAndClientDTO() {
+                    Id = project.Id,
                     Name = project.Name,
                     ClientName = project.ClientName
                 });

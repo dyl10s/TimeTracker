@@ -1,5 +1,14 @@
 @import "../../../../app/styles/display.scss";
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 input,
 textarea,
 button {
