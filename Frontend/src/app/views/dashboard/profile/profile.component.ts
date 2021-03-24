@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProfileService } from '../../../core/services/profile.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
-import { NbToastrService } from '@nebular/theme';
+import { ProjectNameAndClientDTO } from '../../../core/models/ProjectNameAndClientDTO.model';
+import { ProfileDTO } from '../../../core/models/ProfileDTO.model';
+import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 
 @Component({
   selector: 'app-profile',
@@ -14,11 +16,14 @@ export class ProfileComponent implements OnInit {
   firstName: string;
   lastName: string;
   emailAddress: string;
-  projects: string[] = [];
 
   disableNameSubmitButton: boolean = true;
   disablePasswordSubmitButton: boolean = false;
   projectsLoading = true;
+
+  gridHeaders = ['Name', 'Client'];
+  projectNodes: TreeNode<ProjectNameAndClientDTO>[] = [];
+  projectDataSource: NbTreeGridDataSource<ProjectNameAndClientDTO>;
 
   setPasswordForm: FormGroup = new FormGroup({
     currentPassword: new FormControl(''),
@@ -32,13 +37,22 @@ export class ProfileComponent implements OnInit {
     email: new FormControl({value: '', disabled: true})
   });
 
-  constructor(private profileService: ProfileService, private toastrService: NbToastrService) {
+  constructor(
+    private profileService: ProfileService,
+    private toastrService: NbToastrService,
+    private dataSourceBuilder: NbTreeGridDataSourceBuilder<ProjectNameAndClientDTO>){
+
     this.profileService.getProfileInfo().subscribe(
-      (httpResponse: GenericResponseDTO) => {
-        this.updateNameForm.get('firstName').setValue(httpResponse.data.firstName);
-        this.updateNameForm.get('lastName').setValue(httpResponse.data.lastName);
-        this.emailAddress = httpResponse.data.email;
-        this.projects = httpResponse.data.projects;
+      (response: GenericResponseDTO) => {
+        this.updateNameForm.get('firstName').setValue(response.data.firstName);
+        this.updateNameForm.get('lastName').setValue(response.data.lastName);
+        this.emailAddress = response.data.email;
+        response.data.projects.forEach((project) => {
+          this.projectNodes.push({
+            data: project
+          });
+        });
+        this.projectDataSource = this.dataSourceBuilder.create(this.projectNodes);
       },
       (error) => {
         this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
@@ -124,4 +138,10 @@ export class ProfileComponent implements OnInit {
     
   }
 
+}
+
+interface TreeNode<T> {
+  data: T;
+  children?: TreeNode<T>[];
+  expanded?: boolean;
 }

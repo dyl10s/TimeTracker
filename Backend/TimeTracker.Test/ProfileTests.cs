@@ -45,7 +45,7 @@ namespace TimeTracker.Test {
                 FirstName = "Moxie",
                 LastName = "Bespin",
                 Email = "moxie@123.net",
-                Projects = new List<string>()
+                Projects = new List<ProjectNameAndClientDTO>()
             };
 
             GenericResponseDTO<ProfileDTO> response = await profileController.GetUserProfile();
@@ -73,7 +73,7 @@ namespace TimeTracker.Test {
             ProfileDTO expectedProfileInfo = new ProfileDTO {
                 FirstName = "Changed",
                 LastName = "Name",
-                Projects = new List<string>()
+                Projects = new List<ProjectNameAndClientDTO>()
             };
 
             GenericResponseDTO<ProfileDTO> response1 = await profileController.GetUserProfile();
