@@ -8,20 +8,22 @@
 .main-filter-section {
   margin-top: 10px;
   margin-bottom: 10px;
-  text-align: center;
-
-  .left-align {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
 }
 
 .filter-result-section {
   margin-top: 10px;
   margin-bottom: 10px;
-  height: 350px;
-  overflow-y: auto;
+
   table {
+    display: inline-block;
+    width: 100%;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+    th{
+      white-space: nowrap;
+    }
+
     a {
       text-decoration: none;
       color: unset;
@@ -55,12 +57,20 @@
   }
 
   .desk {
-    display: inline;
+    display: table-cell;
+  }
+
+  .filter-result-section {
+    table {
+      display: table;
+    }
   }
 
   .main-filter-section {
-    justify-content: space-between;
     display: flex;
-    flex-wrap: wrap;
+
+    .right-align {
+      margin-left: auto;
+    }
   }
 }

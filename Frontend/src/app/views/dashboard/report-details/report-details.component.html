@@ -9,12 +9,6 @@
 </div>
 
 <div class="main-filter-section">
-    <div class="left-align">
-    <nb-button-group status="control" multiple>
-        <button nbButton filled (click)="sortDate(5)">Date {{ dateToggleText }}</button>
-        <button nbButton class="mob" pressed="true" (click)="rowToggle()">{{ rowToggleText }}</button>
-    </nb-button-group>
-    </div>
     <div class="right-align">
         <nb-select fullWidth multiple placeholder="Member" [(selected)]="selectedMembers">
             <nb-select-label>
@@ -33,20 +27,30 @@
         <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
 
         <ng-container nbTreeGridColumnDef="date">
-            <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
-                <a class ="mob"> Info </a>
-                <a class ="desk"> Date </a>
+            <th nbTreeGridHeaderCell (click)="sortDate(5)" *nbTreeGridHeaderCellDef>
+                Created
+                <nb-icon *ngIf="dateToggle && createSort" icon="chevron-down-outline" aria-label="sorted ascending"></nb-icon>
+                <nb-icon *ngIf="!dateToggle && createSort" icon="chevron-up-outline" aria-label="sorted descending"></nb-icon>
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
-                <nb-tree-grid-row-toggle class= "mob" [expanded]="row.expanded" *ngIf="row.children">
-                    {{row.data.notes}}
-                </nb-tree-grid-row-toggle>
                 {{row.data.day | date: "MM.dd.yyyy"}}
             </td>
         </ng-container>
 
-        <ng-container nbTreeGridColumnDef="notes" class="desk">
-            <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
+        <ng-container nbTreeGridColumnDef="modDate">
+            <th nbTreeGridHeaderCell (click)="sortDate(6)" *nbTreeGridHeaderCellDef>
+               Modified
+                    <nb-icon *ngIf="modifiedDateToggle && modSort" icon="chevron-down-outline" aria-label="sorted ascending"></nb-icon>
+                    <nb-icon *ngIf="!modifiedDateToggle && modSort" icon="chevron-up-outline" aria-label="sorted descending"></nb-icon>
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                {{row.data.dateModified | date: "MM.dd.yyyy"}}
+
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="notes">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
                 Notes
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">

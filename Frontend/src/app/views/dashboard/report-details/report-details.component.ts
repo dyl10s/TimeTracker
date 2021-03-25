@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
-import { element } from 'protractor';
+import { NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
@@ -16,7 +15,7 @@ import { ReportService } from 'src/app/core/services/report.service';
 export class ReportDetailsComponent implements OnInit {
   startDate: Date = new Date();
   endDate: Date = new Date();
-  gridHeaders: string[] = ["date", "notes", "member", "hours"];
+  gridHeaders: string[] = ["date", "modDate", "notes", "member", "hours"];
   timeEntryDataSource: NbTreeGridDataSource<any>;
   allEntries: TreeNode<any>[] = [];
   tempEntries: TreeNode<any>[] = [];
@@ -29,10 +28,10 @@ export class ReportDetailsComponent implements OnInit {
   totalHours: number = 0;
   sortDateOption = 1;
   allSelected: boolean = false;
-  rowExpand: boolean = false;
-  rowToggleText: string = "";
-  dateToggleText: string = "";
   dateToggle: boolean;
+  modifiedDateToggle: boolean;
+  createSort: boolean;
+  modSort: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,9 +48,10 @@ export class ReportDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedMembers = [this.currentUserId];
-    this.rowToggleText = "Expand";
-    this.dateToggleText = "Descend"
     this.dateToggle = true;
+    this.modifiedDateToggle = true;
+    this.createSort = false;
+    this.modSort = false;
   }
 
   datesChanged(event) {
@@ -84,24 +84,11 @@ export class ReportDetailsComponent implements OnInit {
     this.tempEntries = [];
     console.log(this.selectedMembers)
     this.allEntries.forEach(element => {
-      if(this.checkMembers(element.data.id)){
+      if (this.checkMembers(element.data.id)) {
         this.tempEntries.push(element);
       }
     })
     this.getTotalHours();
-    this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
-  }
-
-  rowToggle() {
-    this.rowExpand =!this.rowExpand;
-    if(this.rowToggleText == "Expand"){
-      this.rowToggleText = "Collapse";
-    }else {
-      this.rowToggleText = "Expand";
-    }
-    this.tempEntries.forEach( x => {
-      x.expanded = this.rowExpand;
-    })
     this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
   }
 
@@ -120,7 +107,7 @@ export class ReportDetailsComponent implements OnInit {
     } else {
       this.selectedMembers = [];
     }
-   this.updateMembers();
+    this.updateMembers();
   }
 
   getAllTimeEntries() {
@@ -130,34 +117,26 @@ export class ReportDetailsComponent implements OnInit {
       (results: GenericResponseDTO) => {
         if (results.success) {
           results.data.forEach((user) => {
-              user.timeEntries.forEach((entry) => {
-                this.allEntries.push({
-                  data: {
-                    day: entry.day,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    length: entry.length,
-                    notes: entry.notes,
-                    id: user.userId
-                  },
-                  children: [
-                    {
-                      data: {
-                        notes: entry.notes,
-                        day: '',
-                        firstName: '',
-                        lastName: '',
-                        length: '',
-                        expanded: false
-                      }}],
-                    expanded: false})});
-                });
+            user.timeEntries.forEach((entry) => {
+              this.allEntries.push({
+                data: {
+                  day: entry.day,
+                  dateModified: entry.lastModified,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  length: entry.length,
+                  notes: entry.notes,
+                  id: user.userId
+                }
+              })
+            });
+          });
         } else {
           // TODO Add error handling
         }
         this.updateMembers();
-        this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
         this.sortDate(1);
+        this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
         this.getTotalHours();
 
       },
@@ -176,7 +155,7 @@ export class ReportDetailsComponent implements OnInit {
             this.memberIds.push(results.data.teacher.id);
           } else {
             this.currentUserName = results.data.teacher.firstName +
-            " " + results.data.teacher.lastName;
+              " " + results.data.teacher.lastName;
           }
 
           results.data.students.forEach(s => {
@@ -198,36 +177,69 @@ export class ReportDetailsComponent implements OnInit {
   }
 
   sortDate(num: number) {
+
+    if (num == 5) {
+      this.createSort = true;
+      this.modSort = false;
+    } if (num == 6) {
+      this.modSort = true;
+      this.createSort = false;
+    }
     // Ascending
-    if (num == 1 || 5 && !this.dateToggle) {
-      if(num == 5) {
-      this.dateToggleText = "Descend";
-      this.dateToggle = !this.dateToggle;
+    if (num == 1 || num == 5 && !this.dateToggle || num == 6 && !this.modifiedDateToggle) {
+      if (num == 5) {
+        this.dateToggle = !this.dateToggle;
       }
-      this.tempEntries.sort((x, y) => {
-        let xDate = new Date(x.data.day);
-        let yDate = new Date(y.data.day);
-        if (xDate.getTime() < yDate.getTime())
-          return -1;
-        else if (xDate.getTime() > yDate.getTime())
-          return 1;
-        return 0;
-      });
+
+      if (num == 1 || num == 5) {
+        this.tempEntries.sort((x, y) => {
+          let xDate = new Date(x.data.day);
+          let yDate = new Date(y.data.day);
+          if (xDate.getTime() < yDate.getTime())
+            return -1;
+          else if (xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+      } else {
+        this.modifiedDateToggle = !this.modifiedDateToggle;
+        this.tempEntries.sort((x, y) => {
+          let xDate = new Date(x.data.dateModified);
+          let yDate = new Date(y.data.dateModified);
+          if (xDate.getTime() < yDate.getTime())
+            return -1;
+          else if (xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+      }
     }
 
     // Descending
-    else if (5 && this.dateToggle) {
-      this.dateToggleText = "Ascend";
-      this.dateToggle = !this.dateToggle;
-      this.tempEntries.sort((y, x) => {
-        let xDate = new Date(x.data.day);
-        let yDate = new Date(y.data.day);
-        if (xDate.getTime() < yDate.getTime())
-          return -1;
-        else if (xDate.getTime() > yDate.getTime())
-          return 1;
-        return 0;
-      });
+    else if (num == 5 && this.dateToggle || num == 6 && this.modifiedDateToggle) {
+      if (num == 5) {
+        this.dateToggle = !this.dateToggle;
+        this.tempEntries.sort((y, x) => {
+          let xDate = new Date(x.data.day);
+          let yDate = new Date(y.data.day);
+          if (xDate.getTime() < yDate.getTime())
+            return -1;
+          else if (xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+      } else {
+        this.modifiedDateToggle = !this.modifiedDateToggle;
+        this.tempEntries.sort((y, x) => {
+          let xDate = new Date(x.data.dateModified);
+          let yDate = new Date(y.data.dateModified);
+          if (xDate.getTime() < yDate.getTime())
+            return -1;
+          else if (xDate.getTime() > yDate.getTime())
+            return 1;
+          return 0;
+        });
+      }
     }
     this.timeEntryDataSource = this.dataSourceBuilder.create(this.tempEntries);
   }
