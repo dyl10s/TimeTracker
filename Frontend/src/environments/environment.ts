@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  api: 'https://localhost:5001'
+  api: 'https://localhost:5001',
+  discordLink: 'https://discord.com/oauth2/authorize?client_id=825382235758526495&scope=bot'
 };
 
 /*

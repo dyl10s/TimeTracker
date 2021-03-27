@@ -87,6 +87,7 @@ namespace TimeTracker.Api.Controllers {
             }
 
             User currentUser = await database.Users
+                .AsQueryable()
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
             currentUser.FirstName = profileUpdateInfo.FirstName;
@@ -116,6 +117,7 @@ namespace TimeTracker.Api.Controllers {
             }
 
             User currentUser = await database.Users
+                .AsQueryable()
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
             if(currentUser == null) {

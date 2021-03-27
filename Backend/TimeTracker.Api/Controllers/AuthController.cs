@@ -69,6 +69,7 @@ namespace TimeTracker.Api.Controllers
                 if(!String.IsNullOrWhiteSpace(loginData.InviteCode)) {
 
                     Project project = await database.Projects
+                        .AsQueryable()
                         .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
 
                     if(project != null) {
@@ -133,7 +134,7 @@ namespace TimeTracker.Api.Controllers
                 }
 
                 // Make sure the email is unique
-                if(await database.Users.AnyAsync(x => x.Email.ToLower() == registerData.Email.ToLower()) == true)
+                if(await database.Users.AsQueryable().AnyAsync(x => x.Email.ToLower() == registerData.Email.ToLower()) == true)
                 {
                     return new GenericResponseDTO<int>() 
                     {
@@ -159,6 +160,7 @@ namespace TimeTracker.Api.Controllers
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
+                        .AsQueryable()
                         .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
                     if(project != null) {

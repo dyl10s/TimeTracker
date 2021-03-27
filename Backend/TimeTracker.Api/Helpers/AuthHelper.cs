@@ -75,7 +75,7 @@ namespace TimeTracker.Api.Helpers
         public async Task<User> GetCurrentUser(ClaimsPrincipal user, MainDb db)
         {
             var currentUserId = GetCurrentUserId(user);
-            var currentUser = await db.Users.FirstAsync(x => x.Id == currentUserId);
+            var currentUser = await db.Users.AsQueryable().FirstAsync(x => x.Id == currentUserId);
             return currentUser;
         }
 

@@ -134,6 +134,7 @@ namespace TimeTracker.Api.Controllers
 
             // Only allow the teacher to tag a project
             var project = await database.Projects
+                .AsQueryable()
                 .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
             
             if (project == null)
@@ -175,6 +176,7 @@ namespace TimeTracker.Api.Controllers
                 .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
 
             Project project = await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
 
             if (project == null)
@@ -274,6 +276,7 @@ namespace TimeTracker.Api.Controllers
             };
 
             Project project = await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
 
             project.Description = projectDetails.Description;
