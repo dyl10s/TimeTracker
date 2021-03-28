@@ -50,7 +50,7 @@ export class ReportDetailsComponent implements OnInit {
     this.selectedMembers = [this.currentUserId];
     this.dateToggle = true;
     this.modifiedDateToggle = true;
-    this.createSort = false;
+    this.createSort = true;
     this.modSort = false;
   }
 
