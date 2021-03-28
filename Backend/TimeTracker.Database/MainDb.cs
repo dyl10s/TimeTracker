@@ -26,6 +26,7 @@ namespace TimeTracker.Database
         public DbSet<Project> Projects { get; set; }
         public DbSet<Timer> Timers { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<DiscordLink> DiscordLinks { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

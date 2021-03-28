@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TimeTracker.Database;
@@ -9,9 +10,10 @@ using TimeTracker.Database;
 namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
-    partial class MainDbModelSnapshot : ModelSnapshot
+    [Migration("20210328160814_AddedDiscordLink")]
+    partial class AddedDiscordLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

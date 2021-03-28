@@ -21,6 +21,10 @@ export class AuthApiService {
     return this.http.post(`${this.api}/Auth/Register`, registerUser);
   }
 
+  link(registerUser: UserDto) {
+    return this.http.post(`${this.api}/Auth/Link`, registerUser);
+  }
+
   refresh(refresh: RefreshDto) {
     return this.http.post(`${this.api}/Auth/Refresh`, refresh);
   }

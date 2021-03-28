@@ -64,6 +64,7 @@ namespace TimeTracker.Discord
             }))
             .AddSingleton<CommandHandlerService>()
             .AddSingleton<StartupService>()
+            .AddSingleton(configuration)
             .AddScoped<MainDb>(x => new MainDb(configuration));
         }
     }

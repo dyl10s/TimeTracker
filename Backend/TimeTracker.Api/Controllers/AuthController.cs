@@ -237,5 +237,76 @@ namespace TimeTracker.Api.Controllers
                 };
             }
         }
+
+        /// <summary>
+        /// This endpoint is used to link a Discord account to an NTime account.
+        /// </summary>
+        /// <param name="loginData">The use login / discord link information</param>
+        /// <returns>A boolean value that says if the link was successful or not</returns>
+        [Route("Link")]
+        [HttpPost]
+        public async Task<GenericResponseDTO<bool>> Link(UserDTO loginData)
+        {
+            try
+            {
+                // Get user with a matching username and password hash
+                var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
+                var curUser = await database.Users
+                    .Include(x => x.Projects)
+                    .FirstOrDefaultAsync(u => u.Email.ToLower() == loginData.Email.ToLower() && u.Password.SequenceEqual(hashedPassword));
+
+                // If there was not a matching user then return an error
+                if (curUser == null)
+                {
+                    return new GenericResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Success = false,
+                        Message = "Invalid username or password"
+                    };
+                }
+
+                // Find the linked discord account
+                var discordLinkedAccount = await database.DiscordLinks
+                    .AsQueryable()
+                    .SingleOrDefaultAsync(x => x.LinkKey == loginData.DiscordLink);
+
+                if(discordLinkedAccount == null)
+                {
+                    // Invalid link
+                    return new GenericResponseDTO<bool>()
+                    {
+                        Success = true,
+                        Data = false
+                    };
+                }
+
+                curUser.DiscordId = discordLinkedAccount.DiscordId;
+
+                // Delete all link requests from this dicord user
+                var allRequests = await database.DiscordLinks
+                    .AsQueryable()
+                    .Where(x => x.DiscordId == discordLinkedAccount.DiscordId)
+                    .ToListAsync();
+
+                database.RemoveRange(allRequests);
+                await database.SaveChangesAsync();
+
+                return new GenericResponseDTO<bool>()
+                {
+                    Success = true,
+                    Data = true
+                };
+            }
+            catch
+            {
+                return new GenericResponseDTO<bool>()
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "An unknown error has occured"
+                };
+            }
+        }
     }
 }

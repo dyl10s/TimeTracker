@@ -201,5 +201,58 @@ namespace TimeTracker.Test
             Assert.IsTrue(user.Projects.Count == 1);
             Assert.IsTrue(user.Projects[0].Id == project.Id);
         }  
+
+        [TestMethod]
+        public async Task LinkDiscordAccount()
+        {
+            var registerResults = await authController.Register(new UserDTO()
+            {
+                Email = "testDiscord@gmail.com",
+                FirstName = "Test",
+                LastName = "Discord",
+                Password = "TestDiscord1!"
+            });
+
+            database.DiscordLinks.Add(new DiscordLink()
+            {
+                DiscordId = "TestId",
+                LinkKey = "TestLink"
+            });
+
+            await database.SaveChangesAsync();
+
+            var linkResults = await authController.Link(new UserDTO()
+            {
+                DiscordLink = "TestLink",
+                Email = "testDiscord@gmail.com",
+                Password = "TestDiscord1!"
+            });
+
+            Assert.IsTrue(linkResults.Success);
+            Assert.IsTrue(linkResults.Data);
+
+            var currentUser = await database.Users.AsQueryable().AsNoTracking().FirstOrDefaultAsync(x => x.Id == registerResults.Data);
+            Assert.AreEqual("TestId", currentUser.DiscordId);
+
+            var linkResultsBadLinkCode = await authController.Link(new UserDTO()
+            {
+                DiscordLink = "BadLink",
+                Email = "testDiscord@gmail.com",
+                Password = "TestDiscord1!"
+            });
+
+            Assert.IsTrue(linkResultsBadLinkCode.Success);
+            Assert.IsFalse(linkResultsBadLinkCode.Data);
+
+            var linkResultsBadLogin = await authController.Link(new UserDTO()
+            {
+                DiscordLink = "BadLink",
+                Email = "testDiscord1@gmail.com",
+                Password = "TestDiscord12!"
+            });
+
+            Assert.IsFalse(linkResultsBadLogin.Success);
+            Assert.IsFalse(linkResultsBadLogin.Data);
+        }
     }
 }
