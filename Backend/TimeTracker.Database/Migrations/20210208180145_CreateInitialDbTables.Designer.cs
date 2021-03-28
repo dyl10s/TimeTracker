@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeTracker.Api.Database;
 
-namespace TimeTracker.Api.Migrations
+
+namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
-    [Migration("20210209145409_AllUsersCanCreateProjects")]
-    partial class AllUsersCanCreateProjects
+    [Migration("20210208180145_CreateInitialDbTables")]
+    partial class CreateInitialDbTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -177,6 +177,9 @@ namespace TimeTracker.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsTeacher")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -184,9 +187,6 @@ namespace TimeTracker.Api.Migrations
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });

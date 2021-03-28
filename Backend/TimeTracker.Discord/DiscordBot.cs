@@ -1,11 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using TimeTracker.Database;
 using TimeTracker.Discord.Services;
 
 namespace TimeTracker.Discord
@@ -16,10 +18,12 @@ namespace TimeTracker.Discord
         CommandService commands;
 
         string discordToken = "";
+        IConfiguration configuration;
 
-        public DiscordBot(string token)
+        public DiscordBot(IConfiguration config)
         {
-            discordToken = token;
+            configuration = config;
+            discordToken = configuration["BotToken"];
             Thread botThread = new Thread(StartBot);
             botThread.Start();
         }
@@ -59,7 +63,8 @@ namespace TimeTracker.Discord
                 DefaultRunMode = RunMode.Async,
             }))
             .AddSingleton<CommandHandlerService>()
-            .AddSingleton<StartupService>();
+            .AddSingleton<StartupService>()
+            .AddScoped<MainDb>(x => new MainDb(configuration));
         }
     }
 }

@@ -15,8 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TimeTracker.Api.Database;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
 using TimeTracker.Discord;
 
 namespace Backend
@@ -65,7 +65,7 @@ namespace Backend
             // Start the discord bot
             if (!string.IsNullOrWhiteSpace(Configuration.GetValue<String>("BotToken")))
             {
-                var bot = new DiscordBot(Configuration.GetValue<String>("BotToken"));
+                var bot = new DiscordBot(Configuration);
             }
             else
             {

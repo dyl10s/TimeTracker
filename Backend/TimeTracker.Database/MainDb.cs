@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using TimeTracker.Api.Database.Models;
+using TimeTracker.Database.Models;
 
-namespace TimeTracker.Api.Database
+namespace TimeTracker.Database
 {
     public class MainDb : DbContext
     {

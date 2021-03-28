@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using TimeTracker.Api.Controllers;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
-using TimeTracker.Api.Database.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Test.Helpers;
 using Microsoft.EntityFrameworkCore;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Test
 {
