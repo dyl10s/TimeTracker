@@ -14,9 +14,6 @@ namespace TimeTracker.Discord
 {
     public class DiscordBot
     {
-        DiscordSocketClient client;
-        CommandService commands;
-
         string discordToken = "";
         IConfiguration configuration;
 
