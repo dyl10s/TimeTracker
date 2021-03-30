@@ -1,0 +1,12 @@
+<nb-card class="root">
+    <nb-card-header>
+        <h2>{{ title }}</h2>
+    </nb-card-header>
+    <nb-card-body>
+        {{ body }}
+    </nb-card-body>
+    <nb-card-footer class="footer">
+        <button nbButton status="success" (click)="yes()">Yes</button>
+        <button nbButton status="warning" (click)="no()">No</button>
+    </nb-card-footer>
+</nb-card>
