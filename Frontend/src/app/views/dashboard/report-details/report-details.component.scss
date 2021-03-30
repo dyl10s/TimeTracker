@@ -10,14 +10,16 @@
   margin-bottom: 10px;
 }
 
+::ng-deep .nb-theme-default nb-select.appearance-outline.status-basic .select-button {
+  height: 48px! important;
+}
+
 .filter-result-section {
   margin-top: 10px;
   margin-bottom: 10px;
 
   table {
-    display: inline-block;
     width: 100%;
-    overflow-x: auto;
 
     th {
       white-space: nowrap;
@@ -58,14 +60,9 @@
   .desk {
     display: table-cell;
   }
+}
 
-  .filter-result-section {
-    table {
-      display: table;
-      overflow: hidden;
-    }
-  }
-
+@media only screen and (min-width: 830px) {
   .main-filter-section {
     display: flex;
 
@@ -74,3 +71,4 @@
     }
   }
 }
+

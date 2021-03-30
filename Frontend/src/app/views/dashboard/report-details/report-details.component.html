@@ -38,22 +38,22 @@
         </ng-container>
 
         <ng-container nbTreeGridColumnDef="modDate">
-            <th nbTreeGridHeaderCell (click)="sortDate(6)" *nbTreeGridHeaderCellDef>
+            <th nbTreeGridHeaderCell (click)="sortDate(6)" class="desk" *nbTreeGridHeaderCellDef>
                Modified
                     <nb-icon *ngIf="modifiedDateToggle && modSort" icon="chevron-down-outline" aria-label="sorted ascending"></nb-icon>
                     <nb-icon *ngIf="!modifiedDateToggle && modSort" icon="chevron-up-outline" aria-label="sorted descending"></nb-icon>
             </th>
-            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
                 {{row.data.dateModified | date: "MM.dd.yyyy"}}
 
             </td>
         </ng-container>
 
         <ng-container nbTreeGridColumnDef="notes">
-            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+            <th nbTreeGridHeaderCell class="desk" *nbTreeGridHeaderCellDef>
                 Notes
             </th>
-            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
                 {{row.data.notes}}
             </td>
         </ng-container>
