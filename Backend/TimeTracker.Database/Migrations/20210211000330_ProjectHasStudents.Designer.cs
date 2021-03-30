@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeTracker.Api.Database;
 
-namespace TimeTracker.Api.Migrations
+
+namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
-    [Migration("20210223004203_SplitUserNameField")]
-    partial class SplitUserNameField
+    [Migration("20210211000330_ProjectHasStudents")]
+    partial class ProjectHasStudents
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -192,10 +192,7 @@ namespace TimeTracker.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Password")

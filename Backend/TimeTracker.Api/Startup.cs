@@ -15,8 +15,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TimeTracker.Api.Database;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Discord;
 
 namespace Backend
 {
@@ -61,6 +62,18 @@ namespace Backend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MainDb db)
         {
+            // Start the discord bot
+            if (!string.IsNullOrWhiteSpace(Configuration.GetValue<String>("BotToken")))
+            {
+                var bot = new DiscordBot(Configuration);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("WARNING! No bot token detected. The discord bot will not run.");
+                Console.ResetColor();
+            }
+
             // Automatically update the database
             db.Database.Migrate();
 

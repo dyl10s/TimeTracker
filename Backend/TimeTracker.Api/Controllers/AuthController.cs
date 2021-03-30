@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
 using System.Collections.Generic;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Api.Controllers
 {
@@ -69,6 +69,7 @@ namespace TimeTracker.Api.Controllers
                 if(!String.IsNullOrWhiteSpace(loginData.InviteCode)) {
 
                     Project project = await database.Projects
+                        .AsQueryable()
                         .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
 
                     if(project != null) {
@@ -133,7 +134,7 @@ namespace TimeTracker.Api.Controllers
                 }
 
                 // Make sure the email is unique
-                if(await database.Users.AnyAsync(x => x.Email.ToLower() == registerData.Email.ToLower()) == true)
+                if(await database.Users.AsQueryable().AnyAsync(x => x.Email.ToLower() == registerData.Email.ToLower()) == true)
                 {
                     return new GenericResponseDTO<int>() 
                     {
@@ -159,6 +160,7 @@ namespace TimeTracker.Api.Controllers
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
+                        .AsQueryable()
                         .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
                     if(project != null) {
@@ -230,6 +232,77 @@ namespace TimeTracker.Api.Controllers
             {
                 return new GenericResponseDTO<AccessKeysDTO>()
                 {
+                    Success = false,
+                    Message = "An unknown error has occured"
+                };
+            }
+        }
+
+        /// <summary>
+        /// This endpoint is used to link a Discord account to an NTime account.
+        /// </summary>
+        /// <param name="loginData">The use login / discord link information</param>
+        /// <returns>A boolean value that says if the link was successful or not</returns>
+        [Route("Link")]
+        [HttpPost]
+        public async Task<GenericResponseDTO<bool>> Link(UserDTO loginData)
+        {
+            try
+            {
+                // Get user with a matching username and password hash
+                var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
+                var curUser = await database.Users
+                    .Include(x => x.Projects)
+                    .FirstOrDefaultAsync(u => u.Email.ToLower() == loginData.Email.ToLower() && u.Password.SequenceEqual(hashedPassword));
+
+                // If there was not a matching user then return an error
+                if (curUser == null)
+                {
+                    return new GenericResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Success = false,
+                        Message = "Invalid username or password"
+                    };
+                }
+
+                // Find the linked discord account
+                var discordLinkedAccount = await database.DiscordLinks
+                    .AsQueryable()
+                    .SingleOrDefaultAsync(x => x.LinkKey == loginData.DiscordLink);
+
+                if(discordLinkedAccount == null)
+                {
+                    // Invalid link
+                    return new GenericResponseDTO<bool>()
+                    {
+                        Success = true,
+                        Data = false
+                    };
+                }
+
+                curUser.DiscordId = discordLinkedAccount.DiscordId;
+
+                // Delete all link requests from this dicord user
+                var allRequests = await database.DiscordLinks
+                    .AsQueryable()
+                    .Where(x => x.DiscordId == discordLinkedAccount.DiscordId)
+                    .ToListAsync();
+
+                database.RemoveRange(allRequests);
+                await database.SaveChangesAsync();
+
+                return new GenericResponseDTO<bool>()
+                {
+                    Success = true,
+                    Data = true
+                };
+            }
+            catch
+            {
+                return new GenericResponseDTO<bool>()
+                {
+                    Data = false,
                     Success = false,
                     Message = "An unknown error has occured"
                 };

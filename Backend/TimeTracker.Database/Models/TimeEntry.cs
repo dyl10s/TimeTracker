@@ -1,7 +1,6 @@
 ﻿using System;
-using TimeTracker.Api.Database.Models;
 
-namespace TimeTracker.Api.Database.Models
+namespace TimeTracker.Database.Models
 {
     public class TimeEntry
     {

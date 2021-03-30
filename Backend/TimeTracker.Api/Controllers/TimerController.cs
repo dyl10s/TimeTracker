@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace Backend.Controllers
 {
@@ -34,6 +33,7 @@ namespace Backend.Controllers
             User currentUser = await authHelper.GetCurrentUser(User, database);
 
             Project project = await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(
                     p => p.Id == timerInfo.ProjectId && 
                     (p.Students.Any(s => s.Id == currentUser.Id) || p.Teacher.Id == currentUser.Id));
@@ -73,6 +73,7 @@ namespace Backend.Controllers
         public async Task<GenericResponseDTO<TimeEntryDTO>> StopTimer(int timerId) {
 
             Timer timer = await database.Timers
+                .AsQueryable()
                 .Where(t => t.User.Id == authHelper.GetCurrentUserId(User))
                 .Include(t => t.Project)
                 .FirstOrDefaultAsync(t => t.Id == timerId);
