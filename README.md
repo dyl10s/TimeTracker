@@ -58,7 +58,7 @@ The next time the app is run all migrations will be applied automatically to the
 
 In order to keep the discord token private, we are using a build in .net solution called user secrets. The application will run without the secret and will just not run the discord bot. If you would like to additional discord bot development you will need to add a user secret in vscode. You can install the extension and follow their instructions to edit the user secrets on the `TimeTracker.Api.csproj` project. You can find the vscode extension [here](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets).
 
-The secret should be in the following format.
+After installing the extension, right click on `/backend/TimeTracker.Api/TimeTracker.Api.csproj` and select `Manage User Secrets`. The secret should be in the following format.
 
 ```json
 {
