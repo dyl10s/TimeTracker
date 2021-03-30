@@ -142,14 +142,14 @@ export class ProjectDetailsComponent {
     if(this.details.archivedDate == null) {
       title = "Are you sure you want to archive the project?";
       body = `Archiving the project will make it so no more time can be submitted for the project, 
-      and make it so no new members can join the project. The project will show under the archived tab
-      on most screens.
+      and make it so no new members can join the project. The project will show under the under the archived 
+      tab on the projects screen and report screen.
       `;
     } else{
       title = "Are you sure you want to unarchive the project?";
       body = `Unarchiving the project will make it so time can be submitted for the project, 
       and allow new members can join the project. The project will show under the active projects tab
-      on most screens.
+      on the projects screen and report screen.
       `;
     }
 

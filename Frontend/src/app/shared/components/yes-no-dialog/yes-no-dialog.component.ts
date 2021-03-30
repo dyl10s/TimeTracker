@@ -26,12 +26,18 @@ export class YesNoDialogComponent implements OnInit {
   }
 
   no() {
-    this.noClicked();
+    if(this.noClicked) {
+      this.noClicked();
+    }
+    
     this.ref.close();
   }
 
   yes() {
-    this.yesClicked();
+    if(this.yesClicked) {
+      this.yesClicked();
+    }
+    
     this.ref.close();
   }
 
