@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { NbTagComponent, NbTagInputAddEvent } from '@nebular/theme';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectService } from 'src/app/core/services/project.service';
@@ -12,12 +13,13 @@ import { ProjectService } from 'src/app/core/services/project.service';
 export class CreateProjectComponent {
 
   showLoadingSpinner: boolean = false;
+  tags: string[] = [];
 
   createProjectForm: FormGroup = new FormGroup({
     clientName: new FormControl(''),
     description: new FormControl(''),
     projectName: new FormControl(''),
-    tags: new FormControl('')
+    tags: new FormControl({value: ''}),
   });
 
   constructor(
@@ -42,21 +44,13 @@ export class CreateProjectComponent {
       return;
     }
 
-    let tags: string[] = [];
-    if(form.tags) {
-      tags = form.tags.split(",");
-      for(let i = 0; i < tags.length; i++) {
-        tags[i] = tags[i].trim();
-      }
-    }
-
     this.showLoadingSpinner = true;
     
     this.projectService.createProject({
       clientName: form.clientName,
       description: form.description,
       projectName: form.projectName,
-      tags: tags
+      tags: this.getAllTags(),
     }).subscribe((res: GenericResponseDTO) => {
       if(res.success) {
         this.toastrService.show("Success", 'New project has been created', {status:'success', duration: 4000});
@@ -70,4 +64,25 @@ export class CreateProjectComponent {
       console.log(err);
     });
   }
+
+  getAllTags() : string[] {
+      return this.tags
+  }
+
+  onTagAdd({ value, input }: NbTagInputAddEvent): void {
+    if (value) {
+      this.tags.push(value);
+    }
+    input.nativeElement.value = '';
+  }
+
+  onTagRemove(tagToRemove: NbTagComponent): void {
+    this.tags.forEach(x => {
+      if(x == tagToRemove.text){
+        this.tags.splice(this.tags.indexOf(x), 1);
+      }
+    })
+  }
+
+
 }

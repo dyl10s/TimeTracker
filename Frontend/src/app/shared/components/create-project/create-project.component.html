@@ -1,7 +1,7 @@
 <div class="container" [nbSpinner]="showLoadingSpinner" nbSpinnerStatus="success">
   <h4 class="text-black">New Project</h4>
 
-  <form [formGroup]="createProjectForm" (ngSubmit)="submitDialog(createProjectForm.value)">
+  <form [formGroup]="createProjectForm">
     <div class="form-field">
       <label for="client">Client</label>
       <input type="text" id="client" nbInput status="primary" placeholder="Client" fullWidth formControlName="clientName"/>
@@ -13,8 +13,11 @@
     </div>
   
     <div class="form-field">
-      <label for="projectTags">Tags (Comma separated)</label>
-      <input type="text" id="projectTags" nbInput status="primary"placeholder="Project Tags (optional)" fullWidth formControlName="tags"/>
+      <label for="projectTags">Tags</label>
+        <nb-tag-list (tagRemove)="onTagRemove($event)">
+            <nb-tag size="tiny" [removable]="true" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
+            <input *ngIf="true" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+        </nb-tag-list>
     </div>
   
     <div class="form-field">
@@ -23,7 +26,7 @@
     </div>
   
     <div class="actions-footer">
-      <button nbButton status="success" type="submit">Save Project</button>
+      <button nbButton status="success" type="button" (click)="submitDialog(createProjectForm.value)">Save Project</button>
       <button nbButton status="warning" type="button" (click)="closeDialog()">Cancel</button>
     </div>
   </form>
