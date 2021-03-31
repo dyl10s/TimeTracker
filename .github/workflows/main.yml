@@ -80,8 +80,8 @@ jobs:
         name: Build and push dev
         uses: docker/build-push-action@v2
         with:
-          context: ./Backend/TimeTracker.Api
-          file: ./Backend/TimeTracker.Api/Dockerfile
+          context: ./Backend
+          file: ./Backend/Dockerfile
           push: true
           tags: strohscd/timetracker-api:dev
       
