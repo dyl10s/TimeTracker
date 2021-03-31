@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TimeTracker.Api.Migrations
+namespace TimeTracker.Database.Migrations
 {
     public partial class SplitUserNameField : Migration
     {

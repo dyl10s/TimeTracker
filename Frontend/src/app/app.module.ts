@@ -32,6 +32,7 @@ import { ReportComponent } from './views/dashboard/report/report.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ReportDetailsComponent } from './views/dashboard/report-details/report-details.component';
+import { YesNoDialogComponent } from './shared/components/yes-no-dialog/yes-no-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -54,7 +55,8 @@ export function tokenGetter() {
     ProjectDetailsComponent,
     TimeFramePickerComponent,
     ReportComponent,
-    ReportDetailsComponent
+    ReportDetailsComponent,
+    YesNoDialogComponent
   ],
   imports: [
     CommonModule,

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeTracker.Api.Database;
 
-namespace TimeTracker.Api.Migrations
+
+namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
     [Migration("20210125221612_InitialCreate")]

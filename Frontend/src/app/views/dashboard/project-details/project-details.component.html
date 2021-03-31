@@ -12,11 +12,23 @@
             </div>
 
             <div class="actions">
+                <button 
+                *ngIf="pageMode == 'view' && details.teacher.id == jwtService.decode().sub" 
+                nbButton 
+                status="danger" 
+                (click)="toggleArchive()"
+                [nbSpinner]="archiving"
+                [disabled]="archiving"
+                nbSpinnerStatus="success">
+                    <nb-icon class="adaptive-button-icon" icon="archive-outline"></nb-icon>
+                    <span *ngIf="details.archivedDate == null" class="adaptive-button-text">Archive Project</span>
+                    <span *ngIf="details.archivedDate != null" class="adaptive-button-text">Unarchive Project</span>
+                </button>
                 <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="copyInviteCode(details.inviteCode)">
                     <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
                     <span class="adaptive-button-text">Copy Invite Code</span>
                 </button>
-                <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="pageMode = 'edit'">
+                <button *ngIf="pageMode == 'view' && details.teacher.id == jwtService.decode().sub" nbButton status="primary" (click)="pageMode = 'edit'">
                     <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
                     <span class="adaptive-button-text">Edit Project</span>
                 </button>
@@ -32,7 +44,7 @@
         </div>
 
         <nb-tag-list (tagRemove)="onTagRemove($event)">
-            <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'dd/MM/yyyy')"></nb-tag>
+            <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'MM/dd/yyyy')"></nb-tag>
             <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
             <input *ngIf="pageMode == 'edit'" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
         </nb-tag-list>

@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Api.Controllers
 {
@@ -134,6 +133,7 @@ namespace TimeTracker.Api.Controllers
 
             // Only allow the teacher to tag a project
             var project = await database.Projects
+                .AsQueryable()
                 .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
             
             if (project == null)
@@ -175,6 +175,7 @@ namespace TimeTracker.Api.Controllers
                 .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
 
             Project project = await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
 
             if (project == null)
@@ -274,6 +275,7 @@ namespace TimeTracker.Api.Controllers
             };
 
             Project project = await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
 
             project.Description = projectDetails.Description;
@@ -283,6 +285,50 @@ namespace TimeTracker.Api.Controllers
             response.Success = true;
             response.Data = project.Id;
 
+            return response;
+        }
+
+        /// <summary>
+        /// This endpoint is used to archive or unarchive a project.
+        /// </summary>
+        /// <param name="archiveDetails">The project Id and if the project is being archived or not</param>
+        /// <returns>The archive date that was saved in the database, returns null if it was unarchived.</returns>
+        [Authorize]
+        [HttpPost("Archive")]
+        public async Task<GenericResponseDTO<DateTime?>> ArchiveProject(ArchiveProjectDTO archiveDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<DateTime?>()
+            {
+                Success = true
+            };
+
+            Project archivingProject = await database.Projects
+                .AsQueryable()
+                .Where(x => x.Id == archiveDetails.ProjectId)
+                .Where(x => x.Teacher.Id == currentUserId)
+                .FirstOrDefaultAsync();
+            
+            if(archivingProject == null)
+            {
+                response.Success = false;
+                response.Message = "Could not find the project";
+                return response;
+            }
+
+            if (archiveDetails.Archive)
+            {
+                archivingProject.ArchivedDate = DateTime.UtcNow;
+            }
+            else
+            {
+                archivingProject.ArchivedDate = null;
+            }
+
+            await database.SaveChangesAsync();
+
+            response.Data = archivingProject.ArchivedDate;
             return response;
         }
     }
