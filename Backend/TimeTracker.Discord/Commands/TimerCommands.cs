@@ -52,7 +52,7 @@ namespace TimeTracker.Discord.Commands
             {
                 Color = new Color(35, 45, 154),
                 Title = "Projects",
-                Description = "Multiple projects were found, please select one from the list:"
+                Description = "Multiple projects were found, please select one to start a timer for from the list:"
             };
 
             for(int i = 0; i < projects.Count; i++) {
@@ -68,9 +68,13 @@ namespace TimeTracker.Discord.Commands
             return; 
         }
 
+        //TODO: don't list projects that already have an active timer
         [Command("start")]
         [Summary("starts a new timer if one isn't already running")]
         public async Task Start(int projectNumber) {
+
+            if(projectNumber < 0)
+                return;
 
             User user = database.Users
                 .AsQueryable()
@@ -121,8 +125,109 @@ namespace TimeTracker.Discord.Commands
         [Command("stop")]
         [Summary("stops an active timer and creates a new time entry from it")]
         public async Task Stop() {
+
+            User user = database.Users
+                .AsQueryable()
+                .FirstOrDefault(u => u.DiscordId == Context.User.Id.ToString());
             
-            await Context.Message.ReplyAsync("I'm not implemented yet!");
+            if(user == null) {
+                await Context.Message.ReplyAsync("Your discord account is not currently linked to an NTime account. Use !login to link your accounts together.");
+                return;
+            }
+
+            List<Timer> timers = database.Timers
+                .AsQueryable()
+                .Where(timer => timer.User.Id == user.Id)
+                .ToList();
+
+            if(timers.Count == 0) {
+                await Context.Message.ReplyAsync("There are not currently any timers for you to stop.");
+                return;
+            } else if(timers.Count == 1) {
+                await Context.Message.ReplyAsync("The active timer for project '" + timers[0].Project.Name + "' has been stopped, and a new time entry for it has been created.");
+                return;
+            }
+
+            timers.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+            {
+                Color = new Color(35, 45, 154),
+                Title = "Timers",
+                Description = "Multiple timers were found, please select one to stop from the list:"
+            };
+
+            for(int i = 0; i < timers.Count; i++) {
+                embedBuilder.AddField(field => {
+                    field.Name = timers[i].StartTime.ToString() + " - " + timers[i].Project.Name;
+                    field.Value = "!stop " + (i + 1);
+                    field.IsInline = false;
+                });
+            }
+
+            await Context.Message.ReplyAsync("", false, embedBuilder.Build());
+
+            return;
+        }
+
+        [Command("stop")]
+        [Summary("stops an active timer and creates a new time entry from it")]
+        public async Task Stop(int timerNumber) {
+
+            if(timerNumber < 0)
+                return;
+
+            User user = database.Users
+                .AsQueryable()
+                .FirstOrDefault(u => u.DiscordId == Context.User.Id.ToString());
+            
+            if(user == null) {
+                await Context.Message.ReplyAsync("Your discord account is not currently linked to an NTime account. Use !login to link your accounts together.");
+                return;
+            }
+
+            List<Timer> timers = database.Timers
+                .AsQueryable()
+                .Where(timer => timer.User.Id == user.Id)
+                .ToList();
+
+            timers.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
+
+            if(timers.Count == 0) {
+                await Context.Message.ReplyAsync("There are not currently any timers for you to stop.");
+                return;
+            } else if(timerNumber - 1 >= timers.Count) {
+                await Context.Message.ReplyAsync("Timer number was out of range. There are only " + timers.Count + " active timers.");
+                return;
+            }
+
+            DateTime timeEntryCreationTime = DateTime.UtcNow;
+
+            TimeEntry timeEntry = new TimeEntry{
+                CreatedTime = timeEntryCreationTime,
+                Notes = timers[timerNumber - 1].Notes,
+                Project = timers[timerNumber - 1].Project,
+                LastModified = timeEntryCreationTime,
+                User = user,
+                Length = (timeEntryCreationTime - timers[timerNumber - 1].StartTime).TotalMinutes,
+                Day = timeEntryCreationTime
+            };
+
+            database.TimeEntries.Add(timeEntry);
+
+            database.Timers.Remove(timers[timerNumber - 1]);
+
+            await database.SaveChangesAsync();
+
+            await Context.Message.ReplyAsync("Timer successfully stopped, a time entry for project " + timers[timerNumber - 1].Project.Name + " was created with " + Math.Floor(timeEntry.Length) + " minutes on it.");
+
+            return;
+        }
+
+        [Command("timers")]
+        [Summary("lists all active timers")]
+        public async Task ListTimers() {
+            return;
         }
     }
 }
