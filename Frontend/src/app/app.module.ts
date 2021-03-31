@@ -31,6 +31,7 @@ import { TimeFramePickerComponent } from './shared/components/time-frame-picker/
 import { ReportComponent } from './views/dashboard/report/report.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { YesNoDialogComponent } from './shared/components/yes-no-dialog/yes-no-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -52,7 +53,8 @@ export function tokenGetter() {
     EditTimeComponent,
     ProjectDetailsComponent,
     TimeFramePickerComponent,
-    ReportComponent
+    ReportComponent,
+    YesNoDialogComponent
   ],
   imports: [
     CommonModule,
