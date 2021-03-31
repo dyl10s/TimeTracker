@@ -7,6 +7,7 @@ import { ArchiveProjectDTO } from 'src/app/core/models/ArchiveProjectDTO.model';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
+import { JwtService } from 'src/app/core/services/auth/jwt.service';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
@@ -69,7 +70,8 @@ export class ProjectDetailsComponent {
     private router: Router,
     private reportService: ReportService,
     private dialogService: NbDialogService){
-
+    public jwtService: JwtService
+  ){
     this.startDate.setDate(this.startDate.getDate() - 7);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));

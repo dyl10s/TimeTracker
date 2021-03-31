@@ -28,7 +28,7 @@
                     <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
                     <span class="adaptive-button-text">Copy Invite Code</span>
                 </button>
-                <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="pageMode = 'edit'">
+                <button *ngIf="pageMode == 'view' && details.teacher.id == jwtService.decode().sub" nbButton status="primary" (click)="pageMode = 'edit'">
                     <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
                     <span class="adaptive-button-text">Edit Project</span>
                 </button>
