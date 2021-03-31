@@ -294,7 +294,7 @@ namespace TimeTracker.Api.Controllers
         /// <param name="archiveDetails">The project Id and if the project is being archived or not</param>
         /// <returns>The archive date that was saved in the database, returns null if it was unarchived.</returns>
         [Authorize]
-        [HttpPatch("Archive")]
+        [HttpPost("Archive")]
         public async Task<GenericResponseDTO<DateTime?>> ArchiveProject(ArchiveProjectDTO archiveDetails)
         {
             var currentUserId = authHelper.GetCurrentUserId(User);

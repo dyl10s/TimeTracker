@@ -46,6 +46,6 @@ export class ProjectService {
   }
 
   public archiveProject(archiveDetails: ArchiveProjectDTO): Observable<GenericResponseDTO<any>> {
-    return this.http.patch<GenericResponseDTO<any>>(`${this.api}/Project/Archive`, archiveDetails)
+    return this.http.post<GenericResponseDTO<any>>(`${this.api}/Project/Archive`, archiveDetails)
   }
 }
