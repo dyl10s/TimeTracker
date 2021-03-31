@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace TimeTracker.Api.Migrations
+namespace TimeTracker.Database.Migrations
 {
     public partial class CreateInitialDbTables : Migration
     {

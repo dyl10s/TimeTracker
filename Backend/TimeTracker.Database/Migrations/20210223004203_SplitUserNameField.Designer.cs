@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeTracker.Api.Database;
 
-namespace TimeTracker.Api.Migrations
+
+namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
-    [Migration("20210209145409_AllUsersCanCreateProjects")]
-    partial class AllUsersCanCreateProjects
+    [Migration("20210223004203_SplitUserNameField")]
+    partial class SplitUserNameField
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace TimeTracker.Api.Migrations
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.2");
+
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProjectsId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("ProjectUser");
+                });
 
             modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
                 {
@@ -177,7 +192,10 @@ namespace TimeTracker.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Password")
@@ -191,10 +209,25 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.HasOne("TimeTracker.Api.Database.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TimeTracker.Api.Database.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
                 {
                     b.HasOne("TimeTracker.Api.Database.Models.User", "Teacher")
-                        .WithMany("Projects")
+                        .WithMany("ProjectsTeaching")
                         .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
@@ -255,7 +288,7 @@ namespace TimeTracker.Api.Migrations
 
             modelBuilder.Entity("TimeTracker.Api.Database.Models.User", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("ProjectsTeaching");
 
                     b.Navigation("RefreshTokens");
 

@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
 
   error: string;
   isLoading: boolean = false;
+  discordLink: string;
+  discordLinkResuts: string = "";
 
   constructor(
     private authService: AuthApiService,
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.discordLink = this.activatedRoute.snapshot.queryParamMap.get('discordLink');
     this.loginForm.patchValue({
       inviteCode: this.activatedRoute.snapshot.queryParamMap.get('inviteCode')
     });
@@ -45,6 +48,12 @@ export class LoginComponent implements OnInit {
       this.isLoading = false;
       return;
     } 
+
+    // Check to see if this is a login request or discord link request
+    if(this.discordLink && this.discordLink.length > 0) {
+      this.linkDiscordAccount(loginForm);
+      return;
+    }
 
     this.authService.login({ 
       email: loginForm.email, 
@@ -70,6 +79,28 @@ export class LoginComponent implements OnInit {
       }
       this.isLoading = false;
     }, (error: any) => {
+      this.error = 'API Not Connected.';
+      this.isLoading = false;
+    });
+  }
+
+  linkDiscordAccount(loginForm: any) {
+    this.authService.link({ 
+      email: loginForm.email, 
+      password: loginForm.password,
+      discordLink: this.discordLink
+    }).subscribe((response: GenericResponseDTO) => {
+      if(response.success) {
+        if(response.data == true) {
+          this.discordLinkResuts = "Your Discord account has been successfully linked with your NTime account."
+        } else {
+          this.discordLinkResuts = "Invalid Discord link url. Please try generating a new link with the !login command on Discord."
+        }
+      } else {
+        this.error = response.message;
+      }
+      this.isLoading = false;
+    }, () => {
       this.error = 'API Not Connected.';
       this.isLoading = false;
     });

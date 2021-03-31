@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using TimeTracker.Api.Database.Models;
+using TimeTracker.Database.Models;
 
-namespace TimeTracker.Api.Database
+namespace TimeTracker.Database
 {
     public class MainDb : DbContext
     {
@@ -27,6 +26,7 @@ namespace TimeTracker.Api.Database
         public DbSet<Project> Projects { get; set; }
         public DbSet<Timer> Timers { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<DiscordLink> DiscordLinks { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

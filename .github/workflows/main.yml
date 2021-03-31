@@ -143,6 +143,7 @@ jobs:
           key: ${{ secrets.DEV_KEY }}
           script: |
             wget -N https://raw.githubusercontent.com/dyl10s/TimeTracker/development/docker-compose.yml
+            sed -i 's/BotTokenHere/${{ secrets.BOT_DEV_TOKEN }}/' docker-compose.yml
             export TIMETRACK_TAG=dev
             sudo docker-compose pull api frontend
             sudo docker-compose up -d

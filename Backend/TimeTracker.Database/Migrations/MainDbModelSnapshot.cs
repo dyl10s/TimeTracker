@@ -2,24 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeTracker.Api.Database;
+using TimeTracker.Database;
 
-namespace TimeTracker.Api.Migrations
+namespace TimeTracker.Database.Migrations
 {
     [DbContext(typeof(MainDb))]
-    [Migration("20210211000330_ProjectHasStudents")]
-    partial class ProjectHasStudents
+    partial class MainDbModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("ProjectUser", b =>
                 {
@@ -36,12 +34,30 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("ProjectUser");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.DiscordLink", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("DiscordId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LinkKey")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiscordLinks");
+                });
+
+            modelBuilder.Entity("TimeTracker.Database.Models.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime?>("ArchivedDate")
                         .HasColumnType("timestamp without time zone");
@@ -71,12 +87,12 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.RefreshToken", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Token")
                         .HasColumnType("text");
@@ -91,12 +107,12 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Tag", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -111,12 +127,12 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.TimeEntry", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.TimeEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
@@ -148,12 +164,12 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("TimeEntries");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Timer", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Timer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
@@ -176,12 +192,12 @@ namespace TimeTracker.Api.Migrations
                     b.ToTable("Timers");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.User", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
@@ -192,7 +208,10 @@ namespace TimeTracker.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Password")
@@ -208,53 +227,53 @@ namespace TimeTracker.Api.Migrations
 
             modelBuilder.Entity("ProjectUser", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.Project", null)
+                    b.HasOne("TimeTracker.Database.Models.Project", null)
                         .WithMany()
                         .HasForeignKey("ProjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TimeTracker.Api.Database.Models.User", null)
+                    b.HasOne("TimeTracker.Database.Models.User", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Project", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.User", "Teacher")
+                    b.HasOne("TimeTracker.Database.Models.User", "Teacher")
                         .WithMany("ProjectsTeaching")
                         .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.RefreshToken", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.RefreshToken", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.User", "User")
+                    b.HasOne("TimeTracker.Database.Models.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Tag", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Tag", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.Project", "Project")
+                    b.HasOne("TimeTracker.Database.Models.Project", "Project")
                         .WithMany("Tags")
                         .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.TimeEntry", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.TimeEntry", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.Project", "Project")
+                    b.HasOne("TimeTracker.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("TimeTracker.Api.Database.Models.User", "User")
+                    b.HasOne("TimeTracker.Database.Models.User", "User")
                         .WithMany("TimeEntries")
                         .HasForeignKey("UserId");
 
@@ -263,13 +282,13 @@ namespace TimeTracker.Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Timer", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Timer", b =>
                 {
-                    b.HasOne("TimeTracker.Api.Database.Models.Project", "Project")
+                    b.HasOne("TimeTracker.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("TimeTracker.Api.Database.Models.User", "User")
+                    b.HasOne("TimeTracker.Database.Models.User", "User")
                         .WithMany("Timers")
                         .HasForeignKey("UserId");
 
@@ -278,12 +297,12 @@ namespace TimeTracker.Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.Project", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.Project", b =>
                 {
                     b.Navigation("Tags");
                 });
 
-            modelBuilder.Entity("TimeTracker.Api.Database.Models.User", b =>
+            modelBuilder.Entity("TimeTracker.Database.Models.User", b =>
                 {
                     b.Navigation("ProjectsTeaching");
 
