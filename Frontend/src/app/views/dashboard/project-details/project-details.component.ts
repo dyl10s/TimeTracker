@@ -69,7 +69,7 @@ export class ProjectDetailsComponent {
     private toastrService: NbToastrService,
     private router: Router,
     private reportService: ReportService,
-    private dialogService: NbDialogService){
+    private dialogService: NbDialogService,
     public jwtService: JwtService
   ){
     this.startDate.setDate(this.startDate.getDate() - 7);

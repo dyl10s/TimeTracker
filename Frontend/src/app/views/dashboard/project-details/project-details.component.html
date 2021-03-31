@@ -13,7 +13,7 @@
 
             <div class="actions">
                 <button 
-                *ngIf="pageMode == 'view'" 
+                *ngIf="pageMode == 'view' && details.teacher.id == jwtService.decode().sub" 
                 nbButton 
                 status="danger" 
                 (click)="toggleArchive()"
