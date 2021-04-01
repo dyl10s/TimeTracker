@@ -82,7 +82,6 @@ export class ReportDetailsComponent implements OnInit {
 
   updateMembers() {
     this.tempEntries = [];
-    console.log(this.selectedMembers)
     this.allEntries.forEach(element => {
       if (this.checkMembers(element.data.id)) {
         this.tempEntries.push(element);
