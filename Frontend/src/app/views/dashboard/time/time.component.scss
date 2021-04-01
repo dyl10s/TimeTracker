@@ -112,8 +112,7 @@
   }
 }
 
-::ng-deep .nb-theme-default nb-card-body,
-::ng-deep .nb-theme-default nb-card {
+.full-card {
   padding: unset !important;
   width: 100%;
 }

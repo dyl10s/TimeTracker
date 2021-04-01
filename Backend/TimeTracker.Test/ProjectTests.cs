@@ -76,7 +76,7 @@ namespace TimeTracker.Test
 
         [TestMethod]
         public async Task UpdateProjectDetails() {
-                        var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            var createResult = await projectController.CreateProject(new ProjectCreateDTO()
             {
                 ClientName = "Test Client",
                 Description = "Test Description",
@@ -143,6 +143,44 @@ namespace TimeTracker.Test
 
             Assert.IsTrue(userProjects.Data.Count == 1);
             Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);
+        }
+
+        [TestMethod]
+        public async Task ArchiveProject()
+        {
+            var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                Description = "This project must be archived!",
+                ProjectName = "Test Name",
+                Tags = new List<string>()
+                {
+                    "PLEASE ARCHIVE"
+                }
+            });
+
+            Assert.IsTrue(createResult.Success);
+
+            await projectController.ArchiveProject(new ArchiveProjectDTO()
+            {
+                Archive = true,
+                ProjectId = createResult.Data
+            });
+
+            var projectUpdated = await projectController.GetProjectById(createResult.Data);
+
+            // This test will fail if it starts on one day and ends on another
+            // I think the chances of that would be like winning the lottery though so we ok
+            Assert.IsTrue(projectUpdated.Data.ArchivedDate.Value.Date == DateTime.UtcNow.Date);
+
+            await projectController.ArchiveProject(new ArchiveProjectDTO()
+            {
+                Archive = false,
+                ProjectId = createResult.Data
+            });
+
+            projectUpdated = await projectController.GetProjectById(createResult.Data);
+            Assert.IsNull(projectUpdated.Data.ArchivedDate);
         }
     }
 }
