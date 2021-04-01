@@ -34,7 +34,8 @@ namespace TimeTracker.Discord.Commands
 
                 foreach (var cmd in module.Commands)
                 {
-                    commandList += $"!{cmd.Aliases.First()} - {cmd.Summary}\n";
+                    if(cmd.Summary != null)
+                        commandList += $"!{cmd.Aliases.First()} - {cmd.Summary}\n";
                 }
 
                 if (!string.IsNullOrWhiteSpace(commandList))
