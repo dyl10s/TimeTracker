@@ -70,7 +70,7 @@ namespace TimeTracker.Api.Controllers
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
+                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode && p.ArchivedDate == null);
 
                     if(project != null) {
                         curUser.Projects.Add(project);
@@ -96,7 +96,7 @@ namespace TimeTracker.Api.Controllers
                 return new GenericResponseDTO<AccessKeysDTO>() 
                 {
                     Success = false,
-                    Message = "An unknown error has occured"
+                    Message = "An unknown error has occurred"
                 };
             }
         }
@@ -161,7 +161,7 @@ namespace TimeTracker.Api.Controllers
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
+                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode && p.ArchivedDate == null);
 
                     if(project != null) {
                         newUser.Projects.Add(project);
@@ -198,7 +198,7 @@ namespace TimeTracker.Api.Controllers
         {
             try
             {
-                // Find the user attatched to the token
+                // Find the user attached to the token
                 var curToken = await database.RefreshTokens
                     .Include(x => x.User)
                     .Where(x => x.Token == refreshData.RefreshToken && x.User.Email == refreshData.Email)
@@ -233,7 +233,7 @@ namespace TimeTracker.Api.Controllers
                 return new GenericResponseDTO<AccessKeysDTO>()
                 {
                     Success = false,
-                    Message = "An unknown error has occured"
+                    Message = "An unknown error has occurred"
                 };
             }
         }
@@ -304,7 +304,7 @@ namespace TimeTracker.Api.Controllers
                 {
                     Data = false,
                     Success = false,
-                    Message = "An unknown error has occured"
+                    Message = "An unknown error has occurred"
                 };
             }
         }
