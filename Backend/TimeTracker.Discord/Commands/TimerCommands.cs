@@ -73,7 +73,7 @@ namespace TimeTracker.Discord.Commands
             {
                 Color = new Color(35, 45, 154),
                 Title = "Projects",
-                Description = "Multiple projects without timers were found, please select one to start a timer for:"
+                Description = "Multiple projects without timers were found, please select one to start a timer for:",
             };
 
             for(int i = 0; i < projectsWithoutTimers.Count; i++) {
@@ -83,6 +83,11 @@ namespace TimeTracker.Discord.Commands
                     field.IsInline = false;
                 });
             }
+
+            embedBuilder.WithFooter(footer => {
+                footer.Text = "(you can also start a timer directly using !start [project name])";
+                footer.IconUrl = "";
+            });
 
             await Context.Message.ReplyAsync("", false, embedBuilder.Build());
 
@@ -145,7 +150,7 @@ namespace TimeTracker.Discord.Commands
         }
 
         [Command("start")]
-        public async Task Start(string projectName) {
+        public async Task Start([Remainder] string projectName) {
 
             User user = database.Users
                 .AsQueryable()
@@ -220,7 +225,7 @@ namespace TimeTracker.Discord.Commands
                     Project = timers[0].Project,
                     LastModified = timeEntryCreationTime,
                     User = user,
-                    Length = (timeEntryCreationTime - timers[0].StartTime).TotalMinutes,
+                    Length = Math.Round((timeEntryCreationTime - timers[0].StartTime).TotalHours, 2),
                     Day = timeEntryCreationTime
                 };
 
@@ -230,7 +235,7 @@ namespace TimeTracker.Discord.Commands
 
                 await database.SaveChangesAsync();
 
-                await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[0].Project.Name + "**, and a new time entry with " + Math.Floor(timeEntry.Length) + " minutes on it has been added.");
+                await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[0].Project.Name + "**, and a new time entry with " + timeEntry.Length + " hours on it has been added.");
                 
                 return;
             }
@@ -246,11 +251,16 @@ namespace TimeTracker.Discord.Commands
 
             for(int i = 0; i < timers.Count; i++) {
                 embedBuilder.AddField(field => {
-                    field.Name = timers[i].Project.Name + " (Active for " + Math.Floor((DateTime.UtcNow - timers[i].StartTime).TotalMinutes) + " minutes)";
+                    field.Name = timers[i].Project.Name + " (Active for " + Math.Round((DateTime.UtcNow - timers[i].StartTime).TotalHours, 2) + " hours)";
                     field.Value = "!stop " + (i + 1);
                     field.IsInline = false;
                 });
             }
+
+            embedBuilder.WithFooter(footer => {
+                footer.Text = "(you can also stop a timer directly using !stop [project name])";
+                footer.IconUrl = "";
+            });
 
             await Context.Message.ReplyAsync("", false, embedBuilder.Build());
 
@@ -295,7 +305,7 @@ namespace TimeTracker.Discord.Commands
                 Project = timers[timerNumber - 1].Project,
                 LastModified = timeEntryCreationTime,
                 User = user,
-                Length = (timeEntryCreationTime - timers[timerNumber - 1].StartTime).TotalMinutes,
+                Length = Math.Round((timeEntryCreationTime - timers[timerNumber - 1].StartTime).TotalHours, 2),
                 Day = timeEntryCreationTime
             };
 
@@ -305,13 +315,13 @@ namespace TimeTracker.Discord.Commands
 
             await database.SaveChangesAsync();
 
-            await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[timerNumber - 1].Project.Name + "**, and a new time entry with " + Math.Floor(timeEntry.Length) + " minutes on it has been added.");
+            await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[timerNumber - 1].Project.Name + "**, and a new time entry with " + timeEntry.Length + " hours on it has been added.");
 
             return;
         }
 
         [Command("stop")]
-        public async Task Stop(string projectName) {
+        public async Task Stop([Remainder] string projectName) {
 
             User user = database.Users
                 .AsQueryable()
@@ -342,7 +352,7 @@ namespace TimeTracker.Discord.Commands
                 Project = timers[0].Project,
                 LastModified = timeEntryCreationTime,
                 User = user,
-                Length = (timeEntryCreationTime - timers[0].StartTime).TotalMinutes,
+                Length = Math.Round((timeEntryCreationTime - timers[0].StartTime).TotalHours, 2),
                 Day = timeEntryCreationTime
             };
 
@@ -352,62 +362,7 @@ namespace TimeTracker.Discord.Commands
 
             await database.SaveChangesAsync();
 
-            await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[0].Project.Name + "**, and a new time entry with " + Math.Floor(timeEntry.Length) + " minutes on it has been added.");
-
-            return;
-        }
-
-        [Command("stop")]
-        public async Task Stop(params string[] projectNameAsArray) {
-
-            string projectName = "";
-
-            for(int i = 0; i < projectNameAsArray.Length; i++) {
-                projectName += projectNameAsArray[i];
-                if(i + 1 < projectNameAsArray.Length)
-                    projectName += " ";
-            }
-
-            User user = database.Users
-                .AsQueryable()
-                .FirstOrDefault(u => u.DiscordId == Context.User.Id.ToString());
-            
-            if(user == null) {
-                await Context.Message.ReplyAsync("Your Discord account is not currently linked to an NTime account. Use `!login` to link your accounts together.");
-                return;
-            }
-
-            List<Timer> timers = database.Timers
-                .AsQueryable()
-                .Where(timer => timer.Project.Name.IndexOf(projectName) == 0 && timer.User.Id == user.Id)
-                .ToList();
-
-            timers.Sort((a, b) => a.Project.Name.CompareTo(b.Project.Name));
-
-            if(timers.Count == 0) {
-                await Context.Message.ReplyAsync("No active timer found for the given project name. (Use `!timers` to see which projects have active timers.)");
-                return;
-            }
-
-            DateTime timeEntryCreationTime = DateTime.UtcNow;
-
-            TimeEntry timeEntry = new TimeEntry{
-                CreatedTime = timeEntryCreationTime,
-                Notes = timers[0].Notes,
-                Project = timers[0].Project,
-                LastModified = timeEntryCreationTime,
-                User = user,
-                Length = (timeEntryCreationTime - timers[0].StartTime).TotalMinutes,
-                Day = timeEntryCreationTime
-            };
-
-            database.TimeEntries.Add(timeEntry);
-
-            database.Timers.Remove(timers[0]);
-
-            await database.SaveChangesAsync();
-
-            await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[0].Project.Name + "**, and a new time entry with " + Math.Floor(timeEntry.Length) + " minutes on it has been added.");
+            await Context.Message.ReplyAsync("Timer stopped for the project **" + timers[0].Project.Name + "**, and a new time entry with " + timeEntry.Length + " hours on it has been added.");
 
             return;
         }
@@ -447,7 +402,7 @@ namespace TimeTracker.Discord.Commands
             for(int i = 0; i < timers.Count; i++) {
                 embedBuilder.AddField(field => {
                     field.Name = timers[i].Project.Name;
-                    field.Value = "Active for " + Math.Floor((DateTime.UtcNow - timers[i].StartTime).TotalMinutes) + " minutes \n";
+                    field.Value = "Active for " + Math.Round((DateTime.UtcNow - timers[i].StartTime).TotalHours, 2) + " hours \n";
                     field.IsInline = false;
                 });
             }
