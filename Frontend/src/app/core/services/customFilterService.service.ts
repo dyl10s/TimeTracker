@@ -48,7 +48,7 @@ export class CustomFilterService<T> extends NbTreeGridFilterService<T> {
 
         if (filteredChildren && filteredChildren.length) {
 
-          // Logic to fix the nebular
+          // Logic to fix the nebular bug
           if(isNewFilter) {
             node.expanded = true;
           }
