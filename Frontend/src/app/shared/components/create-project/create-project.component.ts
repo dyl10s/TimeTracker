@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NbTagComponent, NbTagInputAddEvent } from '@nebular/theme';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
@@ -18,45 +18,51 @@ export class CreateProjectComponent {
   createProjectForm: FormGroup = new FormGroup({
     clientName: new FormControl(''),
     description: new FormControl(''),
-    projectName: new FormControl(''),
-    tags: new FormControl({value: ''}),
+    projectName: new FormControl('')
   });
 
   constructor(
     private ref: NbDialogRef<CreateProjectComponent>,
     private projectService: ProjectService,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private cdref: ChangeDetectorRef
   ) { }
 
+  @ViewChild('lastChat') lastChat: ElementRef;
+  ngAfterViewInit() {
+    this.lastChat.nativeElement.focus();
+    this.cdref.detectChanges();
+  }
+
   closeDialog() {
-    this.ref.close({update: false});
+    this.ref.close({ update: false });
   }
 
   submitDialog(form: any) {
 
-    if(!form.clientName) {
-      this.toastrService.show("A client name is required", 'Invalid Data', {status:'danger', duration: 5000});
+    if (!form.clientName) {
+      this.toastrService.show("A client name is required", 'Invalid Data', { status: 'danger', duration: 5000 });
       return;
     }
 
-    if(!form.projectName) {
-      this.toastrService.show("A project name is required", 'Invalid Data', {status:'danger', duration: 5000});
+    if (!form.projectName) {
+      this.toastrService.show("A project name is required", 'Invalid Data', { status: 'danger', duration: 5000 });
       return;
     }
 
     this.showLoadingSpinner = true;
-    
+
     this.projectService.createProject({
       clientName: form.clientName,
       description: form.description,
       projectName: form.projectName,
-      tags: this.getAllTags(),
+      tags: this.tags,
     }).subscribe((res: GenericResponseDTO) => {
-      if(res.success) {
-        this.toastrService.show("Success", 'New project has been created', {status:'success', duration: 4000});
-        this.ref.close({update: true});
-      }else{
-        this.toastrService.show("Error", 'There was an error creating your project', {status:'danger', duration: 4000});
+      if (res.success) {
+        this.toastrService.show("Success", 'New project has been created', { status: 'success', duration: 4000 });
+        this.ref.close({ update: true });
+      } else {
+        this.toastrService.show("Error", 'There was an error creating your project', { status: 'danger', duration: 4000 });
       }
 
       this.showLoadingSpinner = false;
@@ -65,8 +71,8 @@ export class CreateProjectComponent {
     });
   }
 
-  getAllTags() : string[] {
-      return this.tags
+  getAllTags(): string[] {
+    return this.tags
   }
 
   onTagAdd({ value, input }: NbTagInputAddEvent): void {
@@ -78,7 +84,7 @@ export class CreateProjectComponent {
 
   onTagRemove(tagToRemove: NbTagComponent): void {
     this.tags.forEach(x => {
-      if(x == tagToRemove.text){
+      if (x == tagToRemove.text) {
         this.tags.splice(this.tags.indexOf(x), 1);
       }
     })
