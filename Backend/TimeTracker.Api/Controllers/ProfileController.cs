@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TimeTracker.Api.DTOs;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using TimeTracker.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using TimeTracker.Database.Models;
+using TimeTracker.Database;
 
 namespace TimeTracker.Api.Controllers {
 
@@ -87,6 +87,7 @@ namespace TimeTracker.Api.Controllers {
             }
 
             User currentUser = await database.Users
+                .AsQueryable()
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
             currentUser.FirstName = profileUpdateInfo.FirstName;
@@ -116,6 +117,7 @@ namespace TimeTracker.Api.Controllers {
             }
 
             User currentUser = await database.Users
+                .AsQueryable()
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
 
             if(currentUser == null) {
