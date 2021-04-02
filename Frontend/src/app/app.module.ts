@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ProfileComponent } from './views/dashboard/profile/profile.component';
 
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule, NbActionsModule, NbContextMenuModule} from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbTabsetModule, NbRouteTabsetModule, NbInputModule, NbCardModule, NbIconModule, NbSpinnerModule, NbToastrModule, NbDialogService, NbButtonGroupModule, NbTreeGridModule, NbDialogModule, NbTagModule, NbSelectModule, NbDatepickerModule, NbPopoverModule, NbCalendarModule, NbActionsModule, NbContextMenuModule, NbCheckboxModule, NbAutocompleteModule} from '@nebular/theme';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +31,8 @@ import { TimeFramePickerComponent } from './shared/components/time-frame-picker/
 import { ReportComponent } from './views/dashboard/report/report.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReportDetailsComponent } from './views/dashboard/report-details/report-details.component';
+import { YesNoDialogComponent } from './shared/components/yes-no-dialog/yes-no-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -52,7 +54,9 @@ export function tokenGetter() {
     EditTimeComponent,
     ProjectDetailsComponent,
     TimeFramePickerComponent,
-    ReportComponent
+    ReportComponent,
+    ReportDetailsComponent,
+    YesNoDialogComponent
   ],
   imports: [
     CommonModule,
@@ -84,6 +88,8 @@ export function tokenGetter() {
     NbActionsModule,
     NbContextMenuModule,
     NgxChartsModule,
+    NbCheckboxModule,
+    NbAutocompleteModule,
 
     JwtModule.forRoot({
       config: {

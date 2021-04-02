@@ -59,8 +59,8 @@
     </div>
 
     <div class="entry-detail-section" *ngIf="dayView">
-      <nb-card>
-        <nb-card-body>
+      <nb-card class="full-card">
+        <nb-card-body class="full-card">
             <nb-button-group>
               <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}" (click)="returnDayView(1)">
                 M<br />

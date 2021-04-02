@@ -88,7 +88,7 @@ namespace TimeTracker.Api.Controllers
             // Only allow the teacher to tag a project
             var project = await database.Projects
                 .Include(x => x.Tags)
-                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId);
+                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
             
             if (project == null)
             {
@@ -134,7 +134,7 @@ namespace TimeTracker.Api.Controllers
             // Only allow the teacher to tag a project
             var project = await database.Projects
                 .AsQueryable()
-                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
+                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
             
             if (project == null)
             {
@@ -176,7 +176,7 @@ namespace TimeTracker.Api.Controllers
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
+                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode && x.ArchivedDate == null);
 
             if (project == null)
             {
@@ -276,7 +276,16 @@ namespace TimeTracker.Api.Controllers
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
+                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
+
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
 
             project.Description = projectDetails.Description;
 
@@ -285,6 +294,50 @@ namespace TimeTracker.Api.Controllers
             response.Success = true;
             response.Data = project.Id;
 
+            return response;
+        }
+
+        /// <summary>
+        /// This endpoint is used to archive or unarchive a project.
+        /// </summary>
+        /// <param name="archiveDetails">The project Id and if the project is being archived or not</param>
+        /// <returns>The archive date that was saved in the database, returns null if it was unarchived.</returns>
+        [Authorize]
+        [HttpPost("Archive")]
+        public async Task<GenericResponseDTO<DateTime?>> ArchiveProject(ArchiveProjectDTO archiveDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<DateTime?>()
+            {
+                Success = true
+            };
+
+            Project archivingProject = await database.Projects
+                .AsQueryable()
+                .Where(x => x.Id == archiveDetails.ProjectId)
+                .Where(x => x.Teacher.Id == currentUserId)
+                .FirstOrDefaultAsync();
+            
+            if(archivingProject == null)
+            {
+                response.Success = false;
+                response.Message = "Could not find the project";
+                return response;
+            }
+
+            if (archiveDetails.Archive)
+            {
+                archivingProject.ArchivedDate = DateTime.UtcNow;
+            }
+            else
+            {
+                archivingProject.ArchivedDate = null;
+            }
+
+            await database.SaveChangesAsync();
+
+            response.Data = archivingProject.ArchivedDate;
             return response;
         }
     }
