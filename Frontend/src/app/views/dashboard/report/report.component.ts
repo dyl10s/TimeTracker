@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { ReportService } from 'src/app/core/services/report.service';
 import { forkJoin } from 'rxjs';
@@ -129,9 +129,4 @@ interface TreeNode<T> {
   data: T;
   children?: TreeNode<T>[];
   expanded?: boolean;
-}
-
-interface test {
-  name: string;
-  hours: number;
 }
