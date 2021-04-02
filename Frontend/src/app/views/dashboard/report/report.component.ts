@@ -59,10 +59,6 @@ export class ReportComponent {
     });
   }
 
-  navigateToReport(projectId: number, userId: number) {
-    this.router.navigateByUrl(`/dashboard/reports/details?projectId=${projectId}&userId=${userId}`)
-  }
-
   getProjectHours(proj: any, hoursReport: any) {
       // Total Hours
       let totalHours: number = 0;

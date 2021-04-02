@@ -1,0 +1,81 @@
+<div class="container">
+
+<div class="header">
+    <h3>Detailed Time Report</h3>
+</div>
+
+<div class="date-filter-section">
+    <app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="datesChanged($event)"></app-time-frame-picker>
+</div>
+
+<div class="main-filter-section">
+    <div class="right-align">
+        <nb-select fullWidth multiple placeholder="Member" [(selected)]="selectedMembers">
+            <nb-select-label>
+                Member
+            </nb-select-label>
+            <nb-option value="0" (click)="selectAllToggle()">Select all</nb-option>
+            <nb-option [value]="currentUserId" (click)="updateMembers()">{{ currentUserName }}</nb-option>
+            <nb-option *ngFor="let member of members; let i = index" [value]="members[i].id" (click)="updateMembers()">{{members[i].firstName + " " + members[i].lastName}}</nb-option>
+        </nb-select>
+    </div>
+</div>
+
+<div class="filter-result-section">
+     <table [nbTreeGrid]="timeEntryDataSource" equalColumnsWidth>
+        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+
+        <ng-container nbTreeGridColumnDef="date">
+            <th nbTreeGridHeaderCell (click)="sortDate(5)" *nbTreeGridHeaderCellDef>
+                Date
+                <nb-icon *ngIf="dateToggle && createSort" icon="chevron-down-outline" aria-label="sorted ascending"></nb-icon>
+                <nb-icon *ngIf="!dateToggle && createSort" icon="chevron-up-outline" aria-label="sorted descending"></nb-icon>
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                {{row.data.day | date: "MM.dd.yyyy"}}
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="modDate">
+            <th nbTreeGridHeaderCell (click)="sortDate(6)" class="desk" *nbTreeGridHeaderCellDef>
+               Modified
+                    <nb-icon *ngIf="modifiedDateToggle && modSort" icon="chevron-down-outline" aria-label="sorted ascending"></nb-icon>
+                    <nb-icon *ngIf="!modifiedDateToggle && modSort" icon="chevron-up-outline" aria-label="sorted descending"></nb-icon>
+            </th>
+            <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
+                {{row.data.dateModified | date: "MM.dd.yyyy"}}
+
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="notes">
+            <th nbTreeGridHeaderCell class="desk" *nbTreeGridHeaderCellDef>
+                Notes
+            </th>
+            <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
+                {{row.data.notes}}
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="member">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Member
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            {{row.data["firstName"] + " " + row.data["lastName"]}}
+            </td>
+        </ng-container>
+        <ng-container nbTreeGridColumnDef="hours">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Hours: {{ totalHours }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data.length}}</td>
+        </ng-container>
+    </table>
+    <div class="shadow shadow-top" aria-hidden="true"></div>
+    <div class="shadow shadow-bottom" aria-hidden="true"></div>
+</div>
+
+</div>
+

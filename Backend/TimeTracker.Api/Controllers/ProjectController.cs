@@ -88,7 +88,7 @@ namespace TimeTracker.Api.Controllers
             // Only allow the teacher to tag a project
             var project = await database.Projects
                 .Include(x => x.Tags)
-                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId);
+                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
             
             if (project == null)
             {
@@ -134,7 +134,7 @@ namespace TimeTracker.Api.Controllers
             // Only allow the teacher to tag a project
             var project = await database.Projects
                 .AsQueryable()
-                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
+                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
             
             if (project == null)
             {
@@ -176,7 +176,7 @@ namespace TimeTracker.Api.Controllers
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
+                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode && x.ArchivedDate == null);
 
             if (project == null)
             {
@@ -276,7 +276,16 @@ namespace TimeTracker.Api.Controllers
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId);
+                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
+
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
 
             project.Description = projectDetails.Description;
 
