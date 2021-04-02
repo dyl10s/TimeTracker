@@ -19,7 +19,7 @@ export class CustomFilterService<T> extends NbTreeGridFilterService<T> {
       let foundMatch = false;
 
       this.filteredColumns.forEach(x => {
-          if(data[x].trim().toLocaleLowerCase().includes(searchString)){
+          if(data[x] && data[x].trim().toLocaleLowerCase().includes(searchString)){
             foundMatch = true;
           }
       });
