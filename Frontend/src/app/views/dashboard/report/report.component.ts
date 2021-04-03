@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { ReportService } from 'src/app/core/services/report.service';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
+import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 
 @Component({
   selector: 'app-report',
@@ -12,8 +14,11 @@ import { Router } from '@angular/router';
 })
 export class ReportComponent {
 
-  projectsDataSource: NbTreeGridDataSource<any>;
-  projects: TreeNode<any>[] = [];
+  activeDataSource: NbTreeGridDataSource<any>;
+  archivedDataSource: NbTreeGridDataSource<any>;
+
+  activeProjects: TreeNode<any>[] = [];
+  archivedProjects: TreeNode<any>[] = [];
 
   startDate: Date = new Date();
   endDate: Date = new Date();
@@ -22,11 +27,15 @@ export class ReportComponent {
 
   projectCache: any[];
 
+  showActive: boolean = true;
+
+  searchQuery: string;
+
   constructor(
     private projectService: ProjectService,
     private router: Router,
     private reportService: ReportService,
-    private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
+    private dataSourceBuilder: CustomTreeBuilder<any>,
     private tostrService: NbToastrService) {
 
     this.getAllProjects();
@@ -45,7 +54,8 @@ export class ReportComponent {
   }
 
   loadProjectHours() {
-    this.projects = [];
+    this.activeProjects = [];
+    this.archivedProjects = [];
 
     forkJoin(
       this.projectCache.map(p => this.reportService.getLengthReport(p.id, this.startDate, this.endDate))
@@ -54,8 +64,11 @@ export class ReportComponent {
         this.getProjectHours(this.projectCache[i], x);
       });
 
-      console.log(this.projects);
-      this.projectsDataSource = this.dataSourceBuilder.create(this.projects);
+      let customFilter = new CustomFilterService<any>();
+      customFilter.setFilterColumns(["name", "fullName"]);
+  
+      this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
+      this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
     });
   }
 
@@ -66,25 +79,55 @@ export class ReportComponent {
         totalHours += r.hours;
       })
 
-      this.projects.push({
-        data: {
-          name: proj.name,
-          hours: totalHours
-        },
-        children: hoursReport.data.map(s => {
-          s.projId = proj.id;
-          return {
-            data: s,
-            expanded: false
-          }
-        }),
-        expanded: false
-      });
+      if(proj.archivedDate) {
+        this.activeProjects.push({
+          data: {
+            name: proj.name,
+            hours: totalHours
+          },
+          children: hoursReport.data.map(s => {
+            s.projId = proj.id;
+            s.fullName = s.firstName + " " + s.lastName;
+            return {
+              data: s,
+              expanded: false
+            }
+          }),
+          expanded: false
+        });
+      } else {
+        this.archivedProjects.push({
+          data: {
+            name: proj.name,
+            hours: totalHours
+          },
+          children: hoursReport.data.map(s => {
+            s.projId = proj.id;
+            s.fullName = s.firstName + " " + s.lastName;
+            return {
+              data: s,
+              expanded: false
+            }
+          }),
+          expanded: false
+        });
+      }
   }
 
   datesChanged(event) {
     this.loadProjectHours();
   }
+
+  viewArchivedProjects() {
+    this.showActive = false;
+    this.archivedDataSource.filter(this.searchQuery);
+  }
+
+  viewActiveProjects() {
+    this.showActive = true;
+    this.activeDataSource.filter(this.searchQuery);
+  } 
+
 }
 
 interface TreeNode<T> {
