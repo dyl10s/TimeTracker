@@ -30,7 +30,7 @@
                     <label>
                         {{row.data.hours}}
                     </label>
-                    <button (click)="navigateToReport(row.data.projId, row.data.userId)" nbButton status="primary">
+                    <button [routerLink] = "'/dashboard/reports/' + row.data.projId +'/'+ row.data.userId" nbButton status="primary">
                         <nb-icon class="adaptive-button-icon" icon="bar-chart"></nb-icon>
                         <span class="adaptive-button-text">Detailed Report</span>
                     </button>
