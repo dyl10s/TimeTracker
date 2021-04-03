@@ -17,3 +17,16 @@
 .error {
   color: red !important;
 }
+
+.highlight-button {
+  background-color: lightgray !important;
+}
+
+.highlight-button:hover {
+  background-color: gray !important;
+}
+
+.outline-button {
+  background-color: lightgray !important;
+  color: black !important;
+}
