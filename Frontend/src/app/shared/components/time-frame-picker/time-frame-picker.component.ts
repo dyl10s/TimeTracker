@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-time-frame-picker',
@@ -16,8 +16,6 @@ export class TimeFramePickerComponent {
   @Output() datesChanged = new EventEmitter();
 
   timeframe: string = "weekly";
-
-  @ViewChild("startDayPicker") startDatePicker;
 
   constructor() {
     // Default to the current week
