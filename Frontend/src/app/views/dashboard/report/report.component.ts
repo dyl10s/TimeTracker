@@ -29,6 +29,8 @@ export class ReportComponent {
 
   showActive: boolean = true;
 
+  searchQuery: string;
+
   constructor(
     private projectService: ProjectService,
     private router: Router,
@@ -63,11 +65,10 @@ export class ReportComponent {
       });
 
       let customFilter = new CustomFilterService<any>();
-      customFilter.setFilterColumns(["name", "firstName", "lastName"]);
+      customFilter.setFilterColumns(["name", "fullName"]);
   
       this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
       this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
-
     });
   }
 
@@ -86,6 +87,7 @@ export class ReportComponent {
           },
           children: hoursReport.data.map(s => {
             s.projId = proj.id;
+            s.fullName = s.firstName + " " + s.lastName;
             return {
               data: s,
               expanded: false
@@ -101,6 +103,7 @@ export class ReportComponent {
           },
           children: hoursReport.data.map(s => {
             s.projId = proj.id;
+            s.fullName = s.firstName + " " + s.lastName;
             return {
               data: s,
               expanded: false
@@ -117,10 +120,12 @@ export class ReportComponent {
 
   viewArchivedProjects() {
     this.showActive = false;
+    this.archivedDataSource.filter(this.searchQuery);
   }
 
   viewActiveProjects() {
     this.showActive = true;
+    this.activeDataSource.filter(this.searchQuery);
   } 
 
 }
