@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-time-frame-picker',
@@ -17,6 +17,8 @@ export class TimeFramePickerComponent {
 
   timeframe: string = "weekly";
 
+  @ViewChild("startDayPicker") startDatePicker;
+
   constructor() {
     // Default to the current week
     this.startDate = new Date();
@@ -25,6 +27,30 @@ export class TimeFramePickerComponent {
     this.startDateChange.emit(this.startDate);
     this.endDateChange.emit(this.endDate);
     this.datesChanged.emit(null);
+  }
+
+  startDateTyped(typedData: string) {
+    let parsedDate = Date.parse(typedData);
+
+    if(!isNaN(parsedDate)) {
+      this.startDate = new Date(parsedDate);
+      this.startDateChanged(this.startDate);
+    }else{
+      // Reset the date if it is invalid
+      this.endDateChanged(this.endDate);
+    }
+  }
+
+  endDateTyped(typedData: string) {
+    let parsedDate = Date.parse(typedData);
+    
+    if(!isNaN(parsedDate)) {
+      this.endDate = new Date(parsedDate);
+      this.endDateChanged(this.startDate);
+    }else{
+      // Reset the date if it is invalid
+      this.startDateChanged(this.startDate);
+    }
   }
 
   timeFrameChanged(e: string) {
@@ -166,6 +192,8 @@ export class TimeFramePickerComponent {
         this.selectAllTime();
         break;
       case "custom":
+        this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - 1);
+        this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 1);
     }
 
     this.startDateChange.emit(this.startDate);
