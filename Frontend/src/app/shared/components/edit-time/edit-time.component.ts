@@ -51,11 +51,11 @@ export class EditTimeComponent implements OnInit {
 
   updateEntry(form) {
     const entry: TimeEntry = {
-      Id: this.event.id,
-      Day: this.event.day,
-      Length: parseFloat(form.value.time),
-      Notes: form.value.notes,
-      ProjectId: this.event.project.id
+      id: this.event.id,
+      day: this.event.day,
+      length: parseFloat(form.value.time),
+      notes: form.value.notes,
+      projectId: this.event.project.id
     };
 
     this.timeEntryService.updateTimeEntry(entry).subscribe((response: GenericResponseDTO) => {

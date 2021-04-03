@@ -25,7 +25,7 @@ export class TimeEntryApiService {
     }
 
     deleteTimeEntry(timeEntry: TimeEntry) {
-        return this.http.delete(`${this.api}/TimeEntry/${timeEntry.Id}`)
+        return this.http.delete(`${this.api}/TimeEntry/${timeEntry.id}`)
     }
 
 }
