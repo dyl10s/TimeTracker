@@ -81,7 +81,7 @@ export class ReportComponent {
         totalHours += r.hours;
       })
 
-      if(proj.archivedDate) {
+      if(proj.archivedDate == null) {
         this.activeProjects.push({
           data: {
             name: proj.name,
