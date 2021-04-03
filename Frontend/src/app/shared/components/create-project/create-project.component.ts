@@ -28,9 +28,9 @@ export class CreateProjectComponent {
     private cdref: ChangeDetectorRef
   ) { }
 
-  @ViewChild('lastChat') lastChat: ElementRef;
+  @ViewChild('clientField') clientField: ElementRef;
   ngAfterViewInit() {
-    this.lastChat.nativeElement.focus();
+    this.clientField.nativeElement.focus();
     this.cdref.detectChanges();
   }
 
