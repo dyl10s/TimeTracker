@@ -1,13 +1,21 @@
 .container {
-    min-width: 100%! important;
+  width: 100% !important;
+  padding: unset !important;
+  overflow: auto;
+}
+
+.header {
+  background-color: #232d9a;
+  background-image: linear-gradient(#232d9a, #3045c9);
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+
+  app-navbar {
+    width: 100%;
+  }
+}
+
+::ng-deep .nb-theme-default nb-layout-header nav {
     padding: unset! important;
-    overflow: hidden;
-}
-
-/* Media query for tablet viewport targets screen size with a minimum width of 660px. */
-@media only screen and (min-width: 660px) {
-}
-
-/* Media query for desktop viewport targets screens a minimum width of 830px. */
-@media only screen and (min-width: 830px) {
+    height: unset! important;
 }

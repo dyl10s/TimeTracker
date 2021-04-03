@@ -1,7 +1,7 @@
 export interface TimeEntry {
-    Id?: number;
-    Length: number;
-    Notes: string;
-    ProjectId: number;
-    Day: Date;
+    id?: number;
+    length: number;
+    notes: string;
+    projectId: number;
+    day: Date;
 }

@@ -11,7 +11,7 @@ using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
 using TimeTracker.Test.Helpers;
 using Microsoft.EntityFrameworkCore;
-using TimeTracker.Api.Database.Models;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Test {
 
@@ -45,6 +45,7 @@ namespace TimeTracker.Test {
             });
 
             Project project = (await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(p => p.Id == projectCreationResponse.Data));
 
             project.Students
@@ -98,6 +99,7 @@ namespace TimeTracker.Test {
             });
 
             Project project = (await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(p => p.Id == projectCreationResponse.Data));
 
             project.Students
@@ -136,6 +138,7 @@ namespace TimeTracker.Test {
             });
 
             Project project = (await database.Projects
+                .AsQueryable()
                 .FirstOrDefaultAsync(p => p.Id == projectCreationResponse.Data));
 
             project.Students

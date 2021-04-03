@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -50,11 +50,11 @@ export class RegisterComponent implements OnInit {
     } 
 
     this.authService.register({ 
-      Email: registerForm.email, 
-      Password: registerForm.password, 
-      FirstName: registerForm.firstName.trim(),
-      LastName: registerForm.lastName.trim(),
-      InviteCode: registerForm.inviteCode
+      email: registerForm.email, 
+      password: registerForm.password, 
+      firstName: registerForm.firstName.trim(),
+      lastName: registerForm.lastName.trim(),
+      inviteCode: registerForm.inviteCode
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Registration

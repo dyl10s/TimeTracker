@@ -1,24 +1,39 @@
+@import "../../../../app/styles/display.scss";
+
 .container {
-  overflow: hidden;
-  width: 100%;
-  a {
+  padding-top: 0! important;
+  nb-action {
     cursor: pointer;
   }
 }
 
+.intro-section::before {
+  background-image:
+  linear-gradient(
+    #3045c9,  #232d9a
+  )! important;
+  content:" ";
+  position: absolute;
+  height: 100%;
+  width: 200vw;
+  left: -100vw;
+  z-index: -1;
+}
+
 .intro-section {
-  background-color: #232d9a;
-  display: block;
+  z-index: 1;
+  background-image: transparent! important;
+  position: relative;
+  display: grid;
   text-align: center;
-  padding: 50px 20px 50px 20px;
+  padding: 50px 10px 50px 10px;
 
   .intro-text,
   .intro-text-bottom {
     display: inline;
     text-align: center;
-    font-family: Roboto, sans-serif;
     font-size: 40px;
-    font-weight: 600;
+    font-weight: 700;
     color: rgba(252, 252, 252, 1);
     text-decoration: none;
     line-height: 1em;
@@ -50,34 +65,26 @@
 
   img {
     max-width: 100%;
-  }
-}
-
-.footer {
-  display: block;
-  padding: 20px;
-  width: 100%;
-  float: left;
-  margin-top: 60px;
-  .logo {
-    font-family: Prompt, sans-serif;
-    font-size: 30px;
-    font-weight: 700;
-    color: rgba(191, 189, 189, 1);
-    font-style: normal;
-    text-decoration: none;
-    letter-spacing: 2.3px;
+    border-radius: 1%;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   }
 }
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
+  .color-container {
+    height: 299px;
+  }
+
   .intro-section {
     padding: 70px 40px 70px 40px;
     .intro-text,
     .intro-text-bottom {
       line-height: 1.5em;
       .text-break {
+        display: none;
+      }
+      #desk {
         display: none;
       }
     }
@@ -103,12 +110,14 @@
       max-width: 100%;
     }
   }
-
-  .footer {
-    display: block;
-    padding: 40px;
-    img {
-      width: 100px;
-    }
-  }
 }
+
+/* Media query for desktop viewport targets screens a minimum width of 830px. */
+@media only screen and (min-width: 830px) {
+  .intro-section {
+      #desk {
+        display: inline! important;
+      }
+    }
+}
+

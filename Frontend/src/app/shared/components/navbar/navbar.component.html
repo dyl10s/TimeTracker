@@ -1,56 +1,36 @@
-<div class="desktop">
-  <div id="in-app-nav-desk" *ngIf="!hasRoute('')">
-    <nb-tabset fullWidth class="nav" (changeTab)="changeTab($event)">
-      <nb-tab tabTitle="Time"> </nb-tab>
-      <nb-tab tabTitle="Projects"> </nb-tab>
-      <nb-tab tabTitle="Reports"> </nb-tab>
-      <nb-tab tabTitle="Manage"> </nb-tab>
-      <nb-tab tabTitle="Help"> </nb-tab>
-      <nb-tab
-        tabTitle="Name"
-        [tabIcon]="!isMenuOpen ? 'arrow-down' : 'arrow-up'"
-      >
-        <nb-menu [items]="deskItems" *ngIf="isMenuOpen"></nb-menu>
-      </nb-tab>
-    </nb-tabset>
-  </div>
+<div class="nav-container" *ngIf="routeCheck('')">
+  <div class="nav">
+    <div class="nav-inner-container">
 
-  <div id="home-nav-desk" *ngIf="hasRoute('')">
-    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
-    <div class="right-link-section">
-      <p><a (click)="loginClick()">Login</a></p>
-      <button nbButton><a (click)="signupClick()">Sign up</a></button>
+      <div id="home-nav" *ngIf="routeCheck('home')">
+        <nb-action class="logo" aria-label="NTime" (click)="routeClick('')">NTIME</nb-action>
+        <div class= "login-register-remove" *ngIf="routeCheck('logreg')">
+          <button nbButton class="mob" [nbContextMenu]="homeItems">
+            <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
+          </button>
+          <div class="right-aligned" class="desk">
+            <nb-action class="desk" (click)="routeClick('login')">Login</nb-action>
+            <button nbButton class="desk" (click)="routeClick('register')">Sign up</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="in-app-nav" *ngIf="routeCheck('app')">
+        <nb-actions class="desk" size="medium" fullWidth>
+          <nb-action (click)="routeClick('time')">Time</nb-action>
+          <nb-action (click)="routeClick('projects')">Projects</nb-action>
+          <nb-action (click)="routeClick('reports')">Reports</nb-action>
+          <nb-action class="right-aligned" [nbContextMenu]="deskAppItems">{{ getFirstName() }}
+          <nb-icon class="adaptive-button-icon" icon="chevron-down-outline"></nb-icon>
+          </nb-action>
+        </nb-actions>
+
+        <button nbButton class="mob" [nbContextMenu]="mobAppItems">
+          Menu
+          <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="mobile">
-  <div id="in-app-nav-mob" *ngIf="!hasRoute('')">
-    <nb-menu [items]="mobItems" autoCollapse="true" class="nav"> </nb-menu>
-  </div>
-
-  <div id="home-nav-mob" *ngIf="hasRoute('')">
-    <a class="logo" aria-label="NTime" (click)="homeClick()">NTIME</a>
-    <button nbButton [nbPopover]="tabs" nbPopoverPlacement="bottom">
-      <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
-    </button>
-    <ng-template #tabs>
-      <nb-card-body>
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <p><a (click)="loginClick()">Login</a></p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p><a (click)="signupClick()">Sign up</a></p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </nb-card-body>
-    </ng-template>
-  </div>
-</div>

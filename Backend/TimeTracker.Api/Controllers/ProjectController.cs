@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Api.Controllers
 {
@@ -81,6 +80,46 @@ namespace TimeTracker.Api.Controllers
             };
         }
 
+        [Authorize]
+        [HttpPost("Tags")]
+        public async Task<GenericResponseDTO<bool>> SetTags(List<CreateTagDTO> tags){
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            // Only allow the teacher to tag a project
+            var project = await database.Projects
+                .Include(x => x.Tags)
+                .FirstAsync(x => x.Id == tags.First().ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
+            
+            if (project == null)
+            {
+                return new GenericResponseDTO<bool>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            project.Tags = new List<Tag>();
+
+            foreach(var newTag in tags){
+                var tag = new Tag()
+                {
+                    Name = newTag.Tag,
+                    Project = project
+                };
+                
+                project.Tags.Add(tag);
+            }
+            
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<bool>()
+            {
+                Data = true,
+                Success = true
+            };
+        }
+
         /// <summary>
         /// Add a tag to a project
         /// </summary>
@@ -94,7 +133,8 @@ namespace TimeTracker.Api.Controllers
 
             // Only allow the teacher to tag a project
             var project = await database.Projects
-                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId);
+                .AsQueryable()
+                .FirstAsync(x => x.Id == newTag.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
             
             if (project == null)
             {
@@ -117,6 +157,43 @@ namespace TimeTracker.Api.Controllers
             return new GenericResponseDTO<int>()
             {
                 Data = tag.Id,
+                Success = true
+            };
+        }
+
+        /// <summary>
+        /// Adds a user to a project
+        /// </summary>
+        /// <param name="projectInvite">The invite code of the project that the user is added to</param>
+        /// <returns>The Id of the project the user was added to</returns>
+        [Authorize]
+        [HttpPost("AddUserToProject")]
+        public async Task<GenericResponseDTO<int>> AddUserToProject(AddUserToProjectDTO inviteCode)
+        {
+            var curUser = await database.Users
+                .Include(x => x.Projects)
+                .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
+
+            Project project = await database.Projects
+                .AsQueryable()
+                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode && x.ArchivedDate == null);
+
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            curUser.Projects.Add(project);
+            
+            await database.SaveChangesAsync();
+
+            return new GenericResponseDTO<int>()
+            {
+                Data = project.Id,
                 Success = true
             };
         }
@@ -178,6 +255,89 @@ namespace TimeTracker.Api.Controllers
             response.Success = true;
             response.Data = project.Id;
 
+            return response;
+        }
+
+        /// <summary>
+        /// Update project details
+        /// </summary>
+        /// <param name="projectDetails">The details of the existing project to update</param>
+        /// <returns>The Id of the project that was updated</returns>
+        [Authorize]
+        [HttpPatch]
+        public async Task<GenericResponseDTO<int>> UpdateProjectDetails(ProjectDetailsDTO projectDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<int>() 
+            { 
+                Success = false
+            };
+
+            Project project = await database.Projects
+                .AsQueryable()
+                .FirstOrDefaultAsync(x => x.Id == projectDetails.ProjectId && x.Teacher.Id == currentUserId && x.ArchivedDate == null);
+
+            if (project == null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            project.Description = projectDetails.Description;
+
+            await database.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = project.Id;
+
+            return response;
+        }
+
+        /// <summary>
+        /// This endpoint is used to archive or unarchive a project.
+        /// </summary>
+        /// <param name="archiveDetails">The project Id and if the project is being archived or not</param>
+        /// <returns>The archive date that was saved in the database, returns null if it was unarchived.</returns>
+        [Authorize]
+        [HttpPost("Archive")]
+        public async Task<GenericResponseDTO<DateTime?>> ArchiveProject(ArchiveProjectDTO archiveDetails)
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var response = new GenericResponseDTO<DateTime?>()
+            {
+                Success = true
+            };
+
+            Project archivingProject = await database.Projects
+                .AsQueryable()
+                .Where(x => x.Id == archiveDetails.ProjectId)
+                .Where(x => x.Teacher.Id == currentUserId)
+                .FirstOrDefaultAsync();
+            
+            if(archivingProject == null)
+            {
+                response.Success = false;
+                response.Message = "Could not find the project";
+                return response;
+            }
+
+            if (archiveDetails.Archive)
+            {
+                archivingProject.ArchivedDate = DateTime.UtcNow;
+            }
+            else
+            {
+                archivingProject.ArchivedDate = null;
+            }
+
+            await database.SaveChangesAsync();
+
+            response.Data = archivingProject.ArchivedDate;
             return response;
         }
     }

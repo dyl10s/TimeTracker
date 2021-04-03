@@ -1,0 +1,51 @@
+@import "../../../../app/styles/display.scss";
+
+.report-button {
+    justify-self: flex-end;
+}
+
+.hours-breakdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-row {
+    font-weight: bolder;
+    font-size: large;
+}
+
+.filter-section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+  
+    span {
+      @media only screen and (max-width: 830px) {
+        flex: 1 0 100%;
+      }
+  
+      text-align: center;
+  
+      input {
+        width: 100%;
+        max-width: none;
+      }
+    }
+}
+
+@media only screen and (max-width: 830px) {
+    .adaptive-button-text{
+        display: none;
+    }
+
+    .adaptive-button-icon{
+    padding: 0 !important;
+    margin: 0 !important;
+    }
+}
+
+

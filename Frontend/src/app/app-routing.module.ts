@@ -10,6 +10,8 @@ import { TimeComponent } from './views/dashboard/time/time.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ProjectDetailsComponent } from './views/dashboard/project-details/project-details.component';
 import { HomeComponent } from './shared/components/home/home.component';
+import { ReportComponent } from './views/dashboard/report/report.component';
+import { ReportDetailsComponent } from './views/dashboard/report-details/report-details.component';
 
 const routes: Routes = [
   {
@@ -54,7 +56,15 @@ const routes: Routes = [
       {
         path: 'time',
         component: TimeComponent
-      }
+      },
+      {
+        path: 'reports',
+        component: ReportComponent
+      },
+      {
+        path: 'reports/:projId/:userId',
+        component: ReportDetailsComponent
+      },
     ]
   },
   {

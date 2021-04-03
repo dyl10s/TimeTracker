@@ -1,56 +1,141 @@
-<div class="container">
-    <div class="header">
-        <div class="title">
-            <h1>
-                <input *ngIf="pageMode == 'edit'" nbInput placeholder="Project Name" status="primary" fieldSize="giant" [value]="details.name" fullWidth>
-                <span *ngIf="pageMode == 'view'">{{ details.name }}</span>
-            </h1>
-            <h5>
-                <input *ngIf="pageMode == 'edit'" nbInput placeholder="Client Name" status="primary" fieldSize="large" [value]="details.clientName" fullWidth>
-                <span *ngIf="pageMode == 'view'">{{ details.clientName }}</span>
-            </h5>
+
+<div class="container" [nbSpinner]="loadingProject">
+    <div *ngIf="details !== null" [formGroup]="updateProjectForm">
+        <div class="header">
+            <div class="title">
+                <h2>
+                    <span>{{ details.name }}</span>
+                </h2>
+                <h5>
+                    <span>{{ details.clientName }}</span>
+                </h5>
+            </div>
+
+            <div class="actions">
+                <button 
+                *ngIf="pageMode == 'view' && details.teacher.id == jwtService.decode().sub" 
+                nbButton 
+                status="danger" 
+                (click)="toggleArchive()"
+                [nbSpinner]="archiving"
+                [disabled]="archiving"
+                nbSpinnerStatus="success">
+                    <nb-icon class="adaptive-button-icon" icon="archive-outline"></nb-icon>
+                    <span *ngIf="details.archivedDate == null" class="adaptive-button-text">Archive Project</span>
+                    <span *ngIf="details.archivedDate != null" class="adaptive-button-text">Unarchive Project</span>
+                </button>
+                <button *ngIf="pageMode == 'view' && details.archivedDate == null" nbButton status="primary" (click)="copyInviteCode(details.inviteCode)">
+                    <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
+                    <span class="adaptive-button-text">Copy Invite Code</span>
+                </button>
+                <button *ngIf="pageMode == 'view' && details.archivedDate == null  && details.teacher.id == jwtService.decode().sub" nbButton status="primary" (click)="pageMode = 'edit'">
+                    <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
+                    <span class="adaptive-button-text">Edit Project</span>
+                </button>
+                <button *ngIf="pageMode == 'edit'  && details.archivedDate == null" nbButton status="warning" (click)="cancelEdit()">
+                    <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
+                    <span class="adaptive-button-text">Cancel Edit</span>
+                </button>
+                <button nbSpinnerStatus="success" *ngIf="pageMode == 'edit'  && details.archivedDate == null" nbButton status="success" (click)="saveProjectChange()">
+                    <nb-icon class="adaptive-button-icon" icon="save-outline"></nb-icon>
+                    <span class="adaptive-button-text">Save Changes</span>
+                </button>
+            </div>
         </div>
-        <div class="actions">
-            <button *ngIf="pageMode == 'view'" nbButton status="primary">
-                <nb-icon class="adaptive-button-icon" icon="clipboard-outline"></nb-icon>
-                <span class="adaptive-button-text">Copy Invite Code</span>
-            </button>
-            <button *ngIf="pageMode == 'view'" nbButton status="primary" (click)="pageMode = 'edit'">
-                <nb-icon class="adaptive-button-icon" icon="edit-outline"></nb-icon>
-                <span class="adaptive-button-text">Edit Project</span>
-            </button>
-            <button *ngIf="pageMode == 'edit'" nbButton status="warning" (click)="pageMode = 'view'">
-                <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
-                <span class="adaptive-button-text">Cancel Edit</span>
-            </button>
-            <button *ngIf="pageMode == 'edit'" nbButton status="success" (click)="pageMode = 'view'">
-                <nb-icon class="adaptive-button-icon" icon="save-outline"></nb-icon>
-                <span class="adaptive-button-text">Save Changes</span>
-            </button>
-        </div>
-    </div>
 
-    <nb-tag-list (tagRemove)="onTagRemove($event)">
-        <nb-tag size="tiny" *ngIf="details.archivedData && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + details.archivedData"></nb-tag>
-        <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of details.tags" status="info" appearance="filled" [text]="tag"></nb-tag>
-        <input *ngIf="pageMode == 'edit'" type="text" status="primary" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
-    </nb-tag-list>
-
-    <p>
-        <textarea rows="5" *ngIf="pageMode == 'edit'" nbInput status="primary" placeholder="Description" [value]="details.description" fullWidth></textarea>
-        <span *ngIf="pageMode == 'view'">{{ details.description }}</span>
-    </p>
-
-    <h4>Team Members</h4>
-    <table [nbTreeGrid]="teamDataSource">
-        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
-        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+        <nb-tag-list (tagRemove)="onTagRemove($event)">
+            <nb-tag size="tiny" *ngIf="details.archivedDate && pageMode == 'view'" status="danger" appearance="filled" [text]="'Archived Date: ' + (details.archivedDate | date: 'MM/dd/yyyy')"></nb-tag>
+            <nb-tag size="tiny" [removable]="pageMode == 'edit'" *ngFor="let tag of getAllTags()" status="info" appearance="filled" [text]="tag"></nb-tag>
+            <input *ngIf="pageMode == 'edit'" type="text" placeholder="Tags" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+        </nb-tag-list>
     
-        <ng-container nbTreeGridColumnDef="Name">
-          <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
-            Name
-          </th>
-          <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["FirstName"] + " " + row.data["LastName"] || '-'}}</td>
-        </ng-container>
-    </table>
+        <p *ngIf="pageMode == 'view'">
+            <span>{{ details.description }}</span>
+        </p>
+
+        <textarea 
+            *ngIf="pageMode == 'edit'" 
+            class="description"
+            type="text" 
+            status="primary" 
+            placeholder="Project Description" 
+            nbInput 
+            formControlName="details"
+            fullWidth></textarea>
+
+        <h4>Team Members</h4>
+        <div class="time-frame-picker"><app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="setHours()"></app-time-frame-picker></div>
+        <table [nbTreeGrid]="teamDataSource">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
+        
+            <ng-container nbTreeGridColumnDef="Name">
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Name
+              </th>
+              <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["firstName"] + " " + row.data["lastName"] || '-'}}</td>
+            </ng-container>
+    
+            <ng-container nbTreeGridColumnDef="Role">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Role
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["role"]}}</td>
+              </ng-container>
+
+              <ng-container nbTreeGridColumnDef="Hours">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  Hours
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["hours"]}}</td>
+              </ng-container>
+        </table>
+
+        <h4>
+            Time Breakdown
+        </h4>
+
+        <nb-tabset>
+            <nb-tab tabTitle="Cumulative Hours Spent" tabIcon="trending-up-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-line-chart
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        yScaleMin = "0"
+                        [yScaleMax] = "lineChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="lineChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.startDate}} to {{model.name}} (Week {{model.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-line-chart>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Hours Spent By Week" tabIcon="bar-chart-outline" responsive>
+                <div class="charts">
+                    <ngx-charts-bar-vertical
+                        barPadding="15"
+                        showYAxisLabel="true"
+                        yAxis="true"
+                        xAxis="true"
+                        [yScaleMax]="barChartYMax"
+                        [scheme]="colorScheme"
+                        [results]="barChartData" >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="chart-tooltip">
+                                <p>{{model.extra.startDate}} to {{model.name}} (Week {{model.extra.week}})</p>
+                                <hr>
+                                <p>{{model.value}} hours</p>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                </div>
+            </nb-tab>
+        </nb-tabset>
+    </div>
 </div>

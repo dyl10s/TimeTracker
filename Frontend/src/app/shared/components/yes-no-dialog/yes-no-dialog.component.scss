@@ -1,0 +1,9 @@
+.root {
+    width: min(500px, 90vw)
+}
+
+.footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}

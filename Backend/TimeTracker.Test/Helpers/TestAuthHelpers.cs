@@ -3,29 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using TimeTracker.Api.Controllers;
-using TimeTracker.Api.Database;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
 
 namespace TimeTracker.Test.Helpers
 {
     public static class TestAuthHelpers
     {
-        public static async Task LogInUser(MainDb db, IConfiguration configuration, ControllerBase controller) 
+        public static async Task LogInUser(MainDb db, IConfiguration configuration, ControllerBase controller, string inviteCode = null) 
         {
             await LogInUser(db, configuration, new List<ControllerBase>() 
             {
                 controller
-            });
+            }, inviteCode);
         }
 
-        public static async Task LogInUser(MainDb db, IConfiguration configuration, List<ControllerBase> controllers) 
+        public static async Task LogInUser(MainDb db, IConfiguration configuration, List<ControllerBase> controllers, string inviteCode = null) 
         {
             var authController = new AuthController(db, configuration, new AuthHelper());
             var userEmail = Guid.NewGuid().ToString();
@@ -33,7 +30,10 @@ namespace TimeTracker.Test.Helpers
             var userId = (await authController.Register(new UserDTO()
             {
                 Email = $"{userEmail}@gmail.com",
-                Password = "TeztUzer1"
+                Password = "TeztUzer1",
+                FirstName = userEmail,
+                LastName = "Last" + userEmail,
+                InviteCode = inviteCode
             })).Data;
             
             var user = new ClaimsPrincipal(new List<ClaimsIdentity>()

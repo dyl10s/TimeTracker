@@ -1,25 +1,33 @@
-.mobile {
-  display: inline;
-  width: 100%;
+.nav-container {
+  padding-left: 10px;
+  padding-right: 10px;
+
+  nb-action {
+    cursor: pointer;
+  }
 }
-.desktop {
+.mob {
+  display: inline;
+}
+.desk {
   display: none;
 }
 
-a {
-  cursor: pointer;
-}
-
-#home-nav-mob {
-  background-color: #232d9a;
+#home-nav {
   display: flex;
   justify-content: space-between;
-  padding: 20px 20px 0px 20px;
+  padding: 20px 20px 20px 20px;
+  font-size: 17px;
+  font-weight: 700;
   button {
-    margin-top: 20px;
-    height: 30px;
-    background-color: #232d9a;
+    color: white;
+    margin-top: 10px;
+    background-color: transparent;
     border: none;
+    nb-icon {
+      height: 2em !important;
+      width: 2em !important;
+    }
   }
   .logo {
     font-family: Prompt, sans-serif;
@@ -34,51 +42,105 @@ a {
   }
 }
 
+#in-app-nav {
+  display: flex;
+  padding: 10px 10px 10px 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+
+  button {
+    display: flex;
+    background-color: transparent !important;
+    border: none! important;
+    margin-left: auto;
+    color: white !important;
+  }
+  nb-icon {
+    height: 2em !important;
+    width: 2em !important;
+  }
+}
+
+::ng-deep .nb-theme-default nb-menu {
+  background-color: #232d9a;
+  background-image: linear-gradient(#3045c9, #232d9a);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  .menu-item a {
+    text-decoration: none;
+    color: white;
+  }
+}
 
 /* Media query for tablet viewport targets screen size with a minimum width of 660px. */
 @media only screen and (min-width: 660px) {
-  .mobile {
-    display: none;
+  .nav-container {
+    padding-left: 20px;
+    padding-right: 20px;
+
+  }
+  .mob {
+    display: none !important;
+  }
+  .desk {
+    display: flex !important;
   }
 
-  .desktop {
-    display: inline;
-    width: 100%;
-  }
-
-  #home-nav-desk {
-    background-color: #232d9a;
-    display: flex;
-    padding: 20px 20px 0px 20px;
-    justify-content: space-between;
-    a {
-      font-size: 17px;
-      font-weight: 700;
-      font-family: Prompt, sans-serif;
-      text-decoration: none;
+  #home-nav {
+    font-size: 17px;
+    font-weight: 700;
+    nb-action {
       color: white;
+      border-left: none;
     }
-    p {
-      display: inline-block;
-      padding: 10px;
+    button {
+      padding: 12px 20px 12px 20px;
+      color: white;
+      background: black;
+      border: none;
+      margin: 10px;
     }
-    .logo {
-      font-family: Prompt, sans-serif;
-      font-size: 60px;
-      font-weight: 700;
-      color: rgba(252, 252, 252, 1);
-      text-transform: none;
-      font-style: normal;
-      text-decoration: none;
-      line-height: 1em;
-      letter-spacing: 2.3px;
-    }
-    .right-link-section {
-      width: fit-content;
-      button {
-        background: black;
-        border: none;
+  }
+
+  #in-app-nav {
+    position: relative;
+    margin: 0px 20px 0px 20px;
+    nb-actions {
+      width: 100%;
+
+      .right-aligned {
+        position: absolute;
+        right: 20px;
       }
+      nb-action {
+        overflow: hidden;
+        color: white;
+        border-left: none;
+        width: 100px;
+      }
+      nb-action:link,
+      nb-action:visited {
+        border-bottom: 2px solid #929cff;
+        color: #ffffff;
+        padding: 15px 32px;
+        text-align: center;
+        -webkit-transition-duration: 0.5s;
+        transition-duration: 0.5s;
+        text-decoration: none;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-block;
+      }
+
+      nb-action:hover,
+      nb-action:active,
+      nb-action:focus {
+        border-bottom: 2px solid #929cff;
+      }
+    }
+    nb-icon {
+      height: inherit !important;
+      color: white;
     }
   }
 }
