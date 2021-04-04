@@ -5,6 +5,6 @@ namespace TimeTracker.Api.DTOs {
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<string> Projects { get; set; }
+        public List<ProjectNameAndClientDTO> Projects { get; set; }
     }
 }

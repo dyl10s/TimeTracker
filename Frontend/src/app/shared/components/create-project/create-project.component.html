@@ -1,29 +1,32 @@
 <div class="container" [nbSpinner]="showLoadingSpinner" nbSpinnerStatus="success">
   <h4 class="text-black">New Project</h4>
 
-  <form [formGroup]="createProjectForm" (ngSubmit)="submitDialog(createProjectForm.value)">
+  <form [formGroup]="createProjectForm">
     <div class="form-field">
       <label for="client">Client</label>
-      <input type="text" id="client" nbInput status="primary" placeholder="Client" fullWidth formControlName="clientName"/>
+      <input #clientField type="text" id="client" nbInput status="primary" placeholder="Client" fullWidth formControlName="clientName"/>
     </div>
   
     <div class="form-field">
       <label for="projectName">Project Name</label>
       <input type="text" id="projectName" nbInput status="primary" placeholder="Project Name" fullWidth formControlName="projectName"/>
     </div>
-  
+
     <div class="form-field">
-      <label for="projectTags">Tags (Comma separated)</label>
-      <input type="text" id="projectTags" nbInput status="primary"placeholder="Project Tags (optional)" fullWidth formControlName="tags"/>
+      <label for="projectTags">Tags (Press enter to add)</label>
+        <nb-tag-list (tagRemove)="onTagRemove($event)">
+            <nb-tag size="tiny" removable *ngFor="let tag of tags" status="info" appearance="filled" [text]="tag"></nb-tag>
+            <input type="text" placeholder="Tags" status="primary" nbTagInput (tagAdd)="onTagAdd($event)" fullWidth>
+        </nb-tag-list>
     </div>
-  
+
     <div class="form-field">
       <label for="notes">Description</label>
       <textarea nbInput id="notes" status="primary" placeholder="Description (optional)" fullWidth formControlName="description"></textarea>
     </div>
   
     <div class="actions-footer">
-      <button nbButton status="success" type="submit">Save Project</button>
+      <button nbButton status="success" type="button" (click)="submitDialog(createProjectForm.value)">Save Project</button>
       <button nbButton status="warning" type="button" (click)="closeDialog()">Cancel</button>
     </div>
   </form>
