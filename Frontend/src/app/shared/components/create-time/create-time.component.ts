@@ -33,7 +33,7 @@ export class CreateTimeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectService.getProjectsByUser(true).subscribe((response: GenericResponseDTO) => {
+    this.projectService.getProjectsByUser("true").subscribe((response: GenericResponseDTO) => {
       this.projects = response.data;
     });
   }
@@ -61,14 +61,14 @@ export class CreateTimeComponent implements OnInit {
         timeForm.controls['time'].reset();
         return;
       }
-  
+
       const time: TimeEntry = {
         length: parseFloat(timeForm.value.time),
         notes: timeForm.value.notes,
         projectId: timeForm.value.projectName,
         day: this.day
       };
-  
+
       this.timeEntryService.postTimeEntry(time).subscribe((response: GenericResponseDTO) => {
         if(response.success){
           this.showLoadingSpinner = false;

@@ -33,7 +33,7 @@ export class ReportComponent {
   }
 
   getAllProjects() {
-    this.projectService.getProjectsByUser(false).subscribe((res) => {
+    this.projectService.getProjectsByUser("false").subscribe((res) => {
       if(res.success) {
         this.projectCache = res.data;
         this.loadProjectHours();
