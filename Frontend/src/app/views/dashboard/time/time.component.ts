@@ -64,8 +64,8 @@ export class TimeComponent implements OnInit {
     this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allEvents = response.data;
       console.log(response.data);
-      this.displayEvents = this.allEvents.filter(x => new Date(x.day) == new Date(this.today));
-      console.log(this.displayEvents)
+      this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
+      this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
     })
   }
 
@@ -95,17 +95,19 @@ export class TimeComponent implements OnInit {
     this.switchedDate();
   }
 
-  switchedDate(){
-    console.log(new Date(this.today))
-    console.log(new Date(this.allEvents[0].day));
-    this.displayEvents = this.allEvents.filter(x => new Date(x.day) == new Date(this.today));
-    console.log(this.displayEvents)
+  switchedDate() {
+    this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(this.today)).toISOString());
+  }
+
+  setTime(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
   }
 
   /* Returns to date using return button */
   returnDate() {
     this.today = this.dateService.today();
     this.notDate = false;
+    this.switchedDate();
   }
 
   /* Returns to day view from week -day button click */

@@ -100,7 +100,7 @@
           <div class="entryListExist" *ngIf="dayView">
             <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
               <tbody>
-                <tr *ngFor="let e of allEvents">
+                <tr *ngFor="let e of displayEvents">
                   <td id="details">
                     <div class="projectName">{{ e.project?.name }}</div>
                     <div class="projectNotes">{{ e.notes }}</div>
@@ -182,7 +182,7 @@
                   </button>
                 </td>
 
-                <td class="total">0:00</td>
+                <td class="total">{{ timeSpent }}</td>
                 <td class="delete"></td>
               </tr>
             </thead>
