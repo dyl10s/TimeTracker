@@ -42,10 +42,24 @@
         </nb-button-group>
       </div>
 
-      <button (click)="openCreateNewTimeEntry()" nbButton status="success">
+      <button (click)="openCreateNewTimeEntry()" *ngIf="!editMode" nbButton status="success">
         <nb-icon class="adaptive-button-icon" icon="plus"></nb-icon>
         <span class="adaptive-button-text">New Entry</span>
       </button>
+
+      <div class="edit-section"  *ngIf="weekView && editMode">
+        <button nbButton status="success">
+          <nb-icon class="adaptive-button-icon" icon="save-outline"></nb-icon>
+          <span class="adaptive-button-text">Save</span>
+        </button>
+
+        <button nbButton status="danger" >
+          <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
+          <span class="adaptive-button-text">Cancel</span>
+        </button>
+      </div>
+
+
 
       <div class="return-date-section" *ngIf="notDate">
         <button nbButton status="primary" (click)="returnDate()">
@@ -141,136 +155,80 @@
     </div>
 
     <div class="week-details-section" *ngIf="weekView">
-      <nb-card>
-        <nb-card-body>
-          <table>
-            <thead>
-              <tr>
-                <td class="name"></td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(1)">
-                    M<br />{{ monDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(2)">
-                    T<br />{{ tueDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(3)">
-                    W<br />{{ wedDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(4)">
-                    R<br />{{ thurDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(5)">
-                    F<br />{{ friDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(6)">
-                    S<br />{{ satDate | date: "LLL d" }}
-                  </button>
-                </td>
-                <td class="day">
-                  <button nbButton (click)="returnDayView(0)">
-                    S<br />{{ sunDate | date: "LLL d" }}
-                  </button>
-                </td>
+     <table [nbTreeGrid]="timeEntryDataSource" equalColumnsWidth>
+        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
+        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
 
-                <td class="total">0:00</td>
-                <td class="delete"></td>
-              </tr>
-            </thead>
+        <ng-container nbTreeGridColumnDef="ProjectName">
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                Project
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
 
-            <tbody>
-              <tr>
-                <td class="name">
-                  <div class="projectName">Project Name</div>
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="day">
-                  <input
-                    type="text"
-                    nbInput
-                    fullWidth
-                    status="basic"
-                    placeholder="0:00"
-                  />
-                </td>
-                <td class="total">0:00</td>
-                <td class="delete">
-                  <button nbButton status="danger">
-                    <nb-icon
-                      class="adaptive-button-icon"
-                      icon="close-outline"
-                    ></nb-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+        <ng-container nbTreeGridColumnDef="Monday">
+            <th nbTreeGridHeaderCell (click)="returnDayView(1)" *nbTreeGridHeaderCellDef>
+                M<br />{{ monDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
 
-            <tfoot></tfoot>
-          </table>
-        </nb-card-body>
-      </nb-card>
+        <ng-container nbTreeGridColumnDef="Tuesday">
+            <th nbTreeGridHeaderCell  (click)="returnDayView(2)" *nbTreeGridHeaderCellDef>
+                T<br />{{ tueDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="Wednesday">
+            <th nbTreeGridHeaderCell (click)="returnDayView(3)" *nbTreeGridHeaderCellDef>
+                W<br />{{ wedDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="Thursday">
+            <th nbTreeGridHeaderCell  (click)="returnDayView(4)" *nbTreeGridHeaderCellDef>
+                R<br />{{ thurDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="Friday">
+            <th nbTreeGridHeaderCell (click)="returnDayView(5)"*nbTreeGridHeaderCellDef>
+                F<br />{{ friDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="Saturday">
+            <th nbTreeGridHeaderCell (click)="returnDayView(6)" *nbTreeGridHeaderCellDef>
+                S<br />{{ satDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+
+        <ng-container nbTreeGridColumnDef="Sunday">
+            <th nbTreeGridHeaderCell (click)="returnDayView(0)" *nbTreeGridHeaderCellDef>
+                S<br />{{ sunDate | date: "LLL d" }}
+            </th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+        <ng-container nbTreeGridColumnDef="Total">
+            <th nbTreeGridHeaderCell class="desk" *nbTreeGridHeaderCellDef>
+                Total: <br />{{ totalHours }}
+            </th>
+            <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
+            </td>
+        </ng-container>
+    </table>
     </div>
 </div>

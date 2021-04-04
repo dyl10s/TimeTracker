@@ -6,7 +6,7 @@ import { NbThemeModule, NbDialogRef, NbToastrModule, NbActionsModule, NbButtonMo
 import { tokenGetter } from 'src/app/app.module';
 import { CreateProjectComponent } from './create-project.component';
 
-/* 
+/*
   Create a mock class since we don't have the real dialog
   and the component is expecting it in the constructor
 */
@@ -30,7 +30,7 @@ describe('CreateProjectComponent', () => {
         CreateProjectComponent
       ],
       providers: [
-        NbThemeModule.forRoot({ name: 'default' }).providers, 
+        NbThemeModule.forRoot({ name: 'dark' }).providers,
         { provide: NbDialogRef, useClass: NbDialogMock }
       ],
       imports: [
