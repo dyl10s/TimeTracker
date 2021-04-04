@@ -40,7 +40,7 @@ export class ProjectsComponent {
     this.showLoadingSpinner = true;
     this.activeProjects = [];
 
-    this.projectService.getProjectsByUser().subscribe((res: GenericResponseDTO) => {
+    this.projectService.getProjectsByUser(false).subscribe((res: GenericResponseDTO) => {
       res.data.forEach(x => {
         if(x.archivedDate == null) {
           this.activeProjects.push({

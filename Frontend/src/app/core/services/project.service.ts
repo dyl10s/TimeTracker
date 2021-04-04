@@ -21,7 +21,7 @@ export class ProjectService {
     return this.http.get(`${this.api}/Project/${id}`);
   }
 
-  public getProjectsByUser() : Observable<GenericResponseDTO<any>> {
+  public getProjectsByUser(activeOnly: boolean) : Observable<GenericResponseDTO<any>> {
     return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project`);
   }
 
