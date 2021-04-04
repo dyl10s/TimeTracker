@@ -1,6 +1,6 @@
 <div class="container">
     <div class="date-section">
-      <button nbButton (click)="decDate()">
+      <button nbButton (click)="decDate()" class="highlight-button">
         <nb-icon icon="arrow-ios-back-outline"></nb-icon>
       </button>
 
@@ -13,7 +13,7 @@
         </h2>
       </div>
 
-      <button nbButton (click)="incDate()">
+      <button nbButton (click)="incDate()" class="highlight-button">
         <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
       </button>
     </div>
@@ -37,8 +37,8 @@
 
       <div class="view-options-section">
         <nb-button-group>
-          <button nbButtonToggle [pressed]="dayView" (click)="setDayView()">Day</button>
-          <button nbButtonToggle [pressed]="weekView" (click)="setWeekView()">Week</button>
+          <button nbButtonToggle [pressed]="dayView" (click)="setDayView()" [ngClass]="{'outline-button': !dayView}">Day</button>
+          <button nbButtonToggle [pressed]="weekView" (click)="setWeekView()" [ngClass]="{'outline-button': !weekView}">Week</button>
         </nb-button-group>
       </div>
 
@@ -59,34 +59,34 @@
     </div>
 
     <div class="entry-detail-section" *ngIf="dayView">
-      <nb-card>
-        <nb-card-body>
+      <nb-card class="full-card">
+        <nb-card-body class="full-card">
             <nb-button-group>
-              <button nbButtonToggle id="monday" pressed="{{ daysActive[1] }}" (click)="returnDayView(1)">
+              <button [ngClass]="{'outline-button': !daysActive[1]}" nbButtonToggle id="monday" pressed="{{ daysActive[1] }}" (click)="returnDayView(1)">
                 M<br />
               </button>
 
-              <button nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}" (click)="returnDayView(2)">
+              <button [ngClass]="{'outline-button': !daysActive[2]}" nbButtonToggle id="tuesday" pressed="{{ daysActive[2] }}" (click)="returnDayView(2)">
                 T<br />
               </button>
 
-              <button nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}" (click)="returnDayView(3)">
+              <button [ngClass]="{'outline-button': !daysActive[3]}" nbButtonToggle id="wednesday" pressed="{{ daysActive[3] }}" (click)="returnDayView(3)">
                 W<br />
               </button>
 
-              <button nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}" (click)="returnDayView(4)">
+              <button [ngClass]="{'outline-button': !daysActive[4]}" nbButtonToggle id="thursday" pressed="{{ daysActive[4] }}" (click)="returnDayView(4)">
                 R<br />
               </button>
 
-              <button nbButtonToggle id="friday" pressed="{{ daysActive[5] }}" (click)="returnDayView(5)">
+              <button [ngClass]="{'outline-button': !daysActive[5]}" nbButtonToggle id="friday" pressed="{{ daysActive[5] }}" (click)="returnDayView(5)">
                 F<br />
               </button>
 
-              <button nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}" (click)="returnDayView(6)">
+              <button [ngClass]="{'outline-button': !daysActive[6]}" nbButtonToggle id="saturday" pressed="{{ daysActive[6] }}" (click)="returnDayView(6)">
                 S<br />
               </button>
 
-              <button nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}" (click)="returnDayView(0)">
+              <button [ngClass]="{'outline-button': !daysActive[0]}" nbButtonToggle id="sunday" pressed="{{  daysActive[0] }}" (click)="returnDayView(0)">
                 S<br />
               </button>
 

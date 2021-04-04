@@ -2,7 +2,20 @@
     <h2>Reports</h2>
     <app-time-frame-picker [(startDate)]="startDate" [(endDate)]="endDate" (datesChanged)="datesChanged($event)"></app-time-frame-picker>
     <h4>Projects</h4>
-    <table [nbTreeGrid]="projectsDataSource">
+
+    <div class="filter-section">
+        <span>
+          <input [(ngModel)]="searchQuery" nbInput [nbFilterInput]="showActive ? activeDataSource : archivedDataSource" id="search" placeholder="Search">
+        </span>
+        <span>
+          <nb-button-group size="small">
+            <button nbButtonToggle pressed (click)="viewActiveProjects()">Active Projects</button>
+            <button nbButtonToggle (click)="viewArchivedProjects()">Archived Projects</button>
+          </nb-button-group>
+        </span>
+      </div>
+
+    <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbFilter]="">
         <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
         <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
     
@@ -30,7 +43,7 @@
                     <label>
                         {{row.data.hours}}
                     </label>
-                    <button (click)="navigateToReport(row.data.projId, row.data.userId)" nbButton status="primary">
+                    <button [routerLink] = "'/dashboard/reports/' + row.data.projId +'/'+ row.data.userId" nbButton status="primary">
                         <nb-icon class="adaptive-button-icon" icon="bar-chart"></nb-icon>
                         <span class="adaptive-button-text">Detailed Report</span>
                     </button>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NbMenuService } from '@nebular/theme';
 import { PayloadDTO } from 'src/app/core/models/auth/PayloadDto.model';
+import { environment } from 'src/environments/environment';
 import { JwtService } from '../../../core/services/auth/jwt.service';
 
 @Component({
@@ -16,8 +18,14 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private nbMenuService: NbMenuService
   ) {
+    this.nbMenuService.onItemClick().subscribe(menuItem => {
+      if(menuItem.item.title == "Invite Discord Bot") {
+        window.location.href = environment.discordLink;
+      }
+    })
   }
 
   ngOnInit(): void { }
@@ -89,6 +97,9 @@ export class NavbarComponent implements OnInit {
       link: '/dashboard/profile'
     },
     {
+      title: 'Invite Discord Bot'
+    },
+    {
       title: 'Logout',
       link: '/logout'
     },
@@ -110,6 +121,9 @@ export class NavbarComponent implements OnInit {
     {
       title: 'Profile',
       link: '/dashboard/profile'
+    },
+    {
+      title: 'Invite Discord Bot'
     },
     {
       title: 'Logout',

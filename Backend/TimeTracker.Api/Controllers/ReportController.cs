@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Api.Controllers
 {

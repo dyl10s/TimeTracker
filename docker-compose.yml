@@ -12,6 +12,8 @@ services:
   api:
     image: strohscd/timetracker-api:${TIMETRACK_TAG:-latest}
     restart: always
+    environment:
+      BotToken: BotTokenHere
     depends_on: 
       - db
 
