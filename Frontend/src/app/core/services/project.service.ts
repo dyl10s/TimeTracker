@@ -22,7 +22,7 @@ export class ProjectService {
   }
 
   public getProjectsByUser(activeOnly: boolean) : Observable<GenericResponseDTO<any>> {
-    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project/Bool`, { params: { activeOnly: activeOnly.toString() } });
+    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project/`, { params: { activeOnly: activeOnly.toString() } });
   }
 
   public addTagToProject(newTagInfo: CreateTagDTO) {
