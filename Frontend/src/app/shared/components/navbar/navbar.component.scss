@@ -22,8 +22,8 @@
   button {
     color: white;
     margin-top: 10px;
-    background-color: transparent;
-    border: none;
+    background-color: transparent !important;
+    border: none !important;
     nb-icon {
       height: 2em !important;
       width: 2em !important;
@@ -96,7 +96,7 @@
     button {
       padding: 12px 20px 12px 20px;
       color: white;
-      background: black;
+      background: black !important;
       border: none;
       margin: 10px;
     }

@@ -4,6 +4,15 @@
   width: 100%;
 }
 
+::ng-deep .nb-theme-dark [nbButton].appearance-filled.status-basic,
+::ng-deep .nb-theme-dark .appearance-filled.status-basic[nbButtonToggle]
+{
+  background-color: #3c465f !important;
+  border-color: #3c465f !important;
+  color: white !important;
+}
+
+
 @media only screen and (min-width: 1280px) {
   .container {
     width: 80%;
