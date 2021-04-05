@@ -33,7 +33,7 @@ export class CreateTimeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectService.getProjectsByUser("true").subscribe((response: GenericResponseDTO) => {
+    this.projectService.getProjectsByUser(true).subscribe((response: GenericResponseDTO) => {
       this.projects = response.data;
     });
   }

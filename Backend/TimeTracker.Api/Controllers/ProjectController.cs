@@ -61,8 +61,9 @@ namespace TimeTracker.Api.Controllers
         [Authorize]
         [HttpGet]
         [Route("Bool")]
-        public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser(string activeOnly)
+        public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser(Boolean activeOnly)
         {
+            Console.WriteLine(activeOnly);
             var currentUserId = authHelper.GetCurrentUserId(User);
 
             // All projects we teach or are a student of
@@ -75,7 +76,7 @@ namespace TimeTracker.Api.Controllers
               .ToListAsync();
 
             // Only (active) projects we teach or are a student of
-            if (activeOnly == "true")
+            if (activeOnly)
             {
                 projects = await database.Projects
                   .AsNoTracking()
