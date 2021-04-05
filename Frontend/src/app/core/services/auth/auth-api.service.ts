@@ -14,11 +14,19 @@ export class AuthApiService {
   constructor(private http: HttpClient) { }
 
   login(loginUser: UserDto) {
-    return this.http.post(`${this.api}/Auth/Login`, loginUser);
+    return this.http.post(`${this.api}/Auth/Login`, loginUser, {
+      headers: {
+        skipJWT: ''
+      }
+    });
   }
 
   register(registerUser: UserDto) {
-    return this.http.post(`${this.api}/Auth/Register`, registerUser);
+    return this.http.post(`${this.api}/Auth/Register`, registerUser, {
+      headers: {
+        skipJWT: ''
+      }
+    });
   }
 
   link(registerUser: UserDto) {
@@ -26,6 +34,10 @@ export class AuthApiService {
   }
 
   refresh(refresh: RefreshDto) {
-    return this.http.post(`${this.api}/Auth/Refresh`, refresh);
+    return this.http.post(`${this.api}/Auth/Refresh`, refresh, {
+      headers: {
+        skipJWT: ''
+      }
+    });
   }
 }
