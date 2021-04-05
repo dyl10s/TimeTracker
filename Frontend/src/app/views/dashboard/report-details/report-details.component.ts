@@ -40,6 +40,9 @@ export class ReportDetailsComponent implements OnInit {
     private projectService: ProjectService,
     private reportService: ReportService,
   ) {
+    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
+    this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
+
     this.projectId = parseInt(route.snapshot.paramMap.get('projId'));
     this.currentUserId = parseInt(route.snapshot.paramMap.get('userId'));
     this.getAllTimeEntries();
@@ -180,7 +183,8 @@ export class ReportDetailsComponent implements OnInit {
     if (num == 5) {
       this.createSort = true;
       this.modSort = false;
-    } if (num == 6) {
+    } 
+    if (num == 6) {
       this.modSort = true;
       this.createSort = false;
     }

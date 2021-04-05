@@ -37,7 +37,9 @@ export class ReportComponent {
     private reportService: ReportService,
     private dataSourceBuilder: CustomTreeBuilder<any>,
     private tostrService: NbToastrService) {
-
+    
+    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
+    this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
     this.getAllProjects();
   }
 
@@ -79,7 +81,7 @@ export class ReportComponent {
         totalHours += r.hours;
       })
 
-      if(proj.archivedDate) {
+      if(proj.archivedDate == null) {
         this.activeProjects.push({
           data: {
             name: proj.name,
