@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbDateService, NbDialogService, NbToastrService } from '@nebular/theme';
+import { NbDateService, NbDialogService, NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
@@ -12,6 +12,11 @@ import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time
 export class TimeComponent implements OnInit {
   updateSubscription: Subscription;
   showLoadingSpinner: boolean = false;
+  gridHeaders: string[] = ["ProjectName","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Total"];
+  timeEntryDataSource: NbTreeGridDataSource<any>;
+  totalHours: string = "0:00";
+  editMode: boolean = false;
+
   // Date choosen  //
   today: Date;
   // Date range based on date chosen //
