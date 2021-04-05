@@ -53,6 +53,9 @@
   flex-wrap: wrap;
   padding-top: 10px;
   padding-bottom: 10px;
+  button {
+    box-shadow: unset!important;
+  }
 
   ul {
     border: 0;
