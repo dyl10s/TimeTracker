@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
@@ -17,6 +18,11 @@ export class TokenInterceptorService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    // Don't intercept the auth requests
+    if(request.headers.has('skipJWT')) {
+      return next.handle(request);
+    }
+
     if (this.jwtService.isAuthenticated()) {
       request = request.clone({
         setHeaders: {
@@ -24,10 +30,27 @@ export class TokenInterceptorService implements HttpInterceptor {
         }
       });
       return next.handle(request);
-    } else {
+    } 
+    else if (this.jwtService.isExpired()) 
+    {
+      return this.jwtService.refreshToken().pipe(switchMap((res) => {
+
+        if(res.success == true) {
+          this.jwtService.setTokens(res.data.accessToken, res.data.refreshToken);
+
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${this.jwtService.getJWT()}`
+            }
+          });
+        }
+        return next.handle(request);
+      }));
+    } 
+    else 
+    {
       return next.handle(request);
     }
 
   }
-
 }
