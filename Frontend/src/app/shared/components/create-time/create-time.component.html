@@ -1,4 +1,5 @@
-<div class="container" [nbSpinner]="showLoadingSpinner" nbSpinnerStatus="success">
+<nb-card class="container" [nbSpinner]="showLoadingSpinner" nbSpinnerStatus="success">
+<nb-card-body>
   <h4 class="text-black">New Time Entry</h4>
 
   <form [formGroup]="createTimeForm" *ngIf="projects">
@@ -24,4 +25,5 @@
       <button nbButton status="warning" type="button" (click)="closeDialog()">Cancel</button>
     </div>
   </form>
-</div>
+  </nb-card-body>
+</nb-card>

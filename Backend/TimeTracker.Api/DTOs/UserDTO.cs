@@ -12,5 +12,6 @@ namespace TimeTracker.Api.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string InviteCode { get; set; }
+        public string DiscordLink { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 <nb-layout-column class="column">
-    <nb-card class="login-container">
+    <nb-card *ngIf="!discordLinkResuts" class="login-container">
       <nb-card-header>
         <h4 class="text-black">Login</h4>
       </nb-card-header>
@@ -42,9 +42,21 @@
             </button>
           </div>
           <nb-actions>
-            <nb-action>Not a member? <span class="clickable" routerLink="/auth/register" [queryParams]="{inviteCode: activatedRoute.snapshot.queryParamMap.get('inviteCode')}">Register</span></nb-action>
+            <nb-action>Not a member? <span style="margin-left:3px" class="clickable" routerLink="/auth/register" [queryParams]="{inviteCode: activatedRoute.snapshot.queryParamMap.get('inviteCode')}">Register</span></nb-action>
           </nb-actions>
         </form>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card *ngIf="discordLinkResuts" class="login-container">
+      <nb-card-header>
+        <h4 class="text-black">Discord Link Results</h4>
+      </nb-card-header>
+
+      <nb-card-body>
+        <p>
+          {{ discordLinkResuts }}
+        </p>
       </nb-card-body>
     </nb-card>
   </nb-layout-column>

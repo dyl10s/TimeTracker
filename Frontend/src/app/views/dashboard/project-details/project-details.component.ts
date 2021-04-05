@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NbTagComponent, NbTagInputAddEvent, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { NbDialogService, NbTagComponent, NbTagInputAddEvent, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { forkJoin } from 'rxjs';
+import { ArchiveProjectDTO } from 'src/app/core/models/ArchiveProjectDTO.model';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
+import { JwtService } from 'src/app/core/services/auth/jwt.service';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { ReportService } from 'src/app/core/services/report.service';
+import { YesNoDialogComponent } from 'src/app/shared/components/yes-no-dialog/yes-no-dialog.component';
 
 @Component({
   selector: 'app-project-details',
@@ -41,6 +44,7 @@ export class ProjectDetailsComponent {
   gridHeaders: string[] = ["Name", "Role", "Hours"];
 
   projectId: number;
+  archiving: boolean = false;
 
   loadingProject: boolean = true;
   details: ProjectDTO = null;
@@ -64,9 +68,12 @@ export class ProjectDetailsComponent {
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<UserDto>,
     private toastrService: NbToastrService,
     private router: Router,
-    private reportService: ReportService){
-
-    this.startDate.setDate(this.startDate.getDate() - 7);
+    private reportService: ReportService,
+    private dialogService: NbDialogService,
+    public jwtService: JwtService
+  ){
+    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
+    this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
@@ -128,6 +135,70 @@ export class ProjectDetailsComponent {
 
   onTagRemove(tagToRemove: NbTagComponent): void {
     this.updateProjectForm.get("tags").value.splice(this.updateProjectForm.get("tags").value.indexOf(tagToRemove.text), 1);
+  }
+
+  toggleArchive() {
+
+    let body = "";
+    let title = "";
+
+    if(this.details.archivedDate == null) {
+      title = "Are you sure you want to archive the project?";
+      body = `Archiving the project will make it so no more time can be submitted for the project, 
+      and make it so no new members can join the project. The project will show under the under the archived 
+      tab on the projects screen and report screen.
+      `;
+    } else{
+      title = "Are you sure you want to unarchive the project?";
+      body = `Unarchiving the project will make it so time can be submitted for the project, 
+      and allow new members can join the project. The project will show under the active projects tab
+      on the projects screen and report screen.
+      `;
+    }
+
+    this.dialogService.open(YesNoDialogComponent, {
+      context: {
+        body: body,
+        title: title,
+        yesClicked: () => {
+          this.sendArchiveRequest()
+        }
+      }
+    });
+  }
+
+  sendArchiveRequest() {
+    this.archiving = true;
+
+    let requestDetails : ArchiveProjectDTO = {
+      projectId: this.details.id,
+      archive: true
+    }
+    
+    if(this.details.archivedDate == null) {
+      requestDetails.archive = true;
+    } else{
+      requestDetails.archive = false;
+    }
+
+    this.projectService.archiveProject(requestDetails).subscribe(
+    (res) => {
+      if(res.success) {
+        this.details.archivedDate = res.data;
+
+        if(res.data == null) {
+          this.toastrService.success("The project has been unarchived", "Project Unnarchived");
+        }else{
+          this.toastrService.success("The project has been archived", "Project Archived");
+        }
+      }else{
+        this.toastrService.danger(res.message, "Error");
+      }
+      this.archiving = false;
+    }, () => {
+      this.toastrService.danger("There was an unknown error processing the request.", "Error");
+      this.archiving = false;
+    });
   }
 
   saveProjectChange(): void {

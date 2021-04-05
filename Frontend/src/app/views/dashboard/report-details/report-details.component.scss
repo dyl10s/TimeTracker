@@ -1,0 +1,74 @@
+@import "../../../../app/styles/display.scss";
+
+.date-filter-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.main-filter-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+::ng-deep .nb-theme-dark nb-select.appearance-outline.status-basic .select-button {
+  height: 48px! important;
+}
+
+.filter-result-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  table {
+    width: 100%;
+
+    th {
+      white-space: nowrap;
+    }
+
+    a {
+      text-decoration: none;
+      color: unset;
+    }
+  }
+}
+
+.bottom-total-section {
+  display: inline;
+  h6 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+}
+
+.mob {
+  display: inline;
+}
+
+.desk {
+  display: none;
+}
+
+@media only screen and (min-width: 660px) {
+  .header {
+    display: flex;
+  }
+
+  .mob {
+    display: none;
+  }
+
+  .desk {
+    display: table-cell;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .main-filter-section {
+    display: flex;
+
+    .right-align {
+      margin-left: auto;
+    }
+  }
+}
+

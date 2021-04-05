@@ -1,5 +1,9 @@
 @import "../../../../app/styles/display.scss";
 
+.desk {
+  display: none !important;
+}
+
 .date-section {
   width: 100%;
   display: flex;
@@ -49,6 +53,9 @@
   flex-wrap: wrap;
   padding-top: 10px;
   padding-bottom: 10px;
+  button {
+    box-shadow: unset!important;
+  }
 
   ul {
     border: 0;
@@ -112,8 +119,7 @@
   }
 }
 
-::ng-deep .nb-theme-default nb-card-body,
-::ng-deep .nb-theme-default nb-card {
+.full-card {
   padding: unset !important;
   width: 100%;
 }
@@ -133,6 +139,11 @@
         float: left !important;
         margin: unset;
       }
+    }
+    .edit-section {
+      float: right !important;
+      display: inline-flex;
+      gap: 5px;
     }
   }
 
@@ -194,42 +205,27 @@
     table {
       width: 100%;
 
-      th,
-      td {
-        padding: 5px;
-      }
-      // thead,
-      // tr {
-      // }
-      tbody {
-        .adaptive-button-icon {
-          margin-right: 0 !important;
-        }
+      th {
+        text-align: center;
+        white-space: nowrap;
       }
     }
-    .name {
-      text-align: left;
-      padding: 15px !important;
-    }
-
-    // .day,
-    // .total,
-    // .delete {
-
-    // }
   }
 }
 
+@media only screen and (min-width: 960px) {
+  .desk {
+    display: table-cell !important;
+  }
+}
 
 @media only screen and (max-width: 830px) {
-  .adaptive-button-text{
+  .adaptive-button-text {
     display: none;
   }
 
-  .adaptive-button-icon{
+  .adaptive-button-icon {
     padding: 0 !important;
     margin: 0 !important;
   }
 }
-
-

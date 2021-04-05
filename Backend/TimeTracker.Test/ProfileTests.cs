@@ -5,10 +5,10 @@ using TimeTracker.Api.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using TimeTracker.Api.Database.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Test.Helpers;
+using TimeTracker.Database.Models;
 
 namespace TimeTracker.Test {
     [TestClass]

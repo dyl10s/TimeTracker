@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TimeTracker.Api.Database;
-using TimeTracker.Api.Database.Models;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database;
+using TimeTracker.Database.Models;
 
 namespace Backend.Controllers
 {
@@ -98,7 +98,7 @@ namespace Backend.Controllers
                 LastModified = DateTime.UtcNow,
                 Length = data.Length,
                 Notes = data.Notes,
-                Project = await database.Projects.SingleAsync(x => x.Id == data.ProjectId),
+                Project = await database.Projects.AsQueryable().SingleAsync(x => x.Id == data.ProjectId),
                 User = await authHelper.GetCurrentUser(User, database)
             };
 
@@ -119,6 +119,7 @@ namespace Backend.Controllers
             var currentUserId = authHelper.GetCurrentUserId(User);
             var currentTimeEntry = await database
                 .TimeEntries
+                .AsQueryable()
                 .SingleOrDefaultAsync(x => x.Id == data.Id && x.User.Id == currentUserId);
 
             if(currentTimeEntry == null)

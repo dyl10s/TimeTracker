@@ -1,8 +1,9 @@
-<div
+<nb-card
   class="container"
   [nbSpinner]="showLoadingSpinner"
   nbSpinnerStatus="success"
 >
+<nb-card-body>
   <h4 class="text-black">Edit Time Entry</h4>
 
   <form [formGroup]="EditTimeForm" (ngSubmit)="editTimer()">
@@ -51,4 +52,5 @@
       </button>
     </div>
   </form>
-</div>
+  </nb-card-body>
+</nb-card>

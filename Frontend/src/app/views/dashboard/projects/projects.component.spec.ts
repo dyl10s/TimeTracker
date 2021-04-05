@@ -19,7 +19,7 @@ describe('ProjectComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ProjectsComponent],
-      providers: [AuthApiService, NbThemeModule.forRoot({ name: 'default' }).providers, NbDialogService],
+      providers: [AuthApiService, NbThemeModule.forRoot({ name: 'dark' }).providers, NbDialogService],
       imports: [
         NbTreeGridModule,
         NbDialogModule.forRoot(),
@@ -27,7 +27,7 @@ describe('ProjectComponent', () => {
           duration: 7500,
           destroyByClick: true
         }),
-        HttpClientModule, 
+        HttpClientModule,
         JwtModule.forRoot({
           config: {
             tokenGetter: tokenGetter
