@@ -44,7 +44,7 @@ namespace TimeTracker.Test
 
             Assert.IsTrue(createResult.Success);
 
-            var allProjects = await projectController.GetProjectsByUser();
+            var allProjects = await projectController.GetProjectsByUser("false");
 
             Assert.IsTrue(allProjects.Success);
             Assert.AreEqual(allProjects.Data.Count, 1);
@@ -139,7 +139,7 @@ namespace TimeTracker.Test
                 InviteCode = project.Data.InviteCode
             });
 
-            var userProjects = await projectController.GetProjectsByUser();
+            var userProjects = await projectController.GetProjectsByUser("false");
 
             Assert.IsTrue(userProjects.Data.Count == 1);
             Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);

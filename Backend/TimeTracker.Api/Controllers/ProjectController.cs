@@ -60,21 +60,34 @@ namespace TimeTracker.Api.Controllers
         /// <returns>A list of all the projects the user is the teacher or is a student of</returns>
         [Authorize]
         [HttpGet]
-        public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser()
+        [Route("Bool")]
+        public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser(string activeOnly)
         {
             var currentUserId = authHelper.GetCurrentUserId(User);
 
-            // Get all the projects we teach or are a student of
+            // All projects we teach or are a student of
             var projects = await database.Projects
-                .AsNoTracking()
-                .Where(x => x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId))
-                .Include(x => x.Teacher)
-                .Include(x => x.Students)
-                .Include(x => x.Tags)
-                .ToListAsync();
+              .AsNoTracking()
+              .Where(x => (x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId)))
+              .Include(x => x.Teacher)
+              .Include(x => x.Students)
+              .Include(x => x.Tags)
+              .ToListAsync();
 
-            return new GenericResponseDTO<List<Project>>() 
-            { 
+            // Only (active) projects we teach or are a student of
+            if (activeOnly == "true")
+            {
+                projects = await database.Projects
+                  .AsNoTracking()
+                  .Where(x => (x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId)) && x.ArchivedDate == null)
+                  .Include(x => x.Teacher)
+                  .Include(x => x.Students)
+                  .Include(x => x.Tags)
+                  .ToListAsync();
+            }
+
+            return new GenericResponseDTO<List<Project>>()
+            {
                 Data = projects,
                 Success = true
             };
