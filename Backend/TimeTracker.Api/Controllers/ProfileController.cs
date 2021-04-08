@@ -43,8 +43,8 @@ namespace TimeTracker.Api.Controllers {
 
             User queryResult = await database.Users
                 .AsNoTracking()
-                .Include(x => x.Projects)
-                .Include(x => x.ProjectsTeaching)
+                .Include(x => x.Projects.Where(p => p.ArchivedDate == null))
+                .Include(x => x.ProjectsTeaching.Where(p => p.ArchivedDate == null))
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
             
             if(queryResult == null) {
@@ -54,26 +54,23 @@ namespace TimeTracker.Api.Controllers {
                 };
             }
 
+            List<ProjectNameAndClientDTO> projects = queryResult.Projects
+                .Concat(queryResult.ProjectsTeaching)
+                .OrderBy(x => x.Name.ToLower())
+                .ThenBy(x => x.ClientName.ToLower())
+                .Select(x => new ProjectNameAndClientDTO {
+                    ClientName = x.ClientName,
+                    Name = x.Name,
+                    Id = x.Id
+                })
+                .ToList();
+
             ProfileDTO data = new ProfileDTO() {
                 Email = queryResult.Email,
                 FirstName = queryResult.FirstName,
                 LastName = queryResult.LastName,
-                Projects = new List<ProjectNameAndClientDTO>()
+                Projects = projects
             };
-
-            List<Project> projects = queryResult.Projects
-                .Concat(queryResult.ProjectsTeaching)
-                .ToList();
-
-            projects.Sort((a, b) => a.Name.CompareTo(b.Name));
-
-            projects.ForEach((project) => {
-                data.Projects.Add(new ProjectNameAndClientDTO() {
-                    Id = project.Id,
-                    Name = project.Name,
-                    ClientName = project.ClientName
-                });
-            });
             
             return new GenericResponseDTO<ProfileDTO>() {
                 Data = data,
