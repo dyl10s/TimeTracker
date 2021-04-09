@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 
 @Component({
@@ -18,8 +19,13 @@ export class EditTimeComponent {
     time: new FormControl('')
   });
 
-  constructor(private ref: NbDialogRef<EditTimeComponent>
-  ) { }
+  constructor(
+    private ref: NbDialogRef<EditTimeComponent>,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("NTime - Edit Time");
+
+    }
 
   closeDialog() {
     this.ref.close({ update: true });

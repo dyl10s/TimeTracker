@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { NbTagComponent, NbTagInputAddEvent } from '@nebular/theme';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
@@ -25,8 +26,11 @@ export class CreateProjectComponent {
     private ref: NbDialogRef<CreateProjectComponent>,
     private projectService: ProjectService,
     private toastrService: NbToastrService,
-    private cdref: ChangeDetectorRef
-  ) { }
+    private cdref: ChangeDetectorRef,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("NTime - Create Project");
+    }
 
   @ViewChild('clientField') clientField: ElementRef;
   ngAfterViewInit() {

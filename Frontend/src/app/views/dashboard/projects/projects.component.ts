@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NbGetters, NbTreeGridDataService, NbTreeGridFilterService, NbTreeGridService, NbTreeGridSortService } from '@nebular/theme';
 import { NbDialogService, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
@@ -31,10 +32,12 @@ export class ProjectsComponent {
     private dataSourceBuilder: CustomTreeBuilder<ProjectDTO>,
     private projectService: ProjectService,
     private toastrService: NbToastrService,
-    private dialogService: NbDialogService) {
-
-    this.loadProjects();
-  }
+    private dialogService: NbDialogService,
+    private titleService: Title
+    ) {
+        this.titleService.setTitle("NTime - Projects");
+        this.loadProjects();
+      }
 
   loadProjects() {
     this.showLoadingSpinner = true;

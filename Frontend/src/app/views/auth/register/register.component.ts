@@ -1,6 +1,7 @@
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
@@ -27,8 +28,11 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private router: Router,
-    public activatedRoute: ActivatedRoute
-  ) { }
+    public activatedRoute: ActivatedRoute,
+    private titleService: Title
+  ) {
+      this.titleService.setTitle("NTime - Register");
+    }
 
   ngOnInit(): void {
     this.registerForm.patchValue({
