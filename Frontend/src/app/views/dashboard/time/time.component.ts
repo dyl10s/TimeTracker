@@ -202,7 +202,7 @@ export class TimeComponent implements OnInit {
     this.dialogService.open(EditTimeComponent, {}).onClose.subscribe((x: any) => {
       // Clicking outside of dialog will not pass
       if (x) {
-        // Clicking cancel willn not pass
+        // Clicking cancel will not pass
         if (x.update) {
           // Update code here
         }
