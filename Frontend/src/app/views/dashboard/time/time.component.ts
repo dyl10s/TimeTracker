@@ -200,6 +200,13 @@ export class TimeComponent implements OnInit {
   /* Method to open edit time entry screen */
   openEditTimeEntry() {
     this.dialogService.open(EditTimeComponent, {}).onClose.subscribe((x: any) => {
+      // Clicking outside of dialog will not pass
+      if (x) {
+        // Clicking cancel will not pass
+        if (x.update) {
+          // Update code here
+        }
+      }
     });
   }
 
