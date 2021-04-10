@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbDateService, NbDialogService, NbToastrService } from '@nebular/theme';
+import { NbDateService, NbDialogService, NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
@@ -15,6 +15,11 @@ import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time
 export class TimeComponent implements OnInit {
   updateSubscription: Subscription;
   showLoadingSpinner: boolean = false;
+  gridHeaders: string[] = ["ProjectName","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Total"];
+  timeEntryDataSource: NbTreeGridDataSource<any>;
+  totalHours: string = "0:00";
+  editMode: boolean = false;
+
   // Date choosen  //
   today: Date;
   // Date range based on date chosen //
@@ -236,16 +241,20 @@ export class TimeComponent implements OnInit {
   openEditTimeEntry(event: any) {
     this.dialogService.open(EditTimeComponent, {
       context: {
-        event: event
+        event
       }
     }).onClose.subscribe((x: any) => {
-      if(x.success){
-        this.toastrService.show("Time entry updated", 'Success', {status:'success', duration: 5000});
-        this.allEvents = null;
-        this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
-          this.allEvents = response.data;
-          console.log(response.data)
-        })
+      // Clicking outside of dialog will not pass
+      if (x) {
+        // Clicking cancel will not pass
+        if (x.update) {
+          this.toastrService.show("Time entry updated", 'Success', {status:'success', duration: 5000});
+          this.allEvents = null;
+          this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+            this.allEvents = response.data;
+            console.log(response.data)
+          })
+        }
       }
     });
   }

@@ -26,7 +26,7 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ NavbarComponent ],
       providers: [
-        NbThemeModule.forRoot({ name: 'default' }).providers,
+        NbThemeModule.forRoot({ name: 'dark' }).providers,
         NbMenuModule.forRoot().providers,
         RouterModule.forRoot([]).providers,
         { provide: JwtService, useValue: mockJwtService }

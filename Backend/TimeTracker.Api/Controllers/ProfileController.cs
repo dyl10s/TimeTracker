@@ -6,6 +6,7 @@ using System.Linq;
 using TimeTracker.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using TimeTracker.Database.Models;
 using TimeTracker.Database;
 
@@ -42,7 +43,8 @@ namespace TimeTracker.Api.Controllers {
 
             User queryResult = await database.Users
                 .AsNoTracking()
-                .Include(x => x.Projects)
+                .Include(x => x.Projects.Where(p => p.ArchivedDate == null))
+                .Include(x => x.ProjectsTeaching.Where(p => p.ArchivedDate == null))
                 .FirstOrDefaultAsync(user => user.Id == currentUserID);
             
             if(queryResult == null) {
@@ -52,15 +54,26 @@ namespace TimeTracker.Api.Controllers {
                 };
             }
 
+            List<ProjectNameAndClientDTO> projects = queryResult.Projects
+                .Concat(queryResult.ProjectsTeaching)
+                .OrderBy(x => x.Name.ToLower())
+                .ThenBy(x => x.ClientName.ToLower())
+                .Select(x => new ProjectNameAndClientDTO {
+                    ClientName = x.ClientName,
+                    Name = x.Name,
+                    Id = x.Id
+                })
+                .ToList();
+
+            ProfileDTO data = new ProfileDTO() {
+                Email = queryResult.Email,
+                FirstName = queryResult.FirstName,
+                LastName = queryResult.LastName,
+                Projects = projects
+            };
+            
             return new GenericResponseDTO<ProfileDTO>() {
-                Data = new ProfileDTO() {
-                    Email = queryResult.Email,
-                    FirstName = queryResult.FirstName,
-                    LastName = queryResult.LastName,
-                    Projects = queryResult.Projects
-                        .Select(x => x.Name)
-                        .ToList()
-                },
+                Data = data,
                 Success = true
             };
 

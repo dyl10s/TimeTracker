@@ -44,7 +44,7 @@ namespace TimeTracker.Test
 
             Assert.IsTrue(createResult.Success);
 
-            var allProjects = await projectController.GetProjectsByUser();
+            var allProjects = await projectController.GetActiveProjectsByUser();
 
             Assert.IsTrue(allProjects.Success);
             Assert.AreEqual(allProjects.Data.Count, 1);
@@ -139,7 +139,7 @@ namespace TimeTracker.Test
                 InviteCode = project.Data.InviteCode
             });
 
-            var userProjects = await projectController.GetProjectsByUser();
+            var userProjects = await projectController.GetActiveProjectsByUser();
 
             Assert.IsTrue(userProjects.Data.Count == 1);
             Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);
@@ -181,6 +181,35 @@ namespace TimeTracker.Test
 
             projectUpdated = await projectController.GetProjectById(createResult.Data);
             Assert.IsNull(projectUpdated.Data.ArchivedDate);
+        }
+
+        [TestMethod]
+        public async Task GetArchivedProjects() {
+            var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "Mr Dr Professor",
+                Description = "This project must be archived!",
+                ProjectName = "Test Name",
+                Tags = new List<string>()
+                {
+                    "PLEASE ARCHIVE"
+                }
+            });
+
+            Assert.IsTrue(createResult.Success);
+
+            await projectController.ArchiveProject(new ArchiveProjectDTO()
+            {
+                Archive = true,
+                ProjectId = createResult.Data
+            });
+
+            var projectUpdated = await projectController.GetProjectById(createResult.Data);
+
+            var archivedProjects = await projectController.GetArchivedProjectsByUser();
+
+            Assert.AreEqual(1, archivedProjects.Data.Count);
+            Assert.AreEqual("Mr Dr Professor", archivedProjects.Data[0].ClientName);
         }
     }
 }
