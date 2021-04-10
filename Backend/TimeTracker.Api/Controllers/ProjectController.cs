@@ -55,41 +55,51 @@ namespace TimeTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all the projects a user is associated with
+        /// Gets all the active projects a user is associated with
         /// </summary>
-        /// activeOnly = true ->
-        /// <returns>A list of all the (active) projects the user is the teacher or is a student of</returns>
-        /// activeOnly = false ->
-        /// <returns>A list of all the projects the user is the teacher or is a student of</returns>
+        /// <returns>A list of all the active projects the user is the teacher or is a student of</returns>
         [Authorize]
-        [HttpGet]
-        public async Task<GenericResponseDTO<List<Project>>> GetProjectsByUser(Boolean activeOnly)
+        [HttpGet("Active")]
+        public async Task<GenericResponseDTO<List<Project>>> GetActiveProjectsByUser()
         {
-            Console.WriteLine(activeOnly);
             var currentUserId = authHelper.GetCurrentUserId(User);
             var projects = new List<Project>();
 
             // Only (active) projects we teach or are a student of
-            if (activeOnly)
-            {
-                projects = await database.Projects
+            projects = await database.Projects
                   .AsNoTracking()
                   .Where(x => (x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId)) && x.ArchivedDate == null)
                   .Include(x => x.Teacher)
                   .Include(x => x.Students)
                   .Include(x => x.Tags)
                   .ToListAsync();
-            }else
+
+            return new GenericResponseDTO<List<Project>>()
             {
-                // All projects we teach or are a student of
-                projects = await database.Projects
+                Data = projects,
+                Success = true
+            };
+        }
+
+        /// <summary>
+        /// Gets all the archived projects a user is associated with
+        /// </summary>
+        /// <returns>A list of all the archived projects the user is the teacher or is a student of</returns>
+        [Authorize]
+        [HttpGet("Archived")]
+        public async Task<GenericResponseDTO<List<Project>>> GetArchivedProjectsByUser()
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+            var projects = new List<Project>();
+
+            // Only (archived) projects we teach or are a student of
+            projects = await database.Projects
                   .AsNoTracking()
-                  .Where(x => (x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId)))
+                  .Where(x => (x.Teacher.Id == currentUserId || x.Students.Any(x => x.Id == currentUserId)) && x.ArchivedDate != null)
                   .Include(x => x.Teacher)
                   .Include(x => x.Students)
                   .Include(x => x.Tags)
                   .ToListAsync();
-            }
 
             return new GenericResponseDTO<List<Project>>()
             {
