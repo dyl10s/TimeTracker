@@ -93,8 +93,12 @@ export class ProjectsComponent {
 
   openCreateNewProject() {
     this.dialogService.open(CreateProjectComponent, {}).onClose.subscribe((x: any) => {
-      if(x.update) {
+      // Clicking outside of dialog will not pass
+      if(x) {
+        // Clicking cancel will not pass
+        if(x.update){
         this.loadProjects();
+        }
       }
     });
   }
