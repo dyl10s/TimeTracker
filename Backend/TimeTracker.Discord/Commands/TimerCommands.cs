@@ -45,7 +45,7 @@ namespace TimeTracker.Discord.Commands
 
             List<Project> projectsWithoutTimers = database.Projects
                 .AsQueryable()
-                .Where(project => (project.Students.Any(s => s.Id == user.Id) || project.Teacher.Id == user.Id))
+                .Where(project => (project.Students.Any(s => s.Id == user.Id) || project.Teacher.Id == user.Id) && project.ArchivedDate == null)
                 .ToList()
                 .Except(projectsWithTimers)
                 .ToList();
@@ -53,7 +53,7 @@ namespace TimeTracker.Discord.Commands
             projectsWithoutTimers.Sort((a, b) => a.Name.CompareTo(b.Name));
             
             if(projectsWithoutTimers.Count == 0) {
-                await Context.Message.ReplyAsync("You're not part of any projects yet.");
+                await Context.Message.ReplyAsync("You're not part of any active projects.");
                 return;
             } else if(projectsWithoutTimers.Count == 1) {
 
@@ -121,7 +121,7 @@ namespace TimeTracker.Discord.Commands
 
             List<Project> projectsWithoutTimers = database.Projects
                 .AsQueryable()
-                .Where(project => (project.Students.Any(s => s.Id == user.Id) || project.Teacher.Id == user.Id))
+                .Where(project => (project.Students.Any(s => s.Id == user.Id) || project.Teacher.Id == user.Id) && project.ArchivedDate == null)
                 .ToList()
                 .Except(projectsWithTimers)
                 .ToList();
@@ -129,10 +129,10 @@ namespace TimeTracker.Discord.Commands
             projectsWithoutTimers.Sort((a, b) => a.Name.CompareTo(b.Name));
             
             if(projectsWithoutTimers.Count == 0) {
-                await Context.Message.ReplyAsync("You're not currently part of any projects.");
+                await Context.Message.ReplyAsync("You're not part of any active projects.");
                 return;
             } else if(projectNumber - 1 >= projectsWithoutTimers.Count) {
-                await Context.Message.ReplyAsync("Project number was out of range. There are only " + projectsWithoutTimers.Count + " projects without timers that you're a part of.");
+                await Context.Message.ReplyAsync("Project number was out of range. There are only " + projectsWithoutTimers.Count + " projects you can add timers to that you're a part of.");
                 return;
             }
 
@@ -168,6 +168,11 @@ namespace TimeTracker.Discord.Commands
             
             if(projectsWithoutTimers.Count == 0) {
                 await Context.Message.ReplyAsync("No project with that name was found.");
+                return;
+            }
+
+            if(projectsWithoutTimers[0].ArchivedDate != null) {
+                await Context.Message.ReplyAsync("The project **" + projectsWithoutTimers[0].Name + "** has been archived, and cannot have any timers started for it.");
                 return;
             }
 
