@@ -21,7 +21,7 @@ export class CreateTimeComponent implements OnInit {
   createTimeForm: FormGroup = new FormGroup({
     projectName: new FormControl('', [Validators.required]),
     notes: new FormControl(''),
-    time: new FormControl('')
+    time: new FormControl('', [Validators.pattern(/^[0-9]*(\.[0-9]+)?$/)])
   });
 
   constructor(
@@ -59,6 +59,8 @@ export class CreateTimeComponent implements OnInit {
     }else{
       if(!parseFloat(timeForm.value.time)){
         timeForm.controls['time'].reset();
+        this.showLoadingSpinner = false;
+        this.toastrService.danger('An error occured while converting the text in the time field to a number.', 'Error');
         return;
       }
 
