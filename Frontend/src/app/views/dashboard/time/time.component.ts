@@ -3,6 +3,7 @@ import { NbDateService, NbDialogService, NbToastrService } from '@nebular/theme'
 import { interval, Subscription } from 'rxjs';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
+import { TimerService } from 'src/app/core/services/timer.service';
 import { CreateTimeComponent } from 'src/app/shared/components/create-time/create-time.component';
 import { EditTimeComponent } from 'src/app/shared/components/edit-time/edit-time.component';
 
@@ -42,11 +43,15 @@ export class TimeComponent implements OnInit {
   allEvents: any = [];
   displayEvents: any = [];
 
+  allTimers: any = [];
+  allProjects: any = [];
+
   constructor(
     private dialogService: NbDialogService,
     private dateService: NbDateService<Date>,
     private timeEntryService: TimeEntryApiService,
-    private toastrService: NbToastrService
+    private timerService: TimerService,
+    private toastrService: NbToastrService,
   ) {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
@@ -66,6 +71,11 @@ export class TimeComponent implements OnInit {
       console.log(response.data);
       this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
       this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
+    })
+
+    this.timerService.getTimerFromDateRange(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+      this.allTimers = response.data;
+      console.log(this.allTimers);
     })
   }
 
@@ -155,6 +165,7 @@ export class TimeComponent implements OnInit {
     this.weekView = false;
     this.returnText = "Today";
     this.today = this.dateService.today();
+    this.switchedDate();
   }
 
   /* Updates screen for week view button click */
@@ -163,6 +174,7 @@ export class TimeComponent implements OnInit {
     this.dayView = false;
     this.returnText = "Week";
     this.today = this.dateService.today();
+    this.switchedDate();
   }
 
   /* Method to get calendar week start date */
