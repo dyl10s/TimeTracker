@@ -21,8 +21,12 @@ export class ProjectService {
     return this.http.get(`${this.api}/Project/${id}`);
   }
 
-  public getProjectsByUser(activeOnly: boolean) : Observable<GenericResponseDTO<any>> {
-    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project/`, { params: { activeOnly: activeOnly.toString() } });
+  public getActiveProjectsByUser() : Observable<GenericResponseDTO<any>> {
+    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project/Active`);
+  }
+
+  public getArchivedProjectsByUser() : Observable<GenericResponseDTO<any>> {
+    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Project/Archived`);
   }
 
   public addTagToProject(newTagInfo: CreateTagDTO) {

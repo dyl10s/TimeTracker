@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private titleService: Title
   ) {
-    this.titleService.setTitle("NTime - Time Tracker");
+    this.titleService.setTitle("NTime - Gain control of your time");
    }
 
   ngOnInit(): void {
