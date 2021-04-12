@@ -16,7 +16,7 @@ export class TimerService {
   }
 
   stopTimer(timerId: number){
-    return this.http.post(`${this.api}/Timer/Stop`, timerId);
+    return this.http.post(`${this.api}/Timer/Stop`, { timerId });
   }
 
   getTimer(timerId: number){

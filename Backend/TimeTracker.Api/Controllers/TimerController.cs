@@ -70,13 +70,13 @@ namespace Backend.Controllers
         // returns a TimeEntryDTO for the newly created TimeEntry
         [HttpPost]
         [Route("Stop")]
-        public async Task<GenericResponseDTO<TimeEntryDTO>> StopTimer(int timerId) {
+        public async Task<GenericResponseDTO<TimeEntryDTO>> StopTimer(TimerIdDTO timerIdDTO) {
 
             Timer timer = await database.Timers
                 .AsQueryable()
                 .Where(t => t.User.Id == authHelper.GetCurrentUserId(User))
                 .Include(t => t.Project)
-                .FirstOrDefaultAsync(t => t.Id == timerId);
+                .FirstOrDefaultAsync(t => t.Id == timerIdDTO.TimerId);
 
             DateTime timeEntryCreationTime = DateTime.UtcNow;
 
@@ -118,7 +118,7 @@ namespace Backend.Controllers
 
         // returns a TimerDTO for the given timer id
         [HttpPost]
-        public async Task<GenericResponseDTO<TimerDTO>> GetTimerById(int timerId) {
+        public async Task<GenericResponseDTO<TimerDTO>> GetTimerById(TimerIdDTO timerIdDTO) {
             
             if(User == null) {
                 return new GenericResponseDTO<TimerDTO> {
@@ -131,7 +131,7 @@ namespace Backend.Controllers
                 .AsNoTracking()
                 .Where(t => t.User.Id == authHelper.GetCurrentUserId(User))
                 .Include(t => t.Project)
-                .FirstOrDefaultAsync(t => t.Id == timerId);
+                .FirstOrDefaultAsync(t => t.Id == timerIdDTO.TimerId);
 
             if(timer == null) {
                 return new GenericResponseDTO<TimerDTO> {
