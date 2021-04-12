@@ -5,6 +5,7 @@ import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.mode
 import { ProjectNameAndClientDTO } from '../../../core/models/ProjectNameAndClientDTO.model';
 import { ProfileDTO } from '../../../core/models/ProfileDTO.model';
 import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile',
@@ -40,31 +41,33 @@ export class ProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private toastrService: NbToastrService,
-    private dataSourceBuilder: NbTreeGridDataSourceBuilder<ProjectNameAndClientDTO>){
-
-    this.profileService.getProfileInfo().subscribe(
-      (response: GenericResponseDTO) => {
-        this.updateNameForm.get('firstName').setValue(response.data.firstName);
-        this.updateNameForm.get('lastName').setValue(response.data.lastName);
-        this.emailAddress = response.data.email;
-        response.data.projects.forEach((project) => {
-          this.projectNodes.push({
-            data: project
+    private dataSourceBuilder: NbTreeGridDataSourceBuilder<ProjectNameAndClientDTO>,
+    private titleService: Title
+    ) {
+      this.titleService.setTitle("NTime - Profile");
+      this.profileService.getProfileInfo().subscribe(
+        (response: GenericResponseDTO) => {
+          this.updateNameForm.get('firstName').setValue(response.data.firstName);
+          this.updateNameForm.get('lastName').setValue(response.data.lastName);
+          this.emailAddress = response.data.email;
+          response.data.projects.forEach((project) => {
+            this.projectNodes.push({
+              data: project
+            });
           });
-        });
-        this.projectDataSource = this.dataSourceBuilder.create(this.projectNodes);
-      },
-      (error) => {
-        this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
-      },
-      () => {
-        this.updateNameForm.get('firstName').enable();
-        this.updateNameForm.get('lastName').enable();
-        this.disableNameSubmitButton = false;
-        this.projectsLoading = false;
-      }
-    );
-  }
+          this.projectDataSource = this.dataSourceBuilder.create(this.projectNodes);
+        },
+        (error) => {
+          this.toastrService.show(error.message, 'Server error encountered.', {status:'warning'});
+        },
+        () => {
+          this.updateNameForm.get('firstName').enable();
+          this.updateNameForm.get('lastName').enable();
+          this.disableNameSubmitButton = false;
+          this.projectsLoading = false;
+        }
+      );
+    }
 
   public setPassword(setPasswordForm: FormGroup) {
     if(setPasswordForm.get('newPassword').value === ''             ||
