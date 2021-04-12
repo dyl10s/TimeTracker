@@ -77,6 +77,8 @@ export class LoginComponent implements OnInit {
             }else{
               if(response.message == "Added User to Project"){
                 this.toastrService.success("You have been added to a project", "Success");
+              }else if(response.message == "Project not found"){
+                this.toastrService.danger("Invite code has not been found", "Error")
               }
               this.router.navigate(['/dashboard/profile']);
             }

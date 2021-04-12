@@ -31,12 +31,14 @@ export class AuthGuard implements CanActivate {
       // logged in true and isAuth
       if(next.queryParams.inviteCode){
         this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
-          this.toastrService.success("You have been added to a project", "Success");
+          if(response.success){
+            this.toastrService.success("You have been added to a project", "Success");
+          }else{
+            this.toastrService.danger("Invite code has not been found", "Error");
+          }
           this.router.navigate(['/dashboard/profile']);
           return false;
         })
-      }else{
-        this.router.navigate(['/dashboard/profile'], { queryParams: { message: 'WTF' } });
       }
     }
     
@@ -58,8 +60,7 @@ export class AuthGuard implements CanActivate {
 
         if(next.queryParams.inviteCode){
           this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
-            console.log('TEST')
-            this.router.navigate(['/dashboard/profile'], { queryParams: { message: response.message } });
+            this.router.navigate(['/dashboard/profile']);
             return false;
           })
         }

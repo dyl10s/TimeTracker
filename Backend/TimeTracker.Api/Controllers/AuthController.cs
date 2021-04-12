@@ -76,6 +76,8 @@ namespace TimeTracker.Api.Controllers
                     if(project != null) {
                         curUser.Projects.Add(project);
                         message = "Added User to Project";
+                    }else{
+                        message = "Project not found";
                     }
 
                 }
