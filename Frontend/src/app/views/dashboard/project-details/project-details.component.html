@@ -73,7 +73,13 @@
               <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
                 Name
               </th>
-              <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data["firstName"] + " " + row.data["lastName"] || '-'}}</td>
+              <td nbTreeGridCell class="name" *nbTreeGridCellDef="let row">
+              {{row.data["firstName"] + " " + row.data["lastName"] || '-'}} <br class="mob">
+                <button id="delete" status="danger" nbSpinnerStatus="success" *ngIf="pageMode == 'edit' && details.archivedDate == null  && details.teacher.id == jwtService.decode().sub && row.data.id != details.teacher.id"
+                nbButton (click)="removeUserCheck(row.data.id)">
+                    <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
+                </button>
+              </td>
             </ng-container>
     
             <ng-container nbTreeGridColumnDef="Role">
