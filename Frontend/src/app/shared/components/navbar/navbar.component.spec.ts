@@ -19,6 +19,9 @@ describe('NavbarComponent', () => {
       return {
         given_name: "Test Name"
       }
+    },
+    isAuthenticated() {
+      return true
     }
   }
 
