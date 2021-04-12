@@ -7,6 +7,7 @@ import { UpdateProjectDTO } from '../models/UpdateProjectDTO.model';
 import { GenericResponseDTO } from '../models/GenericResponseDTO.model';
 import { Observable } from 'rxjs';
 import { ArchiveProjectDTO } from '../models/ArchiveProjectDTO.model';
+import { ProjectRemoveUserDTO } from '../models/ProjectRemoveUserDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class ProjectService {
 
   public addUserToProject(inviteCode: string) {
     return this.http.post(`${this.api}/Project/AddUserToProject`, { inviteCode })
+  }
+
+  public removeUserFromProject(projectUserRemoveInfo: ProjectRemoveUserDTO) {
+    return this.http.patch(`${this.api}/Project/RemoveUserFromProject`, projectUserRemoveInfo)
   }
 
   public archiveProject(archiveDetails: ArchiveProjectDTO): Observable<GenericResponseDTO<any>> {

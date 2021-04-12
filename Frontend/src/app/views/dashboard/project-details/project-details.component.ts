@@ -7,6 +7,7 @@ import { ArchiveProjectDTO } from 'src/app/core/models/ArchiveProjectDTO.model';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { ProjectDTO } from 'src/app/core/models/ProjectDTO.model';
+import { ProjectRemoveUserDTO } from 'src/app/core/models/ProjectRemoveUserDTO.model';
 import { JwtService } from 'src/app/core/services/auth/jwt.service';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
@@ -40,9 +41,7 @@ export class ProjectDetailsComponent {
 
   teamDataSource: NbTreeGridDataSource<UserDto>;
   teamMembers: TreeNode<UserDto>[] = [];
-
   gridHeaders: string[] = ["Name", "Role", "Hours"];
-
   projectId: number;
   archiving: boolean = false;
 
@@ -56,14 +55,14 @@ export class ProjectDetailsComponent {
   endDate: any = new Date();
 
   updateProjectForm: FormGroup = new FormGroup({
-    tags: new FormControl({value: '', disabled: false}),
-    details: new FormControl({value: '', disabled: false})
+    tags: new FormControl({ value: '', disabled: false }),
+    details: new FormControl({ value: '', disabled: false })
   });
 
   detailsReport: any = {};
 
   constructor(
-    private projectService: ProjectService, 
+    private projectService: ProjectService,
     private route: ActivatedRoute,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<UserDto>,
     private toastrService: NbToastrService,
@@ -78,7 +77,7 @@ export class ProjectDetailsComponent {
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
       (results: GenericResponseDTO<ProjectDTO>) => {
-        if(results.success){
+        if (results.success) {
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
           this.copyDetails = results.data;
@@ -100,7 +99,7 @@ export class ProjectDetailsComponent {
             tags: [...this.details.tags]
           });
 
-        }else{
+        } else {
           // TODO Add error handling
         }
 
@@ -116,17 +115,17 @@ export class ProjectDetailsComponent {
 
   }
 
-  getAllTags() : string[] {
-    if(this.pageMode == 'view'){
+  getAllTags(): string[] {
+    if (this.pageMode == 'view') {
       return this.details.tags;
-    }else{
+    } else {
       return this.updateProjectForm.get('tags').value;
     }
   }
 
   onTagAdd({ value, input }: NbTagInputAddEvent): void {
     if (value) {
-      if(this.updateProjectForm.get("tags").value.indexOf(value) === -1){
+      if (this.updateProjectForm.get("tags").value.indexOf(value) === -1) {
         this.updateProjectForm.get("tags").setValue([...this.updateProjectForm.get("tags").value, value]);
       }
     }
@@ -142,13 +141,13 @@ export class ProjectDetailsComponent {
     let body = "";
     let title = "";
 
-    if(this.details.archivedDate == null) {
+    if (this.details.archivedDate == null) {
       title = "Are you sure you want to archive the project?";
       body = `Archiving the project will make it so no more time can be submitted for the project, 
       and make it so no new members can join the project. The project will show under the under the archived 
       tab on the projects screen and report screen.
       `;
-    } else{
+    } else {
       title = "Are you sure you want to unarchive the project?";
       body = `Unarchiving the project will make it so time can be submitted for the project, 
       and allow new members can join the project. The project will show under the active projects tab
@@ -170,54 +169,54 @@ export class ProjectDetailsComponent {
   sendArchiveRequest() {
     this.archiving = true;
 
-    let requestDetails : ArchiveProjectDTO = {
+    let requestDetails: ArchiveProjectDTO = {
       projectId: this.details.id,
       archive: true
     }
-    
-    if(this.details.archivedDate == null) {
+
+    if (this.details.archivedDate == null) {
       requestDetails.archive = true;
-    } else{
+    } else {
       requestDetails.archive = false;
     }
 
     this.projectService.archiveProject(requestDetails).subscribe(
-    (res) => {
-      if(res.success) {
-        this.details.archivedDate = res.data;
+      (res) => {
+        if (res.success) {
+          this.details.archivedDate = res.data;
 
-        if(res.data == null) {
-          this.toastrService.success("The project has been unarchived", "Project Unnarchived");
-        }else{
-          this.toastrService.success("The project has been archived", "Project Archived");
+          if (res.data == null) {
+            this.toastrService.success("The project has been unarchived", "Project Unnarchived");
+          } else {
+            this.toastrService.success("The project has been archived", "Project Archived");
+          }
+        } else {
+          this.toastrService.danger(res.message, "Error");
         }
-      }else{
-        this.toastrService.danger(res.message, "Error");
-      }
-      this.archiving = false;
-    }, () => {
-      this.toastrService.danger("There was an unknown error processing the request.", "Error");
-      this.archiving = false;
-    });
+        this.archiving = false;
+      }, () => {
+        this.toastrService.danger("There was an unknown error processing the request.", "Error");
+        this.archiving = false;
+      });
   }
 
   saveProjectChange(): void {
 
     // Check if we made changes
     let changesMade = false;
-    if(this.details.tags.length !== this.updateProjectForm.get("tags").value.length){
+    if (this.details.tags.length !== this.updateProjectForm.get("tags").value.length) {
       changesMade = true;
     }
 
-    if(!changesMade){
+    if (!changesMade) {
       this.details.tags.forEach((x: string, i: number) => {
-        if(x !== this.updateProjectForm.get("tags")[i]){
+        if (x !== this.updateProjectForm.get("tags")[i]) {
           changesMade = true;
         }
       })
     }
 
-    if(!changesMade) {
+    if (!changesMade) {
       this.toastrService.success("The project has been saved successfully", "Project Saved");
       this.pageMode = 'view';
       return;
@@ -239,11 +238,11 @@ export class ProjectDetailsComponent {
         };
       }))
     ]).subscribe((res: [GenericResponseDTO, GenericResponseDTO]) => {
-      if(res[0].success == true && res[1].success == true){
+      if (res[0].success == true && res[1].success == true) {
         this.details.description = this.updateProjectForm.get("details").value;
         this.details.tags = this.updateProjectForm.get("tags").value;
         this.toastrService.success("The project has been saved successfully", "Project Saved");
-      }else{
+      } else {
         this.toastrService.danger("There was an error updating the project", "Error");
       }
       this.loadingProject = false;
@@ -251,6 +250,39 @@ export class ProjectDetailsComponent {
       this.toastrService.danger("There was an error updating the project", "Error");
       this.loadingProject = false;
     })
+    this.pageMode = 'view';
+  }
+
+  removeUserCheck(removeUserId: number) {
+    let title = "Are you sure you want to remove this user?";
+    let body = `Removing this user from the project will also remove all existing
+     time entries the user has created on this project.`;
+    this.dialogService.open(YesNoDialogComponent, {
+      context: {
+        body: body,
+        title: title,
+        yesClicked: () => {
+          this.removeUser(removeUserId)
+        }
+      }
+    });
+  }
+
+  removeUser(removeUserId: number) {
+    let removeUserInfo: ProjectRemoveUserDTO = {
+      projectId: this.details.id,
+      userId: removeUserId
+    }
+    this.projectService.removeUserFromProject(removeUserInfo).subscribe((res: GenericResponseDTO) => {
+      if (res.success) {
+        this.toastrService.show("Success", "User Id: " + res.data + " successfully removed from your project", { status: 'success', duration: 4000 });
+        setTimeout(() => {  window.location.reload(); }, 2000);
+      } else {
+        this.toastrService.show("Error", "There was an error removing user from your project", { status: 'danger', duration: 4000 });
+      }
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   cancelEdit() {
@@ -270,10 +302,10 @@ export class ProjectDetailsComponent {
     tempBox.select();
     let success = document.execCommand('copy');
     document.body.removeChild(tempBox);
-    if(success) {
-      this.toastrService.show("Invite code has been copied", 'Success', {status:'success', duration: 4000})
-    }else{
-      this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', {status:'danger', duration: 4000})
+    if (success) {
+      this.toastrService.show("Invite code has been copied", 'Success', { status: 'success', duration: 4000 })
+    } else {
+      this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', { status: 'danger', duration: 4000 })
     }
   }
 
@@ -282,18 +314,18 @@ export class ProjectDetailsComponent {
     this.detailsReport.data.forEach((user) => {
       user.timeEntries.forEach((entry) => {
         let date = new Date(entry.day);
-        if(date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
+        if (date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
           userSum += entry.length;
       });
       let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
-      if(currentTeamMember) {
+      if (currentTeamMember) {
         currentTeamMember.data.hours = userSum;
       }
       userSum = 0;
     });
     this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
   }
-  
+
   setUpCharts() {
 
     // get all time entries associated with a specific project
@@ -314,9 +346,9 @@ export class ProjectDetailsComponent {
         allEntries.sort((x, y) => {
           let xDate = new Date(x.day);
           let yDate = new Date(y.day);
-          if(xDate.getTime() < yDate.getTime())
+          if (xDate.getTime() < yDate.getTime())
             return -1;
-          else if(xDate.getTime() > yDate.getTime())
+          else if (xDate.getTime() > yDate.getTime())
             return 1;
           return 0;
         });
@@ -336,12 +368,12 @@ export class ProjectDetailsComponent {
 
         // plot the times and totals on the charts
         allEntries.forEach((entry) => {
-          if(new Date(entry.day).getTime() > endDate.getTime()) {
+          if (new Date(entry.day).getTime() > endDate.getTime()) {
             let endDateString = endDate.toDateString();
             endDateString = endDateString.substring(endDateString.indexOf(' '));
             let startDateString = startDate.toDateString();
             startDateString = startDateString.substring(startDateString.indexOf(' '));
-            if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+            if (startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
               startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
             }
             this.lineChartData[0].series.push({
@@ -360,7 +392,7 @@ export class ProjectDetailsComponent {
             });
             startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
-            if(subtotal * 1.1 > this.barChartYMax)
+            if (subtotal * 1.1 > this.barChartYMax)
               this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
             subtotal = 0;
             currentWeek++;
@@ -374,7 +406,7 @@ export class ProjectDetailsComponent {
         endDateString = endDateString.substring(endDateString.indexOf(' '));
         let startDateString = startDate.toDateString();
         startDateString = startDateString.substring(startDateString.indexOf(' '));
-        if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+        if (startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
           startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
         }
         this.lineChartData[0].series.push({
@@ -392,7 +424,7 @@ export class ProjectDetailsComponent {
           }
         });
 
-        if(subtotal * 1.1 > this.barChartYMax)
+        if (subtotal * 1.1 > this.barChartYMax)
           this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
 
         // set the height of the line chart
