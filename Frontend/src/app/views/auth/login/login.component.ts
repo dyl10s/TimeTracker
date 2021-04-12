@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NbToastrService } from '@nebular/theme';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
@@ -32,7 +33,8 @@ export class LoginComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private projectService: ProjectService,
     private route: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private toastrService: NbToastrService,
   ) {
     this.titleService.setTitle("NTime - Login");
     }
@@ -70,10 +72,14 @@ export class LoginComponent implements OnInit {
   
         this.route.queryParamMap.subscribe(
           (paramMap) => {
-            if(paramMap.get('returnUrl'))
+            if(paramMap.get('returnUrl')){
               this.router.navigate([paramMap.get('returnUrl')]);
-            else
+            }else{
+              if(response.message == "Added User to Project"){
+                this.toastrService.success("You have been added to a project", "Success");
+              }
               this.router.navigate(['/dashboard/profile']);
+            }
           }
         )
         

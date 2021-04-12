@@ -41,6 +41,7 @@ namespace TimeTracker.Api.Controllers
             {
                 // Get user with a matching username and password hash
                 var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
+                String message = "";
                 var curUser = await database.Users
                     .Include(x => x.Projects)
                     .FirstOrDefaultAsync(u => u.Email.ToLower() == loginData.Email.ToLower() && u.Password.SequenceEqual(hashedPassword));
@@ -74,6 +75,7 @@ namespace TimeTracker.Api.Controllers
 
                     if(project != null) {
                         curUser.Projects.Add(project);
+                        message = "Added User to Project";
                     }
 
                 }
@@ -88,7 +90,8 @@ namespace TimeTracker.Api.Controllers
                     {
                          AccessToken = accessToken,
                          RefreshToken = refreshToken
-                    }
+                    },
+                    Message = message
                 };
             }
             catch

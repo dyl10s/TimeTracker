@@ -6,6 +6,7 @@ import { ProjectNameAndClientDTO } from '../../../core/models/ProjectNameAndClie
 import { ProfileDTO } from '../../../core/models/ProfileDTO.model';
 import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -42,7 +43,8 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private toastrService: NbToastrService,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<ProjectNameAndClientDTO>,
-    private titleService: Title
+    private titleService: Title,
+    private activatedRoute: ActivatedRoute
     ) {
       this.titleService.setTitle("NTime - Profile");
       this.profileService.getProfileInfo().subscribe(
