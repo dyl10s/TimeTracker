@@ -275,6 +275,7 @@ export class TimeComponent implements OnInit {
   /* Method to update timer button view */
   startStopTimer(timer) {
     this.timerService.stopTimer(timer.id).subscribe((response) => {
+      console.log(response)
       this.updateInformation();
     })
   }

@@ -20,7 +20,7 @@ export class TimerService {
   }
 
   getTimer(timerId: number){
-    return this.http.post(`${this.api}/Timer`, timerId);
+    return this.http.post(`${this.api}/Timer`, { timerId });
   }
 
   getAllTimers(){
