@@ -73,18 +73,7 @@ export class TimeComponent implements OnInit {
       }
     );
 
-    this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
-      this.allEvents = response.data;
-      this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
-      this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
-      console.log(this.allEvents)
-    })
-
-    this.timerService.getTimerFromDateRange(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
-      this.allTimers = response.data;
-      this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date()).toISOString());
-      console.log(this.displayTimers);
-    })
+    this.updateInformation();
   }
 
   /* Increases date using arrow buttons */
@@ -238,37 +227,53 @@ export class TimeComponent implements OnInit {
       context: {
         day: this.today
       }
-    });
+    }).onClose.subscribe((x: any) => {
+      if(x){
+        if(x.update){
+          this.updateInformation();
+        }
+      }
+    })
   }
 
   /* Method to open edit time entry screen */
   openEditTimeEntry(event: any) {
     this.dialogService.open(EditTimeComponent, {
       context: {
-        event
+        event: event
       }
     }).onClose.subscribe((x: any) => {
+      console.log(x)
       // Clicking outside of dialog will not pass
       if (x) {
         // Clicking cancel will not pass
         if (x.update) {
           this.toastrService.show("Time entry updated", 'Success', {status:'success', duration: 5000});
           this.allEvents = null;
-          this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
-            this.allEvents = response.data;
-            console.log(response.data)
-          })
+          this.updateInformation();
         }
       }
     });
   }
 
+  updateInformation() {
+    this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+      this.allEvents = response.data;
+      this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
+      this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
+    })
+
+    this.timerService.getTimerFromDateRange(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
+      this.allTimers = response.data;
+      this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date()).toISOString());
+    })
+  }
+
   /* Method to update timer button view */
   startStopTimer(timer) {
-    console.log(timer);
-    // this.timerService.stopTimer(timer.id).subscribe((response) => {
-    //   console.log(response);
-    // })
+    this.timerService.stopTimer(timer.id).subscribe((response) => {
+      this.updateInformation();
+    })
   }
 
   /* To be modified -- controls date views on button clicks */

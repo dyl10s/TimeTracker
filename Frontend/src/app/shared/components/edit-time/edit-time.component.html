@@ -6,7 +6,7 @@
 <nb-card-body>
   <h4 class="text-black">Edit Time Entry</h4>
 
-  <form [formGroup]="EditTimeForm" (ngSubmit)="editTimer()" *ngIf="projects">
+  <form [formGroup]="EditTimeForm" *ngIf="projects">
     <div class="form-field">
       <label for="Project">Project</label>
       <nb-select placeholder="Projects" status="primary" [(selected)]="selectedItem" formControlName="projectName">
@@ -40,7 +40,7 @@
 
     <div class="actions-footer">
       <button nbButton status="success" type="submit" (click)="updateEntry(EditTimeForm)">Update Entry</button>
-      <button nbButton status="danger" type="submit">Delete Entry</button>
+      <button nbButton status="danger" type="submit" (click)="deleteEntry(EditTimeForm)">Delete Entry</button>
       <button nbButton status="warning" type="button" (click)="closeDialog()">
         Cancel
       </button>

@@ -127,7 +127,7 @@
                   <td id="time">{{ e.length }}</td>
 
                   <td id="buttons">
-                    <button (click)="openEditTimeEntry()" nbButton outline status="primary">
+                    <button (click)="openEditTimeEntry(e)" nbButton outline status="primary">
                       <nb-icon
                         style
                         class="adaptive-button-icon"
@@ -244,6 +244,6 @@
             <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
             </td>
         </ng-container>
-    </table>
+      </table>
     </div>
 </div>
