@@ -142,5 +142,36 @@ namespace Backend.Controllers
             return results;
         }
 
+        /// <summary>
+        /// Deletes a time entry
+        /// </summary>
+        /// <returns>The ID of the deleted entry</returns>
+        [HttpDelete("{id}")]
+        public async Task<GenericResponseDTO<int>> DeleteTimeEntry(int id) 
+        {
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            var results = new GenericResponseDTO<int>() {
+                Success = false
+            };
+
+            var entry = await database.TimeEntries
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.User.Id == currentUserId && x.Id == id);
+            
+            if(entry == null) {
+                results.Message = "Could not find the Time Entry";
+                return results;
+            }
+
+            database.TimeEntries.Remove(entry);
+
+            await database.SaveChangesAsync();
+
+            results.Success = true;
+            results.Data = entry.Id;
+            return results;
+        }
+
     }
 }

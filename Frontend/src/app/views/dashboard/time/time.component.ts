@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NbDateService, NbDialogService, NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
@@ -59,7 +60,9 @@ export class TimeComponent implements OnInit {
     private timeEntryService: TimeEntryApiService,
     private timerService: TimerService,
     private toastrService: NbToastrService,
+    private titleService: Title,
   ) {
+    this.titleService.setTitle("NTime - Time Tracker");
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
     this.weekEndDate = this.weekEnd;

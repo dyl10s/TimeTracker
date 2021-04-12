@@ -108,5 +108,47 @@ namespace TimeTracker.Test
             Assert.AreEqual(multipleDayResults.Success, true);
             Assert.AreEqual(multipleDayResults.Data.Count, 1);
         }
+    
+        [TestMethod]
+        public async Task DeleteTimeEntry() {
+            
+            var projectResults = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "Test Client",
+                Description = "Test Desciption",
+                ProjectName = "Best project 10/10",
+                Tags = new List<string>() { "AngryCarrot" }
+            });
+            
+            database.ChangeTracker.Clear();
+
+            var projectId = projectResults.Data;
+
+            var testTimeEntry = new TimeEntryDTO() 
+            { 
+                Day = new DateTime(1999, 6, 18),
+                Length = 5,
+                Notes = "Happy Birthday",
+                ProjectId = projectId
+            };
+
+            // Create time
+            var createTimeResults = await timeEntryController.CreateTime(testTimeEntry);
+
+            Assert.IsTrue(createTimeResults.Success);
+            Assert.IsTrue(createTimeResults.Data > 0);
+
+            // Get the time entry
+            var getCreatedTimeResults = await timeEntryController.Get(createTimeResults.Data);
+
+            Assert.AreEqual(getCreatedTimeResults.Success, true);
+
+            var results = await timeEntryController.DeleteTimeEntry(createTimeResults.Data);
+            Assert.IsTrue(results.Success);
+
+            getCreatedTimeResults = await timeEntryController.Get(createTimeResults.Data);
+
+            Assert.IsFalse(getCreatedTimeResults.Success);
+        }
     }
 }

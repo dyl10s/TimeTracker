@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { TimeEntry } from 'src/app/core/models/TimeEntry.model';
@@ -28,10 +29,12 @@ export class EditTimeComponent implements OnInit {
     private ref: NbDialogRef<EditTimeComponent>,
     private projectService: ProjectService,
     private timeEntryService: TimeEntryApiService,
+    private titleService: Title,
   ){  }
 
   ngOnInit() {
-    console.log(this.event)
+    this.titleService.setTitle("NTime - Edit Time");
+    
     this.projectService.getActiveProjectsByUser().subscribe((response: GenericResponseDTO) => {
       this.projects = response.data;
 
