@@ -6,5 +6,6 @@ namespace TimeTracker.Api.DTOs {
         public DateTime StartTime { get; set; }
         public string Notes { get; set; }
         public int ProjectId { get; set; }
+        public ProjectCreateDTO Project { get; set; }
     }
 }

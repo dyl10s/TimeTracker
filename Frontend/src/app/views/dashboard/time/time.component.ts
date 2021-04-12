@@ -34,9 +34,9 @@ export class TimeComponent implements OnInit {
   timeSpent = '0:00';
   weekTimeSpent = '0:00'
   // Timer button icons //
-  timerBtnIcon = 'play-circle-outline';
-  timerBtnText = 'Start';
-  timerBtnStatus = 'primary';
+  timerBtnIcon = 'stop-circle-outline';
+  timerBtnText = 'Stop';
+  timerBtnStatus = 'danger';
   // Controls view //
   dayView: boolean = true;
   weekView: boolean = false;
@@ -49,6 +49,8 @@ export class TimeComponent implements OnInit {
   displayEvents: any = [];
 
   allTimers: any = [];
+  displayTimers: any = [];
+
   allProjects: any = [];
 
   constructor(
@@ -73,14 +75,15 @@ export class TimeComponent implements OnInit {
 
     this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allEvents = response.data;
-      console.log(response.data);
       this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
       this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
+      console.log(this.allEvents)
     })
 
     this.timerService.getTimerFromDateRange(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allTimers = response.data;
-      console.log(this.allTimers);
+      this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date()).toISOString());
+      console.log(this.displayTimers);
     })
   }
 
@@ -112,6 +115,7 @@ export class TimeComponent implements OnInit {
 
   switchedDate() {
     this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(this.today)).toISOString());
+    this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date(this.today)).toISOString());
   }
 
   setTime(date) {
@@ -260,16 +264,11 @@ export class TimeComponent implements OnInit {
   }
 
   /* Method to update timer button view */
-  startStopTimer() {
-    if (this.timerBtnText == 'Start') {
-      this.timerBtnText = 'Stop';
-      this.timerBtnIcon = 'stop-circle-outline';
-      this.timerBtnStatus = 'danger';
-    } else {
-      this.timerBtnText = 'Start';
-      this.timerBtnIcon = 'play-circle-outline';
-      this.timerBtnStatus = 'primary';
-    }
+  startStopTimer(timer) {
+    console.log(timer);
+    // this.timerService.stopTimer(timer.id).subscribe((response) => {
+    //   console.log(response);
+    // })
   }
 
   /* To be modified -- controls date views on button clicks */

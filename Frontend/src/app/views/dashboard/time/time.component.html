@@ -114,6 +114,10 @@
           <div class="entryListExist" *ngIf="dayView">
             <table [nbFilter]="" [nbSpinner]="showLoadingSpinner">
               <tbody>
+                <tr class="empty-state" *ngIf="displayEvents.length == 0 && displayTimers.length == 0">
+                  <h3>NO EVENTS</h3>
+                </tr>
+
                 <tr *ngFor="let e of displayEvents">
                   <td id="details">
                     <div class="projectName">{{ e.project?.name }}</div>
@@ -123,8 +127,28 @@
                   <td id="time">{{ e.length }}</td>
 
                   <td id="buttons">
-                    <!-- <button
-                      (click)="startStopTimer()"
+                    <button (click)="openEditTimeEntry()" nbButton outline status="primary">
+                      <nb-icon
+                        style
+                        class="adaptive-button-icon"
+                        id="edit-icon"
+                        icon="edit"
+                      ></nb-icon>
+                    </button>
+                  </td>
+                </tr>
+
+                <tr *ngFor="let e of displayTimers">
+                  <td id="details">
+                    <div class="projectName">{{ e.project?.name }}</div>
+                    <div class="projectNotes">{{ e.notes }}</div>
+                  </td>
+
+                  <td id="time"><nb-icon class="adaptive-button-icon" icon="clock"></nb-icon></td>
+
+                  <td id="buttons">
+                    <button
+                      (click)="startStopTimer(e)"
                       nbButton
                       status="{{ timerBtnStatus }}"
                     >
@@ -135,14 +159,6 @@
                       <span class="adaptive-button-text">{{
                         timerBtnText
                       }}</span>
-                    </button> -->
-                    <button (click)="openEditTimeEntry()" nbButton outline status="primary">
-                      <nb-icon
-                        style
-                        class="adaptive-button-icon"
-                        id="edit-icon"
-                        icon="edit"
-                      ></nb-icon>
                     </button>
                   </td>
                 </tr>
@@ -223,7 +239,7 @@
         </ng-container>
         <ng-container nbTreeGridColumnDef="Total">
             <th nbTreeGridHeaderCell class="desk" *nbTreeGridHeaderCellDef>
-                Total: <br />{{ totalHours }}
+                Total: <br />{{ weekTimeSpent }}
             </th>
             <td nbTreeGridCell class="desk" *nbTreeGridCellDef="let row">
             </td>

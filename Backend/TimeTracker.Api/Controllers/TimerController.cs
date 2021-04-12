@@ -183,14 +183,14 @@ namespace Backend.Controllers
         // returns a list of timerDTOs for each timer belonging to the logged in user
         [HttpGet]
         [Route("DateRange")]
-        public async Task<GenericResponseDTO<List<TimerDTO>>> GetTimersWithinDateRange(DateTime startDate, DateTime endDate) {
+        public async Task<GenericResponseDTO<List<Timer>>> GetTimersWithinDateRange(DateTime startDate, DateTime endDate) {
 
             int currentUserId;
 
             try {
                 currentUserId = authHelper.GetCurrentUserId(User);
             } catch(System.NullReferenceException) {
-                return new GenericResponseDTO<List<TimerDTO>> {
+                return new GenericResponseDTO<List<Timer>> {
                     Message = "Not logged in.",
                     Success = false
                 };
@@ -205,16 +205,8 @@ namespace Backend.Controllers
                 .Include(t => t.Project)
                 .ToListAsync();
 
-            List<TimerDTO> timerDTOs = new List<TimerDTO>();
-            timers.ForEach(t => timerDTOs.Add(new TimerDTO {
-                Id = t.Id,
-                StartTime = t.StartTime,
-                Notes = t.Notes,
-                ProjectId = t.Project.Id
-            }));
-
-            return new GenericResponseDTO<List<TimerDTO>> {
-                Data = timerDTOs,
+            return new GenericResponseDTO<List<Timer>> {
+                Data = timers,
                 Success = true
             };
         }

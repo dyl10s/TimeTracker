@@ -3,7 +3,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ProfileService } from '../../../core/services/profile.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { ProjectNameAndClientDTO } from '../../../core/models/ProjectNameAndClientDTO.model';
-import { ProfileDTO } from '../../../core/models/ProfileDTO.model';
 import { NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 
 @Component({

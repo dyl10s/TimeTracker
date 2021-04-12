@@ -32,7 +32,7 @@ export class EditTimeComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.event)
-    this.projectService.getProjectsByUser().subscribe((response: GenericResponseDTO) => {
+    this.projectService.getActiveProjectsByUser().subscribe((response: GenericResponseDTO) => {
       this.projects = response.data;
 
       this.EditTimeForm.patchValue({
