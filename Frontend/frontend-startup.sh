@@ -1,5 +1,8 @@
 # This file controls what happens to the frontend docker container on startup
 
+#Start Nginx
+nginx -g 'daemon off;'
+
 #Generate the certificate
 certbot --nginx --non-interactive --agree-tos -m strohscd@mail.gvsu.edu -d dev.timetrack.ml
 
