@@ -22,6 +22,10 @@ services:
   frontend:
     image: strohscd/timetracker-frontend:${TIMETRACK_TAG:-latest}
     restart: always
+    environment:
+      SSLEmail: SSLEmailHere
+      Domain1: Domain1Here
+      Domain2: Domain2Here
     ports: 
       - 80:80
       - 443:443
