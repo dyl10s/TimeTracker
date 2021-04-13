@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NbToastrService } from '@nebular/theme';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
 import { AuthApiService } from '../../../core/services/auth/auth-api.service';
 
@@ -29,7 +30,8 @@ export class RegisterComponent implements OnInit {
     private authService: AuthApiService,
     private router: Router,
     public activatedRoute: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private toastrService: NbToastrService,
   ) {
       this.titleService.setTitle("NTime - Register");
     }
@@ -62,6 +64,12 @@ export class RegisterComponent implements OnInit {
     }).subscribe((response: GenericResponseDTO) => {
       if(response.success) {
         // Handle Successful Registration
+        if(response.message == "Added User to Project"){
+          this.toastrService.success("You have been added to a project", "Success");
+        }else if(response.message == "Project not found"){
+          this.toastrService.danger("Invite code has not been found", "Error")
+        }
+        
         this.router.navigate(['/auth/login']);
       } else {
         this.error = response.message;

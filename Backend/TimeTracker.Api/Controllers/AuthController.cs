@@ -161,6 +161,8 @@ namespace TimeTracker.Api.Controllers
 
                 await database.AddAsync(newUser);
 
+                String message = "";
+
                 // check if the user registered with an invite code, if they did, add them to a project
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
@@ -170,6 +172,9 @@ namespace TimeTracker.Api.Controllers
 
                     if(project != null) {
                         newUser.Projects.Add(project);
+                        message = "Added User to Project";
+                    }else{
+                        message = "Project not found";
                     }
 
                 }
@@ -179,7 +184,8 @@ namespace TimeTracker.Api.Controllers
                 return new GenericResponseDTO<int>() 
                 {
                     Success = true,
-                    Data = newUser.Id
+                    Data = newUser.Id,
+                    Message = message
                 };
             }
             catch
