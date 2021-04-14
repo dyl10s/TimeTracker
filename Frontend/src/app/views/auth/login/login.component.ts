@@ -79,7 +79,10 @@ export class LoginComponent implements OnInit {
                 this.toastrService.success("You have been added to a project", "Success");
               }else if(response.message == "Project not found"){
                 this.toastrService.danger("Invite code has not been found", "Error")
+              }else if (response.message == "Unable to add to Archived Project"){
+                this.toastrService.danger("Unable to add user to Archived Project", "Error");
               }
+              
               this.router.navigate(['/dashboard/profile']);
             }
           }

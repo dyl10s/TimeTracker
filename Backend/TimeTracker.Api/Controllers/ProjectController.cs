@@ -204,13 +204,22 @@ namespace TimeTracker.Api.Controllers
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode && x.ArchivedDate == null);
+                .FirstOrDefaultAsync(x => x.InviteCode == inviteCode.InviteCode);
 
             if (project == null)
             {
                 return new GenericResponseDTO<int>()
                 {
                     Message = "Couldn't find the project",
+                    Success = false
+                };
+            }
+
+            if (project.ArchivedDate != null)
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "Can't add user to archived project",
                     Success = false
                 };
             }

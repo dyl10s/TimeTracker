@@ -71,11 +71,15 @@ namespace TimeTracker.Api.Controllers
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode && p.ArchivedDate == null);
+                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
 
-                    if(project != null) {
-                        curUser.Projects.Add(project);
-                        message = "Added User to Project";
+                    if(project != null){
+                        if(project.ArchivedDate != null){
+                            message = "Unable to add to Archived Project";
+                        }else{
+                            curUser.Projects.Add(project);
+                            message = "Added User to Project";
+                        }
                     }else{
                         message = "Project not found";
                     }
@@ -168,11 +172,15 @@ namespace TimeTracker.Api.Controllers
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode && p.ArchivedDate == null);
+                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
-                    if(project != null) {
-                        newUser.Projects.Add(project);
-                        message = "Added User to Project";
+                    if(project != null){
+                        if(project.ArchivedDate != null){
+                            message = "Unable to add to Archived Project";
+                        }else{
+                            newUser.Projects.Add(project);
+                            message = "Added User to Project";
+                        }
                     }else{
                         message = "Project not found";
                     }
