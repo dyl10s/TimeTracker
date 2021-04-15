@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using TimeTracker.Api.Controllers;
 using TimeTracker.Api.DTOs;
 using TimeTracker.Api.Helpers;
+using TimeTracker.Database.Models;
 using TimeTracker.Test.Helpers;
 
 namespace TimeTracker.Test
@@ -19,10 +21,12 @@ namespace TimeTracker.Test
     public class ProjectTests : BaseTest
     {
         ProjectController projectController;
+        AuthController authController;
 
         public ProjectTests()
         {
             projectController = new ProjectController(database, new AuthHelper());
+            authController = new AuthController(database, configuration, new AuthHelper());
             
             TestAuthHelpers.LogInUser(database, configuration, projectController).GetAwaiter().GetResult(); 
         }
@@ -184,16 +188,33 @@ namespace TimeTracker.Test
             Assert.IsTrue(userProjects.Data.Count == 1);
             Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);
 
+            // Testing to attempt to remove teacher //
             await projectController.RemoveUserFromProject(new ProjectRemoveUserDTO()
             {
                 ProjectId = 1,
                 UserId = 1
             });
+            Assert.IsTrue(userProjects.Data.Count == 1);
+            Assert.IsTrue(userProjects.Data[0].Id == 1);
 
-            var userRemoved = await projectController.GetActiveProjectsByUser();
+            // Testing to attempt to remove student //
+            var student = await authController.Register(new UserDTO(){
+                Email = "newStudent12345@gmail.com",
+                Password = "Admin123.",
+                FirstName = "New",
+                LastName = "Student",
+                InviteCode = project.Data.InviteCode
+            });
 
-            Assert.IsTrue(userRemoved.Data.Count == 0);
-            Assert.IsTrue(userRemoved.Data[0].Id == 1);
+            Console.WriteLine(project.Data.Students.Count);
+            Assert.IsTrue(project.Data.Students.Count == 1);
+            Assert.IsTrue(project.Data.Id == 1);
+            await projectController.RemoveUserFromProject(new ProjectRemoveUserDTO()
+            {
+                ProjectId = 1,
+                UserId = 2
+            });
+            Assert.IsTrue(project.Data.Students.Count == 0);
         }
 
         [TestMethod]

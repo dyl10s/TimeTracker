@@ -256,9 +256,9 @@ namespace TimeTracker.Api.Controllers
                 return response;
             }
 
-            if (currentUserId != project.Teacher.Id)
+            if (currentUserId != project.Teacher.Id || projectUserRemoveInfo.UserId == project.Teacher.Id)
             {
-                response.Message = "Error, only teachers can remove users.";
+                response.Message = "Error, only teachers can remove users and teachers cannot be removed.";
                 return response;
             }
 
