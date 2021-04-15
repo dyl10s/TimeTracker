@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService, NbTagComponent, NbTagInputAddEvent, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { forkJoin } from 'rxjs';
@@ -70,8 +71,10 @@ export class ProjectDetailsComponent {
     private router: Router,
     private reportService: ReportService,
     private dialogService: NbDialogService,
-    public jwtService: JwtService
-  ) {
+    public jwtService: JwtService,
+    private titleService: Title
+  ){
+    this.titleService.setTitle("NTime - Project Details");
     this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
     this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
 

@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import { CustomFilterService } from 'src/app/core/services/customFilterService.service';
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-report',
@@ -38,13 +39,16 @@ export class ReportComponent {
     private router: Router,
     private reportService: ReportService,
     private dataSourceBuilder: CustomTreeBuilder<any>,
-    private tostrService: NbToastrService) {
-    
-    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
-    this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
-    this.getActiveProjects();
-  }
+    private tostrService: NbToastrService,
+    private titleService: Title
+    ) {
+        this.titleService.setTitle("NTime - Reports");
+        this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
+        this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
+        this.getActiveProjects();
+    }
 
+    
   getActiveProjects() {
     this.showLoadingSpinner = true;
     this.projectService.getActiveProjectsByUser().subscribe((res) => {
@@ -52,7 +56,7 @@ export class ReportComponent {
         this.activeProjectCache = res.data;
         this.loadActiveProjectHours();
       }
-    }, 
+    },
     () => {
       this.showLoadingSpinner = false;
       this.tostrService.danger("There was an error loading the projects.", "Error");
@@ -72,7 +76,7 @@ export class ReportComponent {
 
       let customFilter = new CustomFilterService<any>();
       customFilter.setFilterColumns(["name", "fullName"]);
-  
+
       this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
 
       // This will hide the spinner after the first report request is made
@@ -179,7 +183,7 @@ export class ReportComponent {
   viewActiveProjects() {
     this.showActive = true;
     this.activeDataSource.filter(this.searchQuery);
-  } 
+  }
 
 }
 
