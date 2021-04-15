@@ -77,8 +77,12 @@ namespace TimeTracker.Api.Controllers
                         if(project.ArchivedDate != null){
                             message = "Unable to add to Archived Project";
                         }else{
-                            curUser.Projects.Add(project);
-                            message = "Added User to Project";
+                            if(curUser.Projects.Contains(project)){
+                                message = "User already in project";
+                            }else{
+                                curUser.Projects.Add(project);
+                                message = "Added User to Project";
+                            }
                         }
                     }else{
                         message = "Project not found";

@@ -224,7 +224,16 @@ namespace TimeTracker.Api.Controllers
                 };
             }
 
-            curUser.Projects.Add(project);
+            if(curUser.Projects.Contains(project))
+            {
+                return new GenericResponseDTO<int>()
+                {
+                    Message = "User is already assigned to this project",
+                    Success = false
+                };
+            } else {
+                curUser.Projects.Add(project);
+            }
             
             await database.SaveChangesAsync();
 

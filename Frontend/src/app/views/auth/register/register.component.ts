@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
         if(response.message == "Added User to Project"){
           this.toastrService.success("You have been added to a project", "Success");
         }else if(response.message == "Project not found"){
-          this.toastrService.danger("Invite code has not been found", "Error");
+          this.toastrService.danger("Invite code is not valid", "Error");
         }else if (response.message == "Unable to add to Archived Project"){
           this.toastrService.danger("Unable to add user to Archived Project", "Error");
         }
