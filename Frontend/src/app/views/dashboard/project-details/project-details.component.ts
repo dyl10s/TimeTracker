@@ -87,7 +87,6 @@ export class ProjectDetailsComponent {
           this.copyDetails = results.data;
 
           results.data.teacher.role = "Teacher";
-
           this.teamMembers.push({
             data: results.data.teacher
           });
@@ -96,11 +95,9 @@ export class ProjectDetailsComponent {
             s.role = "Student";
             this.teamMembers.push({
               data: s
-
             });
           });
 
-          console.log(this.teamMembers);
           this.updateProjectForm.setValue({
             details: this.details.description,
             tags: [...this.details.tags]
