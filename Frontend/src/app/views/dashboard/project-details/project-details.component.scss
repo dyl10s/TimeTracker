@@ -70,11 +70,7 @@ table {
 
 @media only screen and (max-width: 767px) {
     table {
-        .name {
-            #delete {
-                float: left;
-            }
-        }
+        text-align: center;
     }
 }
 
@@ -83,8 +79,15 @@ table {
         display: none;
     }
     table {
-        #delete {
-            float: right;
+        .name {
+            .delete {
+                display: flex;
+                justify-content: space-between;
+                #space-left{
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                }
+            }
         }
     }
 }

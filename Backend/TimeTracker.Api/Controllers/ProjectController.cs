@@ -240,14 +240,12 @@ namespace TimeTracker.Api.Controllers
                 Success = false
             };
 
-            var curUser = await database.Users
-                .Include(x => x.Projects)
-                .FirstOrDefaultAsync(x => x.Id == authHelper.GetCurrentUserId(User));
+            var currentUserId = authHelper.GetCurrentUserId(User);
 
             Project project = await database.Projects
                 .AsQueryable()
                 .Where(x => x.Id == projectUserRemoveInfo.ProjectId && x.ArchivedDate == null)
-                .Where(x => x.Teacher.Id == curUser.Id)
+                .Where(x => x.Teacher.Id == currentUserId)
                 .Include(x => x.Teacher)
                 .Include(x => x.Students)
                 .FirstOrDefaultAsync();
@@ -255,6 +253,12 @@ namespace TimeTracker.Api.Controllers
             if (project == null)
             {
                 response.Message = "Couldn't find the project";
+                return response;
+            }
+
+            if (currentUserId != project.Teacher.Id)
+            {
+                response.Message = "Error, only teachers can remove users.";
                 return response;
             }
 
@@ -269,11 +273,11 @@ namespace TimeTracker.Api.Controllers
             }
             project.Students.Remove(removeStud);
      
-            List<TimeEntry> removeEntries = database.TimeEntries
+            List<TimeEntry> removeEntries = await database.TimeEntries
                     .AsQueryable()
                     .Where(
                     x => x.Project.Id == projectUserRemoveInfo.ProjectId &&
-                    x.User.Id == projectUserRemoveInfo.UserId).ToList();
+                    x.User.Id == projectUserRemoveInfo.UserId).ToListAsync();
             database.TimeEntries.RemoveRange(removeEntries);
               
 

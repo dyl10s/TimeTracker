@@ -146,6 +146,57 @@ namespace TimeTracker.Test
         }
 
         [TestMethod]
+        public async Task RemoveUserFromProject()
+        {
+            var createResult = await projectController.CreateProject(new ProjectCreateDTO()
+            {
+                ClientName = "Test Client",
+                Description = "Test Description",
+                ProjectName = "Test Name",
+                Tags = new List<string>()
+                {
+                    "Test Tag 1",
+                    "Test Tag 2"
+                }
+            });
+
+            Assert.IsTrue(createResult.Success);
+
+            var project = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(project.Data.Description == "Test Description");
+
+            await projectController.UpdateProjectDetails(new ProjectDetailsDTO()
+            {
+                Description = "Updated Description",
+                ProjectId = createResult.Data
+            });
+
+            var projectUpdated = await projectController.GetProjectById(createResult.Data);
+
+            Assert.IsTrue(projectUpdated.Data.Description == "Updated Description");
+
+            await projectController.AddUserToProject(new AddUserToProjectDTO()
+            {
+                InviteCode = project.Data.InviteCode
+            });
+            var userProjects = await projectController.GetActiveProjectsByUser();
+            Assert.IsTrue(userProjects.Data.Count == 1);
+            Assert.IsTrue(userProjects.Data[0].Id == project.Data.Id);
+
+            await projectController.RemoveUserFromProject(new ProjectRemoveUserDTO()
+            {
+                ProjectId = 1,
+                UserId = 1
+            });
+
+            var userRemoved = await projectController.GetActiveProjectsByUser();
+
+            Assert.IsTrue(userRemoved.Data.Count == 0);
+            Assert.IsTrue(userRemoved.Data[0].Id == 1);
+        }
+
+        [TestMethod]
         public async Task ArchiveProject()
         {
             var createResult = await projectController.CreateProject(new ProjectCreateDTO()

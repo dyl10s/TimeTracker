@@ -55,11 +55,12 @@ export class ProjectDetailsComponent {
   endDate: any = new Date();
 
   updateProjectForm: FormGroup = new FormGroup({
-    tags: new FormControl({ value: '', disabled: false }),
-    details: new FormControl({ value: '', disabled: false })
+    tags: new FormControl({value: '', disabled: false}),
+    details: new FormControl({value: '', disabled: false})
   });
 
   detailsReport: any = {};
+  userChangesMade: boolean = false;
 
   constructor(
     private projectService: ProjectService,
@@ -70,19 +71,20 @@ export class ProjectDetailsComponent {
     private reportService: ReportService,
     private dialogService: NbDialogService,
     public jwtService: JwtService
-  ){
+  ) {
     this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
     this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
 
     this.projectId = parseInt(route.snapshot.paramMap.get('id'));
     projectService.getProjectById(this.projectId).subscribe(
       (results: GenericResponseDTO<ProjectDTO>) => {
-        if (results.success) {
+        if(results.success){
           results.data.tags = results.data.tags.map(x => x.name);
           this.details = results.data;
           this.copyDetails = results.data;
 
           results.data.teacher.role = "Teacher";
+
           this.teamMembers.push({
             data: results.data.teacher
           });
@@ -91,15 +93,17 @@ export class ProjectDetailsComponent {
             s.role = "Student";
             this.teamMembers.push({
               data: s
+
             });
           });
 
+          console.log(this.teamMembers);
           this.updateProjectForm.setValue({
             details: this.details.description,
             tags: [...this.details.tags]
           });
 
-        } else {
+        }else{
           // TODO Add error handling
         }
 
@@ -115,17 +119,17 @@ export class ProjectDetailsComponent {
 
   }
 
-  getAllTags(): string[] {
-    if (this.pageMode == 'view') {
+  getAllTags() : string[] {
+    if(this.pageMode == 'view'){
       return this.details.tags;
-    } else {
+    }else{
       return this.updateProjectForm.get('tags').value;
     }
   }
 
   onTagAdd({ value, input }: NbTagInputAddEvent): void {
     if (value) {
-      if (this.updateProjectForm.get("tags").value.indexOf(value) === -1) {
+      if(this.updateProjectForm.get("tags").value.indexOf(value) === -1){
         this.updateProjectForm.get("tags").setValue([...this.updateProjectForm.get("tags").value, value]);
       }
     }
@@ -141,15 +145,15 @@ export class ProjectDetailsComponent {
     let body = "";
     let title = "";
 
-    if (this.details.archivedDate == null) {
+    if(this.details.archivedDate == null){
       title = "Are you sure you want to archive the project?";
-      body = `Archiving the project will make it so no more time can be submitted for the project, 
-      and make it so no new members can join the project. The project will show under the under the archived 
+      body = `Archiving the project will make it so no more time can be submitted for the project,
+      and make it so no new members can join the project. The project will show under the under the archived
       tab on the projects screen and report screen.
       `;
     } else {
       title = "Are you sure you want to unarchive the project?";
-      body = `Unarchiving the project will make it so time can be submitted for the project, 
+      body = `Unarchiving the project will make it so time can be submitted for the project,
       and allow new members can join the project. The project will show under the active projects tab
       on the projects screen and report screen.
       `;
@@ -176,21 +180,21 @@ export class ProjectDetailsComponent {
 
     if (this.details.archivedDate == null) {
       requestDetails.archive = true;
-    } else {
+    } else{
       requestDetails.archive = false;
     }
 
     this.projectService.archiveProject(requestDetails).subscribe(
       (res) => {
-        if (res.success) {
+        if(res.success) {
           this.details.archivedDate = res.data;
 
-          if (res.data == null) {
+          if(res.data == null) {
             this.toastrService.success("The project has been unarchived", "Project Unnarchived");
-          } else {
+          }else {
             this.toastrService.success("The project has been archived", "Project Archived");
           }
-        } else {
+        }else{
           this.toastrService.danger(res.message, "Error");
         }
         this.archiving = false;
@@ -204,19 +208,24 @@ export class ProjectDetailsComponent {
 
     // Check if we made changes
     let changesMade = false;
-    if (this.details.tags.length !== this.updateProjectForm.get("tags").value.length) {
+    if(this.details.tags.length !== this.updateProjectForm.get("tags").value.length){
       changesMade = true;
     }
 
-    if (!changesMade) {
+    if(!changesMade){
       this.details.tags.forEach((x: string, i: number) => {
-        if (x !== this.updateProjectForm.get("tags")[i]) {
+        if(x !== this.updateProjectForm.get("tags")[i]){
           changesMade = true;
         }
       })
     }
 
-    if (!changesMade) {
+    if (this.userChangesMade) {
+      this.setUpCharts();
+      this.userChangesMade = false;
+    }
+
+    if(!changesMade) {
       this.toastrService.success("The project has been saved successfully", "Project Saved");
       this.pageMode = 'view';
       return;
@@ -238,11 +247,11 @@ export class ProjectDetailsComponent {
         };
       }))
     ]).subscribe((res: [GenericResponseDTO, GenericResponseDTO]) => {
-      if (res[0].success == true && res[1].success == true) {
+      if(res[0].success == true && res[1].success == true){
         this.details.description = this.updateProjectForm.get("details").value;
         this.details.tags = this.updateProjectForm.get("tags").value;
         this.toastrService.success("The project has been saved successfully", "Project Saved");
-      } else {
+      }else{
         this.toastrService.danger("There was an error updating the project", "Error");
       }
       this.loadingProject = false;
@@ -275,13 +284,19 @@ export class ProjectDetailsComponent {
     }
     this.projectService.removeUserFromProject(removeUserInfo).subscribe((res: GenericResponseDTO) => {
       if (res.success) {
+        this.teamMembers.forEach((element, index) => {
+          if (removeUserId == element.data.id) {
+            this.teamMembers.splice(index, 1);
+          }
+          this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
+        })
         this.toastrService.show("Success", "User Id: " + res.data + " successfully removed from your project", { status: 'success', duration: 4000 });
-        setTimeout(() => {  window.location.reload(); }, 2000);
+        this.userChangesMade = true;
       } else {
         this.toastrService.show("Error", "There was an error removing user from your project", { status: 'danger', duration: 4000 });
       }
     }, (err) => {
-      console.log(err);
+      this.toastrService.show("Error", "There was an error removing user from your project", { status: 'danger', duration: 4000 });
     });
   }
 
@@ -327,6 +342,12 @@ export class ProjectDetailsComponent {
   }
 
   setUpCharts() {
+    this.lineChartData  = [{
+      'name': 'Total Hours Spent',
+      'series': [
+      ]
+    }];
+    this.barChartData = [];
 
     // get all time entries associated with a specific project
     this.reportService.getDetailsReport(this.projectId, new Date(2020, 1, 1), new Date()).subscribe(
