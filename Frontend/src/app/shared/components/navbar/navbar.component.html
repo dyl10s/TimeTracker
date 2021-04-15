@@ -8,9 +8,12 @@
           <button nbButton class="mob" [nbContextMenu]="homeItems">
             <nb-icon class="adaptive-button-icon" icon="menu-outline"></nb-icon>
           </button>
-          <div class="right-aligned" class="desk">
+          <div class="right-aligned" class="desk" *ngIf="!jwtService.isAuthenticated()">
             <nb-action class="desk" (click)="routeClick('login')">Login</nb-action>
             <button nbButton class="desk" (click)="routeClick('register')">Sign up</button>
+          </div>
+          <div class="right-aligned" class="desk" *ngIf="jwtService.isAuthenticated()">
+            <button nbButton class="desk" (click)="router.navigate(['/dashboard/profile'])">Dashboard</button>
           </div>
         </div>
       </div>

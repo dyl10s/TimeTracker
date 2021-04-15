@@ -17,8 +17,8 @@ export class NavbarComponent implements OnInit {
   userInfo: PayloadDTO;
 
   constructor(
-    private router: Router,
-    private jwtService: JwtService,
+    public router: Router,
+    public jwtService: JwtService,
     private nbMenuService: NbMenuService
   ) {
     this.nbMenuService.onItemClick().subscribe(menuItem => {

@@ -80,6 +80,13 @@ namespace Backend.Controllers
 
             DateTime timeEntryCreationTime = DateTime.UtcNow;
 
+            if(timer == null) {
+                return new GenericResponseDTO<TimeEntryDTO>() {
+                    Success = false,
+                    Message = "Could not find the timer"
+                };
+            }
+
             TimeEntry timeEntry = (await database.TimeEntries
                 .AddAsync(new TimeEntry{
                     CreatedTime = timeEntryCreationTime,

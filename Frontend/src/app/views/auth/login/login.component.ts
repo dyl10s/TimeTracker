@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { GenericResponseDTO } from '../../../core/models/GenericResponseDTO.model';
@@ -30,8 +31,11 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public activatedRoute: ActivatedRoute,
     private projectService: ProjectService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("NTime - Login");
+    }
 
   ngOnInit(): void {
     this.discordLink = this.activatedRoute.snapshot.queryParamMap.get('discordLink');

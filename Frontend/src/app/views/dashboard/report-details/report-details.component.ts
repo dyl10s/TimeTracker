@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { UserDto } from 'src/app/core/models/auth/UserDto.model';
@@ -39,10 +40,11 @@ export class ReportDetailsComponent implements OnInit {
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
     private projectService: ProjectService,
     private reportService: ReportService,
+    private titleService: Title
   ) {
+    this.titleService.setTitle("NTime - Report Details");
     this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - this.startDate.getDay() + 1);
     this.endDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() + 6);
-
     this.projectId = parseInt(route.snapshot.paramMap.get('projId'));
     this.currentUserId = parseInt(route.snapshot.paramMap.get('userId'));
     this.getAllTimeEntries();
