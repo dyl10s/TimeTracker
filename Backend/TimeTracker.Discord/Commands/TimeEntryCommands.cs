@@ -20,9 +20,19 @@ namespace TimeTracker.Discord.Commands
             this.commandService = commandService;
         }
 
+        [Command("test")]
+        [Summary("Create a time entry for the current day.")]
+        public async Task TestCall(int projectId, decimal length, string notes)
+        {
+            await Context.Message.ReplyAsync(projectId.ToString());
+            await Context.Message.ReplyAsync(length.ToString());
+            await Context.Message.ReplyAsync(notes);
+            return;
+        }
+
         [Command("create")]
         [Summary("Create a time entry for the current day.")]
-        public async Task Create([Remainder] string parameters)
+        public async Task Create(int? projectId, double? length, [Remainder] string notes = "")
         {
             User user = database.Users
                 .AsQueryable()
@@ -33,36 +43,18 @@ namespace TimeTracker.Discord.Commands
                 return;
             }
 
-            string[] paramArray = parameters.Split(" ");
-
-            if(paramArray.Length < 2){
-                await Context.Message.ReplyAsync("You are missing a parameter in the command.");
-                return;
-            }
-
-            if(int.Parse(paramArray[0]).ToString() == ""){
-                await Context.Message.ReplyAsync("Project ID should be an integer.");
-                return;
-            }
-
-            if(int.Parse(paramArray[1]).ToString() == ""){
-                await Context.Message.ReplyAsync("Length of TimeEntry should be an integer.");
+            if(projectId == null || length == null){
+                await Context.Message.ReplyAsync("You need to have a Project ID and TimeEntry length in the command.");
                 return;
             }
 
             Project project = await database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.Id == int.Parse(paramArray[0]) && x.ArchivedDate == null);
+                .FirstOrDefaultAsync(x => x.Id == projectId && x.ArchivedDate == null);
 
             if(project == null){
                 await Context.Message.ReplyAsync("No projects match the ID listed.");
                 return;
-            }
-
-            String notes = null;
-
-            if(paramArray.ElementAtOrDefault(2) != null) {
-                notes = paramArray[2];
             }
 
             var newTimeEntry = new TimeEntry() 
@@ -70,7 +62,7 @@ namespace TimeTracker.Discord.Commands
                 CreatedTime = DateTime.UtcNow,
                 Day = DateTime.UtcNow,
                 LastModified = DateTime.UtcNow,
-                Length = int.Parse(paramArray[1]),
+                Length = length.GetValueOrDefault(),
                 Notes = notes,
                 Project = project,
                 User = user
@@ -83,7 +75,7 @@ namespace TimeTracker.Discord.Commands
             {
                 Color = new Color(35, 45, 154),
                 Title = "New TimeEntry",
-                Description = "Successfully created a new TimeEntry with Id " + newTimeEntry.Id,
+                Description = "Successfully created a new TimeEntry",
             };
 
             embedBuilder.AddField(field => {
@@ -104,7 +96,7 @@ namespace TimeTracker.Discord.Commands
                 field.IsInline = false;
             });
 
-            if(newTimeEntry.Notes != null){
+            if(notes != ""){
                 embedBuilder.AddField(field => {
                     field.Name = "Notes";
                     field.Value = newTimeEntry.Notes;
