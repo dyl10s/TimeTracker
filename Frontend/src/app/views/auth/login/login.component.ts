@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
             if(paramMap.get('returnUrl'))
               this.router.navigate([paramMap.get('returnUrl')]);
             else
-              this.router.navigate(['/dashboard/profile']);
+              this.router.navigate(['/dashboard/time']);
           }
         )
         
