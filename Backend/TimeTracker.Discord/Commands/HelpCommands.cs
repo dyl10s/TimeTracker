@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace TimeTracker.Discord.Commands
 {
- 
     public class HelpCommands : ModuleBase<SocketCommandContext>
     {
         CommandService commandService;
