@@ -67,22 +67,23 @@ export class ReportComponent {
     this.showLoadingSpinner = true;
     this.activeProjects = [];
 
-    forkJoin(
-      this.activeProjectCache.map(p => this.reportService.getLengthReport(p.id, this.startDate, this.endDate))
-    ).subscribe(projReport => {
-      projReport.forEach((x, i) => {
-        this.getProjectHours(this.activeProjectCache[i], x);
-      });
+    this.reportService.getLengthsReport(this.activeProjectCache.map(x => x.id), this.startDate, this.endDate).subscribe(results => {
 
-      let customFilter = new CustomFilterService<any>();
-      customFilter.setFilterColumns(["name", "fullName"]);
+      if(results.success) {
+        results.data.forEach(proj => {
 
-      this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
+          const cachedProject = this.activeProjectCache.find(x => x.id == proj.projectId);
+          if(cachedProject) {
+            this.getProjectHours(cachedProject, proj.userTimeEntries);
 
-      // This will hide the spinner after the first report request is made
-      // this is incorrect but I am going to be making this into a single API call in
-      // another story this sprint so there is no need for me to google around for
-      // how to do this properly
+            let customFilter = new CustomFilterService<any>();
+            customFilter.setFilterColumns(["name", "fullName"]);
+
+            this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
+          }
+        })
+      }
+
       this.showLoadingSpinner = false;
     });
   }
@@ -102,20 +103,25 @@ export class ReportComponent {
   }
 
   loadArchivedProjectHours() {
+    this.showLoadingSpinner = true;
     this.archivedProjects = [];
 
-    forkJoin(
-      this.archivedProjectCache.map(p => this.reportService.getLengthReport(p.id, this.startDate, this.endDate))
-    ).subscribe(projReport => {
-      projReport.forEach((x, i) => {
-        this.getProjectHours(this.archivedProjectCache[i], x);
-      });
+    this.reportService.getLengthsReport(this.archivedProjectCache.map(x => x.id), this.startDate, this.endDate).subscribe(results => {
 
-      let customFilter = new CustomFilterService<any>();
-      customFilter.setFilterColumns(["name", "fullName"]);
-  
-      this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
-      this.archivedDataSource.filter(this.searchQuery);
+      if(results.success) {
+        results.data.forEach(proj => {
+          const cachedProject = this.archivedProjectCache.find(x => x.id == proj.projectId);
+          if(cachedProject) {
+            this.getProjectHours(cachedProject, proj.userTimeEntries);
+
+            let customFilter = new CustomFilterService<any>();
+            customFilter.setFilterColumns(["name", "fullName"]);
+
+            this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
+          }
+        })
+      }
+
       this.showLoadingSpinner = false;
     });
   }
@@ -123,7 +129,7 @@ export class ReportComponent {
   getProjectHours(proj: any, hoursReport: any) {
       // Total Hours
       let totalHours: number = 0;
-      hoursReport.data.forEach(r => {
+      hoursReport.forEach(r => {
         totalHours += r.hours;
       })
 
@@ -133,7 +139,7 @@ export class ReportComponent {
             name: proj.name,
             hours: totalHours
           },
-          children: hoursReport.data.map(s => {
+          children: hoursReport.map(s => {
             s.projId = proj.id;
             s.fullName = s.firstName + " " + s.lastName;
             return {
@@ -149,7 +155,7 @@ export class ReportComponent {
             name: proj.name,
             hours: totalHours
           },
-          children: hoursReport.data.map(s => {
+          children: hoursReport.map(s => {
             s.projId = proj.id;
             s.fullName = s.firstName + " " + s.lastName;
             return {
