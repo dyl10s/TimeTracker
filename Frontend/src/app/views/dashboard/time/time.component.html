@@ -231,4 +231,21 @@
         </ng-container>
     </table>
     </div>
+
+    <div id="help"  [nbPopover]="popoverTemplate" nbPopoverTrigger="hint">
+      <nb-icon icon="question-mark-circle"></nb-icon>
+    </div>
+  
+    <nb-layout id="popoverStyle">
+      <ng-template #popoverTemplate>
+        <p>
+          This is the Time Entry page, where you can view, create, and edit time entries for your projects.<br><br>
+          <u>Add New Time Entries</u> by clicking on the "New Entry" button.<br>
+          In the popup window, use the dropdown menu to select the project that the time entry is for, and enter in an hour amount.<br>
+          Notes about the time entry can be added here as well, but are not required to submit a time entry.<br><br>
+          <u>Edit Time Entries</u> by clicking on the <nb-icon icon="edit"></nb-icon> button.
+        </p>
+      </ng-template>
+    </nb-layout>
+    
 </div>

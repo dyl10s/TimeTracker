@@ -8,6 +8,7 @@ import { CustomFilterService } from 'src/app/core/services/customFilterService.s
 import { CustomTreeBuilder } from 'src/app/core/services/customTreeBuilder.service';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { CreateProjectComponent } from 'src/app/shared/components/create-project/create-project.component';
+import { NbPopoverDirective } from '@nebular/theme';
 
 @Component({
   selector: 'app-projects',

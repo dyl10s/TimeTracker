@@ -138,4 +138,23 @@
             </nb-tab>
         </nb-tabset>
     </div>
+
+    <div id="help"  [nbPopover]="popoverTemplate" nbPopoverTrigger="hint">
+        <nb-icon icon="question-mark-circle"></nb-icon>
+      </div>
+    
+      <nb-layout id="popoverStyle">
+        <ng-template #popoverTemplate>
+            <p>
+                This is the Project Details page, all of the details for a specific project are listed here.<br><br>
+                A project's name, tags, client, and description are all listed at the top of the page.<br><br>
+                The <u>Copy Invite Code</u> button will copy an invite link for this project to your clipboard.<br>
+                Other users who use this link to join the project will be required to login or make an NTime account if they haven't already.<br><br>
+                <!-- teacher stuff-->
+                You're the designated <u>Teacher</u> for this project, meaning that you can edit the tags and description for this project using the <u>Edit Details</u> button.<br><br>
+                You can also choose to <u>Archive</u> this Project, which will mark the project as inactive, and prevent new time entries new team members from being added.<br><br>
+            </p>
+        </ng-template>
+      </nb-layout>
+      
 </div>
