@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { NbDateService, NbDialogService, NbToastrService, NbTreeGridDataSource } from '@nebular/theme';
+import { NbDateService, NbDialogService, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { interval, Subscription } from 'rxjs';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
 import { TimeEntryApiService } from 'src/app/core/services/timeEntry.api.service';
@@ -17,6 +17,7 @@ export class TimeComponent implements OnInit {
   updateSubscription: Subscription;
   showLoadingSpinner: boolean = false;
   gridHeaders: string[] = ["ProjectName","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Total"];
+  weekViewRows: TreeNode<any>[] = [];
   timeEntryDataSource: NbTreeGridDataSource<any>;
   totalHours: string = "0:00";
   editMode: boolean = false;
@@ -59,6 +60,7 @@ export class TimeComponent implements OnInit {
     private dateService: NbDateService<Date>,
     private timeEntryService: TimeEntryApiService,
     private timerService: TimerService,
+    private dataSourceBuilder: NbTreeGridDataSourceBuilder<any>,
     private toastrService: NbToastrService,
     private titleService: Title,
   ) {
@@ -66,6 +68,15 @@ export class TimeComponent implements OnInit {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
     this.weekEndDate = this.weekEnd;
+    this.weekViewRows.push({
+      data: {
+        test: "Help for Adam"
+      },
+      children: [],
+      expanded: false
+    });
+
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.weekViewRows);
   }
 
   /* Refresh variables */
@@ -308,4 +319,10 @@ export class TimeComponent implements OnInit {
     }
   }
 
+}
+
+interface TreeNode<T> {
+  data: T;
+  children?: TreeNode<T>[];
+  expanded?: boolean;
 }

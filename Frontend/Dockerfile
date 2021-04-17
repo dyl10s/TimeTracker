@@ -9,3 +9,12 @@ RUN npm run build -- --prod
 FROM nginx:1.19.6
 COPY --from=build /app/dist/TimeTracker/ /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./frontend-startup.sh ./frontend-startup.sh
+RUN apt-get update
+RUN apt install python3 -y python3-venv -y libaugeas0 -y
+RUN python3 -m venv /opt/certbot/
+RUN /opt/certbot/bin/pip install --upgrade pip
+RUN /opt/certbot/bin/pip install certbot certbot-nginx
+RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+RUN chmod +x frontend-startup.sh
+ENTRYPOINT ["/bin/bash", "/frontend-startup.sh"]

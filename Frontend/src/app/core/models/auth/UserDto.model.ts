@@ -5,4 +5,6 @@ export interface UserDto {
     lastName?: string;
     inviteCode?: string;
     discordLink?: string;
+    role?: string;
+    id?: number;
 }

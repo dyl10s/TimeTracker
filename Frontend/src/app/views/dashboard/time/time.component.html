@@ -179,6 +179,7 @@
                 Project
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
+              <p type="text">{{ row.data.test }}</p>
             </td>
         </ng-container>
 
@@ -187,6 +188,7 @@
                 M<br />{{ monDate | date: "LLL d" }}
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
+              <input nbInput fullWidth type="text" [value]="row.data.test"/>
             </td>
         </ng-container>
 
@@ -195,6 +197,7 @@
                 T<br />{{ tueDate | date: "LLL d" }}
             </th>
             <td nbTreeGridCell *nbTreeGridCellDef="let row">
+              <input nbInput fullWidth type="text" [value]="row.data.test"/>
             </td>
         </ng-container>
 
