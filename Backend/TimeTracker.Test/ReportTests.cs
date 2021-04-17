@@ -159,29 +159,45 @@ namespace TimeTracker.Test
 
             // Get report
             var report = await reportController.GetAllUserTimeEntryLength(projectId, new DateTime(1998, 1, 1), new DateTime(2001, 1, 1));
+            var multiReport = await reportController.GetAllUserTimeEntryLength(new int[] { projectId }, new DateTime(1998, 1, 1), new DateTime(2001, 1, 1));
         
             Assert.IsTrue(report.Success);
+            Assert.IsTrue(multiReport.Success);
             // Should have 2 users
             Assert.AreEqual(2, report.Data.Count);
+            Assert.AreEqual(2, multiReport.Data[0].UserTimeEntries.Count);
 
             // Should either be the first or 2nd persons time entries
             Assert.IsTrue(report.Data[0].Hours == 10 || report.Data[0].Hours == 2);
             Assert.IsTrue(report.Data[1].Hours == 10 || report.Data[1].Hours == 2);
 
+            Assert.IsTrue(multiReport.Data[0].UserTimeEntries[0].Hours == 10 || multiReport.Data[0].UserTimeEntries[0].Hours == 2);
+            Assert.IsTrue(multiReport.Data[0].UserTimeEntries[1].Hours == 10 || multiReport.Data[0].UserTimeEntries[1].Hours == 2);
+
             // Get report with only some entries
             var report2 = await reportController.GetAllUserTimeEntryLength(projectId, new DateTime(2000, 1, 1), new DateTime(2001, 1, 1));
+            var multiReport2 = await reportController.GetAllUserTimeEntryLength(new int[] { projectId }, new DateTime(2000, 1, 1), new DateTime(2001, 1, 1));
         
             Assert.IsTrue(report2.Success);
+            Assert.IsTrue(multiReport2.Success);
+
             // Should have 2 users
             Assert.AreEqual(2, report2.Data.Count);
+            Assert.AreEqual(2, multiReport2.Data[0].UserTimeEntries.Count);
 
             // Should either be the first or 2nd persons time entries
             Assert.IsTrue(report2.Data[0].Hours == 2 || report2.Data[0].Hours == 0);
             Assert.IsTrue(report2.Data[1].Hours == 2 || report2.Data[1].Hours == 0);
 
-            // Invalid project should error
+            Assert.IsTrue(multiReport2.Data[0].UserTimeEntries[0].Hours == 2 || multiReport2.Data[0].UserTimeEntries[0].Hours == 0);
+            Assert.IsTrue(multiReport2.Data[0].UserTimeEntries[1].Hours == 2 || multiReport2.Data[0].UserTimeEntries[1].Hours == 0);
+
+            // Invalid project should error or be blank
             var failedReport = await reportController.GetAllUserTimeEntryLength(-1, new DateTime(2000, 1, 1), new DateTime(2001, 1, 1));
+            var failedMutliReport = await reportController.GetAllUserTimeEntryLength(new int[] { -1 }, new DateTime(2000, 1, 1), new DateTime(2001, 1, 1));
+            
             Assert.IsFalse(failedReport.Success);
+            Assert.AreEqual(0, failedMutliReport.Data.Count);
         }
     }
 }
