@@ -75,13 +75,13 @@ export class ReportComponent {
           const cachedProject = this.activeProjectCache.find(x => x.id == proj.projectId);
           if(cachedProject) {
             this.getProjectHours(cachedProject, proj.userTimeEntries);
-
-            let customFilter = new CustomFilterService<any>();
-            customFilter.setFilterColumns(["name", "fullName"]);
-
-            this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
           }
-        })
+        });
+
+        let customFilter = new CustomFilterService<any>();
+        customFilter.setFilterColumns(["name", "fullName"]);
+
+        this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
       }
 
       this.showLoadingSpinner = false;
@@ -113,13 +113,13 @@ export class ReportComponent {
           const cachedProject = this.archivedProjectCache.find(x => x.id == proj.projectId);
           if(cachedProject) {
             this.getProjectHours(cachedProject, proj.userTimeEntries);
-
-            let customFilter = new CustomFilterService<any>();
-            customFilter.setFilterColumns(["name", "fullName"]);
-
-            this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
           }
-        })
+        });
+
+        let customFilter = new CustomFilterService<any>();
+        customFilter.setFilterColumns(["name", "fullName"]);
+
+        this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
       }
 
       this.showLoadingSpinner = false;
