@@ -68,13 +68,6 @@ export class TimeComponent implements OnInit {
     this.today = this.dateService.today();
     this.weekStartDate = this.weekStart;
     this.weekEndDate = this.weekEnd;
-    this.weekViewRows.push({
-      data: {
-        test: "Help for Adam"
-      },
-      children: [],
-      expanded: false
-    });
 
     this.timeEntryDataSource = this.dataSourceBuilder.create(this.weekViewRows);
   }
@@ -119,6 +112,7 @@ export class TimeComponent implements OnInit {
   switchedDate() {
     this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(this.today)).toISOString());
     this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date(this.today)).toISOString());
+    this.updateWeekView();
   }
 
   setTime(date) {
@@ -271,16 +265,49 @@ export class TimeComponent implements OnInit {
   }
 
   updateInformation() {
+    this.updateDates();
     this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allEvents = response.data;
       this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
       this.weekTimeSpent = this.allEvents.map(x => x.length).reduce((a, b) => { return a + b }, 0);
+      this.updateWeekView();
     })
 
     this.timerService.getTimerFromDateRange(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allTimers = response.data;
       this.displayTimers = this.allTimers.filter(x => this.setTime(new Date(x.startTime)).toISOString() === this.setTime(new Date()).toISOString());
     })
+  }
+
+  updateWeekView(){
+    this.weekViewRows = [];
+    this.allEvents.map(x => x.project.name).filter((item, i, ar) => ar.indexOf(item) === i).forEach(e => {
+      this.weekViewRows.push({
+        data: {
+          projectName: e,
+          mon: this.countHours(this.monDate, e),
+          tue: this.countHours(this.tueDate, e),
+          wed: this.countHours(this.wedDate, e),
+          thu: this.countHours(this.thurDate, e),
+          fri: this.countHours(this.friDate, e),
+          sat: this.countHours(this.satDate, e),
+          sun: this.countHours(this.sunDate, e),
+          totalHours: 70
+        },
+        children: [],
+        expanded: false
+      })
+    });
+
+    this.timeEntryDataSource = this.dataSourceBuilder.create(this.weekViewRows);
+  }
+
+  countHours(date, projectName){
+    if(this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(date)).toISOString() && x.project.name == projectName).length > 0){
+      return this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(date)).toISOString() && x.project.name == projectName).map(x => x.length).reduce((a, b) => a + b)
+    }else{
+      return 0
+    }
   }
 
   /* Method to update timer button view */
