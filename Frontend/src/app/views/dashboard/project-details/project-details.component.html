@@ -139,41 +139,33 @@
         </nb-tabset>
     </div>
 
-    <div id="help"  [nbPopover]="popoverTemplate" nbPopoverTrigger="hint">
-        <nb-icon icon="question-mark-circle"></nb-icon>
-      </div>
-    
-      <nb-layout id="popoverStyle">
-        <ng-template #popoverTemplate>
-            <p>
-                This is the Project Details page, all of the details for a specific project are listed here.<br><br>
-                A <u>Project's Name, Tags, Client, and Description</u> are all listed at the top of the page.<br><br>
-                <span *ngIf="details.archivedDate != null">
-                    This project has been <u>Archived</u>, meaning that it's inactive, and no new time entries or team members can be added to it.<br><br>
-                </span>
-                <span *ngIf="details.archivedDate == null">
-                    To <u>Invite Team Members</u> to this project, click on the <nb-icon icon="clipboard-outline"></nb-icon><b> Copy Invite Code</b> button to copy an invite link to your clipboard.<br>
-                    You can then send this link to anyone who you'd like to invite to the project.<br>
-                    Other users who use this link to join the project will be required to login or make an NTime account if they haven't already.<br><br>
-                </span>
-                <span *ngIf="details.teacher.id == jwtService.decode().sub">
-                    <span *ngIf="details.archivedDate == null">
-                        You're the <u>Teacher</u> for this project, meaning that you can <u>Edit The Tags And Description</u> for this project using the <nb-icon icon="edit-outline"></nb-icon><b class="adaptive-button-text"> Edit Project</b> button.<br><br>
-                        You can also <u>Archive</u> this project using the <nb-icon icon="archive-outline"></nb-icon><b class="adaptive-button-text"> Archive Project</b> button.<br>
-                        Archiving a project will mark it as inactive, and prevent new time entries and team members from being added to it.<br><br>
-                    </span>
-                    <span *ngIf="details.archivedDate != null">
-                        You're the <u>Teacher</u> for this project, meaning that you can unarchive this project using the <nb-icon icon="archive-outline"></nb-icon><b class="adaptive-button-text"> Unarchive Project</b> button.<br>
-                        Unarchiving a project will mark it as active again, allowing new time entries and team members to be added to it.<br><br>
-                    </span>
-                </span>
-                The time each team member has spent working on the project is listed in the Team Members section.<br>
-                Use the Time Range selector in this section to adjust the date range for the table results.<br><br>
-                The time spent on the project over the course of its lifetime are displayed in the charts in the Time Breakdown section.<br>
-                The Cumulative Hours Spent chart displays the total hours spent on the project for each week.<br>
-                The Hours Spent by Week chart displays the hours spent for each week.
-            </p>
-        </ng-template>
-      </nb-layout>
+    <app-help-icon>
+        This is the Project Details page, all of the details for a specific project are listed here.<br><br>
+        A <u>Project's Name, Tags, Client, and Description</u> are all listed at the top of the page.<br><br>
+        <span *ngIf="details.archivedDate != null">
+            This project has been <u>Archived</u>, meaning that it's inactive, and no new time entries or team members can be added to it.<br><br>
+        </span>
+        <span *ngIf="details.archivedDate == null">
+            To <u>Invite Team Members</u> to this project, click on the <nb-icon icon="clipboard-outline"></nb-icon><b> Copy Invite Code</b> button to copy an invite link to your clipboard.<br>
+            You can then send this link to anyone who you'd like to invite to the project.<br>
+            Other users who use this link to join the project will be required to login or make an NTime account if they haven't already.<br><br>
+        </span>
+        <span *ngIf="details.teacher.id == jwtService.decode().sub">
+            <span *ngIf="details.archivedDate == null">
+                You're the <u>Teacher</u> for this project, meaning that you can <u>Edit The Tags And Description</u> for this project using the <nb-icon icon="edit-outline"></nb-icon><b class="adaptive-button-text"> Edit Project</b> button.<br><br>
+                You can also <u>Archive</u> this project using the <nb-icon icon="archive-outline"></nb-icon><b class="adaptive-button-text"> Archive Project</b> button.<br>
+                Archiving a project will mark it as inactive, and prevent new time entries and team members from being added to it.<br><br>
+            </span>
+            <span *ngIf="details.archivedDate != null">
+                You're the <u>Teacher</u> for this project, meaning that you can unarchive this project using the <nb-icon icon="archive-outline"></nb-icon><b class="adaptive-button-text"> Unarchive Project</b> button.<br>
+                Unarchiving a project will mark it as active again, allowing new time entries and team members to be added to it.<br><br>
+            </span>
+        </span>
+        The time each team member has spent working on the project is listed in the Team Members section.<br>
+        Use the Time Range selector in this section to adjust the date range for the table results.<br><br>
+        The time spent on the project over the course of its lifetime are displayed in the charts in the Time Breakdown section.<br>
+        The Cumulative Hours Spent chart displays the total hours spent on the project for each week.<br>
+        The Hours Spent by Week chart displays the hours spent for each week.
+    </app-help-icon>
       
 </div>

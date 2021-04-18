@@ -166,23 +166,15 @@
       </table>
     </div>
 
-    <div id="help"  [nbPopover]="popoverTemplate" nbPopoverTrigger="hint">
-      <nb-icon icon="question-mark-circle"></nb-icon>
-    </div>
-  
-    <nb-layout id="popoverStyle">
-      <ng-template #popoverTemplate>
-        <p>
-          This is your Profile page, where all of the details of your NTime account are listed.<br><br>
-          <u>Update Your First or Last Name</u> by changing them in the text boxes, and clicking on the <b>Update Info</b> button.<br><br>
-          The <u>Email Address</u> you created your account with is also shown, but for security reasons it cannot be changed.<br><br>
-          To <u>Change Your Password</u>, type your current and new passwords into their respective fields, then click the <b>Change Password</b> button.<br>
-          A password must be at least 7 characters long, and must contain an uppercase letter, a lowercase letter, and a number.<br>
-          A green notification will be shown on screen if the password change was successful.<br><br>
-          The <u>Active Projects</u> you've joined are listed at the bottom of the page.<br><br>
-          To see the <u>Archived Projects</u> you've been a part of, navigate to the Projects page by selecting "Projects" in the navigation bar.
-        </p>
-      </ng-template>
-    </nb-layout>
+    <app-help-icon>
+      This is your Profile page, where all of the details of your NTime account are listed.<br><br>
+      <u>Update Your First or Last Name</u> by changing them in the text boxes, and clicking on the <b>Update Info</b> button.<br><br>
+      The <u>Email Address</u> you created your account with is also shown, but for security reasons it cannot be changed.<br><br>
+      To <u>Change Your Password</u>, type your current and new passwords into their respective fields, then click the <b>Change Password</b> button.<br>
+      A password must be at least 7 characters long, and must contain an uppercase letter, a lowercase letter, and a number.<br>
+      A green notification will be shown on screen if the password change was successful.<br><br>
+      The <u>Active Projects</u> you've joined are listed at the bottom of the page.<br><br>
+      To see the <u>Archived Projects</u> you've been a part of, navigate to the Projects page by selecting "Projects" in the navigation bar.
+    </app-help-icon>
     
 </div>
