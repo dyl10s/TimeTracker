@@ -31,10 +31,11 @@ export class AuthGuard implements CanActivate {
       // logged in true and isAuth
       if(next.queryParams.inviteCode){
         this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
+          console.log(response)
           if(response.success){
             this.toastrService.success("You have been added to a project", "Success");
           }else{
-            this.toastrService.danger("Invite code is not valid", "Error");
+            this.toastrService.danger(response.message, "Error");
           }
           this.router.navigate(['/dashboard/profile']);
           return false;
