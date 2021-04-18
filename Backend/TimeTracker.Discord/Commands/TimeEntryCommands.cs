@@ -20,16 +20,6 @@ namespace TimeTracker.Discord.Commands
             this.commandService = commandService;
         }
 
-        [Command("test")]
-        [Summary("Create a time entry for the current day.")]
-        public async Task TestCall(int projectId, decimal length, string notes)
-        {
-            await Context.Message.ReplyAsync(projectId.ToString());
-            await Context.Message.ReplyAsync(length.ToString());
-            await Context.Message.ReplyAsync(notes);
-            return;
-        }
-
         [Command("create")]
         [Summary("Create a time entry for the current day.")]
         public async Task Create(int? projectId, double? length, [Remainder] string notes = "")
