@@ -67,3 +67,51 @@ After installing the extension, right click on `/backend/TimeTracker.Api/TimeTra
 ```
 
 You can reach out to one of the existing developers to get the bot development token or create your own bot for local development [here](https://discord.com/developers/applications).
+
+## Deployment
+
+NTime has been built to make deployment easy and is built to be run on a single machine using docker compose. Below are a few steps to get NTime up and running on a server.
+
+### Install Docker
+
+The first thing you will need to do is install docker and docker compose. The steps to install docker can be found [here](https://docs.docker.com/engine/install/). The steps to install docker compose can be found [here](https://docs.docker.com/compose/install/)
+
+### Start Up NTime
+
+We have created a simple script that you can modify and run to fit your needs.
+
+```sh
+wget -N https://raw.githubusercontent.com/dyl10s/TimeTracker/development/docker-compose.yml
+sed -i 's/BotTokenHere/${{ secrets.BOT_TOKEN }}/' docker-compose.yml
+sed -i 's/SSLEmailHere/${{ secrets.SSL_EMAIL }}/' docker-compose.yml
+sed -i 's/Domain1Here/${{ secrets.DOMAIN_1 }}/' docker-compose.yml
+sed -i 's/Domain2Here/${{ secrets.DOMAIN_2 }}/' docker-compose.yml
+export TIMETRACK_TAG=dev
+sudo -E docker-compose pull
+sudo -E docker-compose up -d
+```
+
+There are a few things in this script you will want to configure. 
+
+`wget -N https://raw.githubusercontent.com/dyl10s/TimeTracker/development/docker-compose.yml` - This line just downloads the `docker-compose.yml` file from the github repo. This is the url for the development branch. If you want to run the current production branch you can run `wget -N https://raw.githubusercontent.com/dyl10s/TimeTracker/master/docker-compose.yml`
+
+`${{ secrets.BOT_TOKEN }}` - This should be replaced by your discord bot token. You can find out more about this in the discord bot section.
+
+`${{ secrets.SSL_EMAIL }}` - This is the email you want the SSL certificate linked to, you can just use any personal / school email. This line can be removed if you do not want to auto configure SSL.
+
+`${{ secrets.DOMAIN_1 }}` and `${{ secrets.DOMAIN_2 }}` - This will be replaced by the domain name of your website. Most of the time you would use the main domain as well as the domain starting with `www`. For example `www.timetrack.ml` and `timetrack.ml`. If you want to configure SSL automatically both values must be filled. However if you only have 1 domain name you can just set them both to the same value. If you want to skip automatic SSL configuration you can remove these lines.
+
+If you want the docker images to be pulled from the development branch you can use `export TIMETRACK_TAG=dev`. If you want them to be from master you can just remove this command or use `export TIMETRACK_TAG=latest`.
+
+### CI/CD
+
+For development we have been using github actions to automate testing and deployment of NTime. When development or master are updated, the docker images are automatically built and pushed to the docker repository which means all you need to do to update the application is run the following commands once the build is complete.
+
+```sh
+sudo -E docker-compose pull
+sudo -E docker-compose up -d
+```
+
+We have configured github actions to automatically run these commands on our development server.
+
+All of this is configured with github secrets which can be found [here](https://github.com/dyl10s/TimeTracker/settings/secrets/actions). The github action itself is located [here](https://github.com/dyl10s/TimeTracker/blob/master/.github/workflows/main.yml).
