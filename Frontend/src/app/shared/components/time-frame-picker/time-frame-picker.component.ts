@@ -208,9 +208,9 @@ export class TimeFramePickerComponent {
 
   selectCurrentBiWeek(referenceDate: Date) {
     this.startDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate());
-    this.startDate.setDate(this.startDate.getDate() - this.startDate.getDay() + 1 - 7); // Last Monday
+    this.startDate.setDate(this.startDate.getDate() - this.startDate.getDay() + 1); // Monday
     this.endDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate());
-    this.endDate.setDate(this.endDate.getDate() - this.endDate.getDay() + 7); // Sunday
+    this.endDate.setDate(this.endDate.getDate() - this.endDate.getDay() + 14); // Sunday
   }
 
   selectCurrentMonth(referenceDate: Date) {
