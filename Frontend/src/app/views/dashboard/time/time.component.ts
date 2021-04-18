@@ -265,7 +265,6 @@ export class TimeComponent implements OnInit {
   }
 
   updateInformation() {
-    this.updateDates();
     this.timeEntryService.getTimeEntry(this.weekStartDate, this.weekEndDate).subscribe((response: GenericResponseDTO) => {
       this.allEvents = response.data;
       this.displayEvents = this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() === this.setTime(new Date()).toISOString());
@@ -280,6 +279,7 @@ export class TimeComponent implements OnInit {
   }
 
   updateWeekView(){
+    this.updateDates();
     this.weekViewRows = [];
     this.allEvents.map(x => x.project.name).filter((item, i, ar) => ar.indexOf(item) === i).forEach(e => {
       this.weekViewRows.push({
@@ -292,7 +292,7 @@ export class TimeComponent implements OnInit {
           fri: this.countHours(this.friDate, e),
           sat: this.countHours(this.satDate, e),
           sun: this.countHours(this.sunDate, e),
-          totalHours: 70
+          totalHours: this.countWeeklyHours(e)
         },
         children: [],
         expanded: false
@@ -305,6 +305,14 @@ export class TimeComponent implements OnInit {
   countHours(date, projectName){
     if(this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(date)).toISOString() && x.project.name == projectName).length > 0){
       return this.allEvents.filter(x => this.setTime(new Date(x.day)).toISOString() == this.setTime(new Date(date)).toISOString() && x.project.name == projectName).map(x => x.length).reduce((a, b) => a + b)
+    }else{
+      return 0
+    }
+  }
+
+  countWeeklyHours(projectName){
+    if(this.allEvents.filter(x => x.project.name == projectName).length > 0){
+      return this.allEvents.filter(x => x.project.name == projectName).map(x => x.length).reduce((a, b) => a + b)
     }else{
       return 0
     }
