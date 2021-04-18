@@ -58,6 +58,7 @@ export class TimeFramePickerComponent {
         this.selectCurrentWeek(this.startDate);
         break;
       case "bi-weekly":
+        this.startDate.setDate(this.startDate.getDate() - 7);
         this.selectCurrentBiWeek(this.startDate);
         break;
       case "monthly":
