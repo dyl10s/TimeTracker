@@ -4,10 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using TimeTracker.Api.Controllers;
 using TimeTracker.Api.DTOs;
@@ -22,12 +20,19 @@ namespace TimeTracker.Test
     {
         ProjectController projectController;
         AuthController authController;
+        AuthHelper authHelper;
+        List<ControllerBase> controllers;
 
         public ProjectTests()
         {
             projectController = new ProjectController(database, new AuthHelper());
             authController = new AuthController(database, configuration, new AuthHelper());
-            
+            authHelper = new AuthHelper();
+            authController = new AuthController(database, configuration, authHelper);
+            controllers = new List<ControllerBase>();
+            controllers.Add(projectController);
+            controllers.Add(authController);
+
             TestAuthHelpers.LogInUser(database, configuration, projectController).GetAwaiter().GetResult(); 
         }
 
@@ -152,11 +157,22 @@ namespace TimeTracker.Test
         [TestMethod]
         public async Task RemoveUserFromProject()
         {
+            UserDTO teacherRegInfo = new UserDTO
+            {
+                Email = "teacher@321.org",
+                Password = "decentPassword7",
+                FirstName = "Lily",
+                LastName = "Z."
+            };
+
+            GenericResponseDTO<int> teacherRegResponse = await authController.Register(teacherRegInfo);
+            TestAuthHelpers.attachUserToContext(teacherRegResponse.Data, controllers);
+
             var createResult = await projectController.CreateProject(new ProjectCreateDTO()
             {
                 ClientName = "Test Client",
                 Description = "Test Description",
-                ProjectName = "Test Name",
+                ProjectName = "Test Name 1",
                 Tags = new List<string>()
                 {
                     "Test Tag 1",
@@ -167,18 +183,6 @@ namespace TimeTracker.Test
             Assert.IsTrue(createResult.Success);
 
             var project = await projectController.GetProjectById(createResult.Data);
-
-            Assert.IsTrue(project.Data.Description == "Test Description");
-
-            await projectController.UpdateProjectDetails(new ProjectDetailsDTO()
-            {
-                Description = "Updated Description",
-                ProjectId = createResult.Data
-            });
-
-            var projectUpdated = await projectController.GetProjectById(createResult.Data);
-
-            Assert.IsTrue(projectUpdated.Data.Description == "Updated Description");
 
             await projectController.AddUserToProject(new AddUserToProjectDTO()
             {
@@ -198,23 +202,34 @@ namespace TimeTracker.Test
             Assert.IsTrue(userProjects.Data[0].Id == 1);
 
             // Testing to attempt to remove student //
-            var student = await authController.Register(new UserDTO(){
-                Email = "newStudent12345@gmail.com",
-                Password = "Admin123.",
-                FirstName = "New",
-                LastName = "Student",
+            UserDTO registrationInfo = new UserDTO
+            {
+                Email = "suzuya@321.org",
+                Password = "decentPassword7",
+                FirstName = "Suzuya",
+                LastName = "Z.",
                 InviteCode = project.Data.InviteCode
-            });
+            };
 
-            Console.WriteLine(project.Data.Students.Count);
-            Assert.IsTrue(project.Data.Students.Count == 1);
-            Assert.IsTrue(project.Data.Id == 1);
+            GenericResponseDTO<int> registerResponse = await authController.Register(registrationInfo);
+            Assert.IsTrue(registerResponse.Success);
+            TestAuthHelpers.attachUserToContext(registerResponse.Data, controllers);
+
+            User user = await database.Users
+               .Include(x => x.Projects)
+               .FirstOrDefaultAsync(u => u.Id == registerResponse.Data);
+
+            Assert.IsTrue(user.Projects.Count == 1);
+            Assert.IsTrue(user.Projects[0].Id == project.Data.Id);
+            Assert.IsTrue(user.Projects[0].Name == "Test Name 1");
+
+            TestAuthHelpers.attachUserToContext(teacherRegResponse.Data, controllers);
             await projectController.RemoveUserFromProject(new ProjectRemoveUserDTO()
             {
                 ProjectId = 1,
-                UserId = 2
+                UserId = user.Id
             });
-            Assert.IsTrue(project.Data.Students.Count == 0);
+            Assert.IsTrue(user.Projects.Count == 0);
         }
 
         [TestMethod]

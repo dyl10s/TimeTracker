@@ -283,7 +283,7 @@ namespace TimeTracker.Api.Controllers
 
             await database.SaveChangesAsync();
             response.Success = true;
-            response.Data = projectUserRemoveInfo.UserId;
+            response.Data = removeStud.Id;
             return response;
         }
 

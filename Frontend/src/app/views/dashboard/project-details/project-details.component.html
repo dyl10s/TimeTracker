@@ -77,7 +77,7 @@
                 <div class="delete">
                    <span class="desk" id="space-left"> {{row.data["firstName"] + " " + row.data["lastName"] || '-'}}</span> <br class="mob">
                     <button size="small" id="delete" status="danger" nbSpinnerStatus="success" *ngIf="pageMode == 'edit' && details.archivedDate == null  && details.teacher.id == jwtService.decode().sub && row.data.id != details.teacher.id"
-                    nbButton (click)="removeUserCheck(row.data.id)">
+                    nbButton (click)="removeUserCheck(row.data.id, row.data.firstName, row.data.lastName)">
                          <nb-icon class="adaptive-button-icon" icon="close-outline"></nb-icon>
                     </button>
                 </div>

@@ -173,35 +173,35 @@ export class ProjectDetailsComponent {
   sendArchiveRequest() {
     this.archiving = true;
 
-    let requestDetails: ArchiveProjectDTO = {
+    let requestDetails : ArchiveProjectDTO = {
       projectId: this.details.id,
       archive: true
     }
 
-    if (this.details.archivedDate == null) {
+    if(this.details.archivedDate == null) {
       requestDetails.archive = true;
     } else{
       requestDetails.archive = false;
     }
 
     this.projectService.archiveProject(requestDetails).subscribe(
-      (res) => {
-        if(res.success) {
-          this.details.archivedDate = res.data;
+    (res) => {
+      if(res.success) {
+        this.details.archivedDate = res.data;
 
-          if(res.data == null) {
-            this.toastrService.success("The project has been unarchived", "Project Unnarchived");
-          }else {
-            this.toastrService.success("The project has been archived", "Project Archived");
-          }
+        if(res.data == null) {
+          this.toastrService.success("The project has been unarchived", "Project Unnarchived");
+        }else {
+          this.toastrService.success("The project has been archived", "Project Archived");
+        }
         }else{
           this.toastrService.danger(res.message, "Error");
         }
-        this.archiving = false;
-      }, () => {
-        this.toastrService.danger("There was an unknown error processing the request.", "Error");
-        this.archiving = false;
-      });
+      this.archiving = false;
+    }, () => {
+      this.toastrService.danger("There was an unknown error processing the request.", "Error");
+      this.archiving = false;
+    });
   }
 
   saveProjectChange(): void {
@@ -262,8 +262,9 @@ export class ProjectDetailsComponent {
     this.pageMode = 'view';
   }
 
-  removeUserCheck(removeUserId: number) {
-    let title = "Are you sure you want to remove this user?";
+  removeUserCheck(removeUserId: number, firstName: string, lastName: string) {
+    let userName = firstName + " " + lastName;
+    let title = "Are you sure you want to remove " + userName + "?";
     let body = `Removing this user from the project will also remove all existing
      time entries the user has created on this project.`;
     this.dialogService.open(YesNoDialogComponent, {
@@ -271,13 +272,13 @@ export class ProjectDetailsComponent {
         body: body,
         title: title,
         yesClicked: () => {
-          this.removeUser(removeUserId)
+          this.removeUser(removeUserId, userName)
         }
       }
     });
   }
 
-  removeUser(removeUserId: number) {
+  removeUser(removeUserId: number, userName: string) {
     let removeUserInfo: ProjectRemoveUserDTO = {
       projectId: this.details.id,
       userId: removeUserId
@@ -290,13 +291,13 @@ export class ProjectDetailsComponent {
           }
           this.teamDataSource = this.dataSourceBuilder.create(this.teamMembers);
         })
-        this.toastrService.show("Success", "User Id: " + res.data + " successfully removed from your project", { status: 'success', duration: 4000 });
+        this.toastrService.show("Success", "User: " + userName + " successfully removed from your project", { status: 'success', duration: 4000 });
         this.userChangesMade = true;
       } else {
-        this.toastrService.show("Error", "There was an error removing user from your project", { status: 'danger', duration: 4000 });
+        this.toastrService.show("Error", "There was an error removing user: " + userName + "from your project", { status: 'danger', duration: 4000 });
       }
     }, (err) => {
-      this.toastrService.show("Error", "There was an error removing user from your project", { status: 'danger', duration: 4000 });
+      this.toastrService.show("Error", "There was an error removing user: " + userName + "from your project", { status: 'danger', duration: 4000 });
     });
   }
 
@@ -317,9 +318,9 @@ export class ProjectDetailsComponent {
     tempBox.select();
     let success = document.execCommand('copy');
     document.body.removeChild(tempBox);
-    if (success) {
+    if(success) {
       this.toastrService.show("Invite code has been copied", 'Success', { status: 'success', duration: 4000 })
-    } else {
+    }else{
       this.toastrService.show("There was an error copping the invite code to your clipboard", 'Error', { status: 'danger', duration: 4000 })
     }
   }
@@ -329,11 +330,11 @@ export class ProjectDetailsComponent {
     this.detailsReport.data.forEach((user) => {
       user.timeEntries.forEach((entry) => {
         let date = new Date(entry.day);
-        if (date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
+        if(date.getTime() >= this.startDate.getTime() && date.getTime() <= this.endDate.getTime())
           userSum += entry.length;
       });
       let currentTeamMember: any = this.teamMembers.find(member => (member as any).data.id === user.userId);
-      if (currentTeamMember) {
+      if(currentTeamMember) {
         currentTeamMember.data.hours = userSum;
       }
       userSum = 0;
@@ -367,9 +368,9 @@ export class ProjectDetailsComponent {
         allEntries.sort((x, y) => {
           let xDate = new Date(x.day);
           let yDate = new Date(y.day);
-          if (xDate.getTime() < yDate.getTime())
+          if(xDate.getTime() < yDate.getTime())
             return -1;
-          else if (xDate.getTime() > yDate.getTime())
+          else if(xDate.getTime() > yDate.getTime())
             return 1;
           return 0;
         });
@@ -394,7 +395,7 @@ export class ProjectDetailsComponent {
             endDateString = endDateString.substring(endDateString.indexOf(' '));
             let startDateString = startDate.toDateString();
             startDateString = startDateString.substring(startDateString.indexOf(' '));
-            if (startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+            if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
               startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
             }
             this.lineChartData[0].series.push({
@@ -413,7 +414,7 @@ export class ProjectDetailsComponent {
             });
             startDate.setDate(startDate.getDate() + 7);
             endDate.setDate(endDate.getDate() + 7);
-            if (subtotal * 1.1 > this.barChartYMax)
+            if(subtotal * 1.1 > this.barChartYMax)
               this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
             subtotal = 0;
             currentWeek++;
@@ -427,7 +428,7 @@ export class ProjectDetailsComponent {
         endDateString = endDateString.substring(endDateString.indexOf(' '));
         let startDateString = startDate.toDateString();
         startDateString = startDateString.substring(startDateString.indexOf(' '));
-        if (startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
+        if(startDateString.substring(startDateString.lastIndexOf(' ')) === endDateString.substring(endDateString.lastIndexOf(' '))) {
           startDateString = startDateString.substring(0, startDateString.lastIndexOf(' '));
         }
         this.lineChartData[0].series.push({
@@ -445,7 +446,7 @@ export class ProjectDetailsComponent {
           }
         });
 
-        if (subtotal * 1.1 > this.barChartYMax)
+        if(subtotal * 1.1 > this.barChartYMax)
           this.barChartYMax = subtotal * 1.1;   // set the height of the bar chart
 
         // set the height of the line chart
