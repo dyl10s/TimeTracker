@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
           if(response.success){
             this.toastrService.success("You have been added to a project", "Success");
           }else{
-            this.toastrService.danger("Invite code has not been found", "Error");
+            this.toastrService.danger("Invite code is not valid", "Error");
           }
           this.router.navigate(['/dashboard/profile']);
           return false;
