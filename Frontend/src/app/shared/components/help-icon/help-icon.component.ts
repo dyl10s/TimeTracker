@@ -12,19 +12,37 @@ export class HelpIconComponent implements OnInit {
 
   @HostListener('window:resize')
   onResize() {
+    this.adjustPopover();
+  }
+
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+    this.popover.nbPopoverShowStateChange.subscribe(state => this.adjustPopover());
+  }
+
+  adjustPopover() {
     if(this.popover.isShown) {
       let popoverElement = document.querySelector("nb-popover") as any;
-      let overlayElement = document.querySelector("#popoverStyle #cdk-overlay-0") as any;
-      if(window.innerWidth < 630) {
-        
+      let overlayElement = document.querySelector("#popoverStyle .cdk-overlay-pane") as any;
+      let arrowElement = document.querySelector("#popoverStyle .arrow") as any;
 
-        popoverElement.style.overflowY = "scroll";
+      overlayElement.style.marginLeft = overlayElement.style.right;
+
+      if(window.innerWidth < 660) {
+        popoverElement.style.overflowY = "auto";
         popoverElement.style.width = "100%";
         popoverElement.style.position = "fixed";
         popoverElement.style.left = "0px";
         popoverElement.style.right = "0px";
         popoverElement.style.bottom = "80px";
+        popoverElement.style.top = "0px";
         overlayElement.style.width = "100%";
+        arrowElement.style.display = "none";
       } else {
         popoverElement.style.overflowY = "initial";
         popoverElement.style.width = "initial";
@@ -34,10 +52,11 @@ export class HelpIconComponent implements OnInit {
         popoverElement.style.right = "initial";
         popoverElement.style.bottom = "initial";
         overlayElement.style.width = "initial";
+        arrowElement.style.display = "initial";
       }
 
       let popupChanged = false;
-      if(window.innerWidth < 630) {
+      if(window.innerWidth < 660) {
         if(this.popover.adjustment !== NbAdjustment.NOOP) {
           this.popover.adjustment = NbAdjustment.NOOP;
           this.popover.offset = 0;
@@ -53,53 +72,5 @@ export class HelpIconComponent implements OnInit {
       if(popupChanged = true)
         this.popover.rebuild();
     }
-  }
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-    this.popover.nbPopoverShowStateChange.subscribe((state) => {
-      
-      let popupChanged = false;
-      if(window.innerWidth < 630) {
-        if(this.popover.adjustment !== NbAdjustment.NOOP) {
-          this.popover.adjustment = NbAdjustment.NOOP;
-          this.popover.offset = 0;
-          popupChanged = true;
-        }
-      } else {
-        if(this.popover.adjustment === NbAdjustment.NOOP) {
-          this.popover.adjustment = NbAdjustment.CLOCKWISE;
-          this.popover.offset = 15;
-          popupChanged = true;
-        }
-      }
-      if(popupChanged = true)
-        this.popover.rebuild();
-
-      if(state.isShown) {
-        let popoverElement = document.querySelector("nb-popover") as any;
-          let overlayElement = document.querySelector("#popoverStyle #cdk-overlay-0") as any;
-        //popoverElement.style.margin = "15px";
-        overlayElement.style.marginLeft = "20px";
-        if(window.innerWidth < 630) {
-
-          popoverElement.style.overflowY = "scroll";
-          popoverElement.style.width = "100%";
-          popoverElement.style.position = "fixed";
-          popoverElement.style.left = "0px";
-          popoverElement.style.right = "0px";
-          popoverElement.style.bottom = "80px";
-
-          overlayElement.style.width = "100%";
-        }
-      }
-
-
-    });
   }
 }
