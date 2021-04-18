@@ -62,8 +62,8 @@ namespace Backend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MainDb db)
         {
-            // Start the discord bot
-            if (!string.IsNullOrWhiteSpace(Configuration.GetValue<String>("BotToken")))
+            // Start the discord bot if there is a token
+            if (!string.IsNullOrWhiteSpace(Configuration.GetValue<String>("BotToken")) && Configuration.GetValue<String>("BotToken") != "BotTokenHere")
             {
                 var bot = new DiscordBot(Configuration);
             }
