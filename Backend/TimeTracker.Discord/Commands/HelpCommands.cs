@@ -94,7 +94,7 @@ namespace TimeTracker.Discord.Commands
                     x.IsInline = false;
                 });
             }
-
+            //Test
             await ReplyAsync("", false, builder.Build());
         }
     }
