@@ -34,6 +34,7 @@ namespace TimeTracker.Discord.Commands
 
             List<Project> projects = database.Projects
                 .AsQueryable()
+                .Where(timer => user.Id == user.Id)
                 .Where(x => x.ArchivedDate == null)
                 .ToList();
 
@@ -47,7 +48,7 @@ namespace TimeTracker.Discord.Commands
             for(int i = 0; i < projects.Count; i++) {
                 embedBuilder.AddField(field => {
                     field.Name = "Create TimeEntry for " + projects[i].Name;
-                    field.Value = "!create " + projects[i].Id.ToString() + " Length Notes";
+                    field.Value = "!create " + i.ToString() + " Length Notes";
                     field.IsInline = false;
                 });
             }
@@ -57,7 +58,7 @@ namespace TimeTracker.Discord.Commands
 
         [Command("create")]
         [Summary("Create a time entry for the current day.")]
-        public async Task Create(int? projectId, double? length, [Remainder] string notes = "")
+        public async Task Create(int? projectNumber, double? length, [Remainder] string notes = "")
         {
             User user = database.Users
                 .AsQueryable()
@@ -68,19 +69,23 @@ namespace TimeTracker.Discord.Commands
                 return;
             }
 
-            if(projectId == null || length == null){
-                await Context.Message.ReplyAsync("You need to have a Project ID and TimeEntry length in the command.");
+            if(projectNumber == null || length == null){
+                await Context.Message.ReplyAsync("You need to have a Project Number and TimeEntry length in the command.");
                 return;
             }
 
-            Project project = await database.Projects
+            List<Project> projects = database.Projects
                 .AsQueryable()
-                .FirstOrDefaultAsync(x => x.Id == projectId && x.ArchivedDate == null);
+                .Where(timer => user.Id == user.Id)
+                .Where(x => x.ArchivedDate == null)
+                .ToList();
 
-            if(project == null){
+            if(projectNumber >= projects.Count){
                 await Context.Message.ReplyAsync("No projects match the ID listed.");
                 return;
             }
+
+            Project project = projects[projectNumber.GetValueOrDefault()];
 
             var newTimeEntry = new TimeEntry() 
             { 
