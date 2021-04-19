@@ -121,12 +121,6 @@ namespace TimeTracker.Discord.Commands
                 x.IsInline = false;
             });
 
-            builder.AddField(x =>
-            {
-                x.Name = "\u200B";
-                x.Value = "\u200B";
-                x.IsInline = false;
-            });
 
             builder.AddField(x =>
             {
@@ -152,13 +146,6 @@ namespace TimeTracker.Discord.Commands
                 x.Value = "This command will allow the user to stop an NTime timer by project name on their account. " +
                           "The timer running on the specified project name will be stopped. This will result in the creation of a " +
                           "time entry on the project of the timer and the user will be returned the timers data. ";
-                x.IsInline = false;
-            });
-
-            builder.AddField(x =>
-            {
-                x.Name = "\u200B";
-                x.Value = "\u200B";
                 x.IsInline = false;
             });
 
