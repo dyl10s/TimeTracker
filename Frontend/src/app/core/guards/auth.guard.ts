@@ -31,7 +31,12 @@ export class AuthGuard implements CanActivate {
       // logged in true and isAuth
       if(next.queryParams.inviteCode){
         this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
-          this.toastrService.success("You have been added to a project", "Success")
+          console.log(response)
+          if(response.success){
+            this.toastrService.success("You have been added to a project", "Success");
+          }else{
+            this.toastrService.danger(response.message, "Error");
+          }
           this.router.navigate(['/dashboard/profile']);
           return false;
         })
@@ -58,7 +63,6 @@ export class AuthGuard implements CanActivate {
 
         if(next.queryParams.inviteCode){
           this.projectService.addUserToProject(next.queryParams.inviteCode).subscribe((response: GenericResponseDTO) => {
-            this.toastrService.success("You have been added to a project", "Success")
             this.router.navigate(['/dashboard/profile']);
             return false;
           })

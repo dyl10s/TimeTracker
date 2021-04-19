@@ -41,6 +41,7 @@ namespace TimeTracker.Api.Controllers
             {
                 // Get user with a matching username and password hash
                 var hashedPassword = authHelper.GetPasswordHash(loginData.Password, configuration);
+                String message = "";
                 var curUser = await database.Users
                     .Include(x => x.Projects)
                     .FirstOrDefaultAsync(u => u.Email.ToLower() == loginData.Email.ToLower() && u.Password.SequenceEqual(hashedPassword));
@@ -70,10 +71,25 @@ namespace TimeTracker.Api.Controllers
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode && p.ArchivedDate == null);
+                        .FirstOrDefaultAsync(p => p.InviteCode == loginData.InviteCode);
 
-                    if(project != null) {
-                        curUser.Projects.Add(project);
+                    if(project != null){
+                        if(project.ArchivedDate != null){
+                            message = "Unable to add to Archived Project";
+                        }else{
+                            if(curUser.Projects.Contains(project)){
+                                message = "User already in project";
+                            }else{
+                                if(project.Teacher == curUser){
+                                    message = "User already in project";
+                                }else{
+                                    curUser.Projects.Add(project);
+                                    message = "Added User to Project";
+                                }
+                            }
+                        }
+                    }else{
+                        message = "Project not found";
                     }
 
                 }
@@ -88,7 +104,8 @@ namespace TimeTracker.Api.Controllers
                     {
                          AccessToken = accessToken,
                          RefreshToken = refreshToken
-                    }
+                    },
+                    Message = message
                 };
             }
             catch
@@ -156,15 +173,29 @@ namespace TimeTracker.Api.Controllers
 
                 await database.AddAsync(newUser);
 
+                String message = "";
+
                 // check if the user registered with an invite code, if they did, add them to a project
                 if(!String.IsNullOrWhiteSpace(registerData.InviteCode)) {
 
                     Project project = await database.Projects
                         .AsQueryable()
-                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode && p.ArchivedDate == null);
+                        .FirstOrDefaultAsync(p => p.InviteCode == registerData.InviteCode);
 
-                    if(project != null) {
-                        newUser.Projects.Add(project);
+                    if(project != null){
+                        if(project.ArchivedDate != null){
+                            message = "Unable to add to Archived Project";
+                        }else{
+                            if(project.Teacher == newUser){
+                                message = "User already in project";
+                            }else{
+                                newUser.Projects.Add(project);
+                                message = "Added User to Project";
+                            }
+                            
+                        }
+                    }else{
+                        message = "Project not found";
                     }
 
                 }
@@ -174,7 +205,8 @@ namespace TimeTracker.Api.Controllers
                 return new GenericResponseDTO<int>() 
                 {
                     Success = true,
-                    Data = newUser.Id
+                    Data = newUser.Id,
+                    Message = message
                 };
             }
             catch
