@@ -57,7 +57,7 @@ namespace TimeTracker.Discord.Commands
 
         [Command("help")]
         [Summary("Takes an argument to search for matching NTime bot commands.")]
-        public async Task Help(string command)
+        public async Task Help([Remainder][Summary("The command to search for")] string command)
         {
             var result = commandService.Search(Context, command);
             if (!result.IsSuccess)
@@ -97,5 +97,10 @@ namespace TimeTracker.Discord.Commands
 
             await ReplyAsync("", false, builder.Build());
         }
+
+        [Command("say")]
+        [Summary("Echoes a message.")]
+        public Task SayAsync([Remainder][Summary("The text to echo")] string echo)
+    => ReplyAsync(echo);
     }
 }
