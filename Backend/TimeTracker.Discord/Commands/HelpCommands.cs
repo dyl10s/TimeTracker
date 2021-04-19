@@ -100,7 +100,7 @@ namespace TimeTracker.Discord.Commands
             {
                 x.Name = "!start";
                 x.Value = "This command will allow the user to start an NTime timer on their account. " +
-                " A timer will start on the users project without a timer, and if multiple projects don't have timers" +
+                " A timer will start on the user's project without a timer, and if multiple projects don't have timers" +
                 " the user will be prompted to select a specific project to start the timer.";
                 x.IsInline = false;
             });
@@ -109,7 +109,7 @@ namespace TimeTracker.Discord.Commands
             {
                 x.Name = "!start  [project ID]";
                 x.Value = "This command will allow the user to start an NTime timer on their account. " +
-                " A timer will be started on the users project with the specified ID if one is found.";
+                " A timer will be started on the user's project with the specified ID if one is found.";
                 x.IsInline = false;
             });
 
@@ -117,7 +117,7 @@ namespace TimeTracker.Discord.Commands
             {
                 x.Name = "!start  [project name]";
                 x.Value = "This command will allow the user to start an NTime timer on their account." +
-                " A timer will be started on the users project with the specified name if one is found.";
+                " A timer will be started on the user's project with the specified name if one is found.";
                 x.IsInline = false;
             });
 
