@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
                 this.toastrService.danger("You are already a part of this project", "Error");
               }
               
-              this.router.navigate(['/dashboard/profile']);
+              this.router.navigate(['/dashboard/time']);
             }
           }
         )
