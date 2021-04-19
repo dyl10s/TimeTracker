@@ -17,13 +17,11 @@ namespace TimeTracker.Discord.Commands
     {
         MainDb database;
         IConfiguration configuration;
-        CommandService commandService;
 
-        public AuthCommands(MainDb db, IConfiguration config, CommandService commandService)
+        public AuthCommands(MainDb db, IConfiguration config)
         {
             database = db;
             configuration = config;
-            commandService = commandService;
         }
 
         [Command("login")]
