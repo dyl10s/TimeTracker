@@ -97,10 +97,5 @@ namespace TimeTracker.Discord.Commands
 
             await ReplyAsync("", false, builder.Build());
         }
-
-        [Command("say")]
-        [Summary("Echoes a message.")]
-        public Task SayAsync([Remainder][Summary("The text to echo")] string echo)
-    => ReplyAsync(echo);
     }
 }
