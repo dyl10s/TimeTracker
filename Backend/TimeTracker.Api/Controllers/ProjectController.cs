@@ -232,6 +232,13 @@ namespace TimeTracker.Api.Controllers
                     Success = false
                 };
             } else {
+                if(project.Teacher == curUser){
+                    return new GenericResponseDTO<int>()
+                    {
+                        Message = "You are already a part of this project",
+                        Success = false
+                    };
+                }
                 curUser.Projects.Add(project);
             }
             

@@ -80,8 +80,12 @@ namespace TimeTracker.Api.Controllers
                             if(curUser.Projects.Contains(project)){
                                 message = "User already in project";
                             }else{
-                                curUser.Projects.Add(project);
-                                message = "Added User to Project";
+                                if(project.Teacher == curUser){
+                                    message = "User already in project";
+                                }else{
+                                    curUser.Projects.Add(project);
+                                    message = "Added User to Project";
+                                }
                             }
                         }
                     }else{
@@ -182,8 +186,13 @@ namespace TimeTracker.Api.Controllers
                         if(project.ArchivedDate != null){
                             message = "Unable to add to Archived Project";
                         }else{
-                            newUser.Projects.Add(project);
-                            message = "Added User to Project";
+                            if(project.Teacher == newUser){
+                                message = "User already in project";
+                            }else{
+                                newUser.Projects.Add(project);
+                                message = "Added User to Project";
+                            }
+                            
                         }
                     }else{
                         message = "Project not found";
