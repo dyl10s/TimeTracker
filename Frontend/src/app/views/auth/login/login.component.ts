@@ -80,9 +80,9 @@ export class LoginComponent implements OnInit {
               }else if(response.message == "Project not found"){
                 this.toastrService.danger("Invite code is not valid", "Error")
               }else if (response.message == "Unable to add to Archived Project"){
-                this.toastrService.danger("Unable to add user to Archived Project", "Error");
+                this.toastrService.danger("You can not join an Archived Project", "Error");
               }else if (response.message == "User already in project"){
-                this.toastrService.danger("You are already apart of this project", "Error");
+                this.toastrService.danger("You are already a part of this project", "Error");
               }
               
               this.router.navigate(['/dashboard/profile']);

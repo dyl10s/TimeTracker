@@ -210,7 +210,7 @@ namespace TimeTracker.Api.Controllers
             {
                 return new GenericResponseDTO<int>()
                 {
-                    Message = "Couldn't find the project",
+                    Message = "Invite code is not valid",
                     Success = false
                 };
             }
@@ -219,7 +219,7 @@ namespace TimeTracker.Api.Controllers
             {
                 return new GenericResponseDTO<int>()
                 {
-                    Message = "Can't add user to archived project",
+                    Message = "You can not join an Archived Project",
                     Success = false
                 };
             }
@@ -228,7 +228,7 @@ namespace TimeTracker.Api.Controllers
             {
                 return new GenericResponseDTO<int>()
                 {
-                    Message = "User is already assigned to this project",
+                    Message = "You are already a part of this project",
                     Success = false
                 };
             } else {
