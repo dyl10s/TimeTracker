@@ -86,35 +86,5 @@ namespace TimeTracker.Discord.Commands
 
             await ReplyAsync("Your Discord account has been unlinked from your NTime account.");
         }
-
-
-        [Command("help-auth")]
-        [Summary("Displays further description of the auth commands.")]
-        public async Task authHelp()
-        {
-            var builder = new EmbedBuilder()
-            {
-                Color = new Color(35, 45, 154),
-                Title = "NTime Auth Help",
-                Description = "Here is a further description of the auth commands"
-            };
-
-            builder.AddField(x =>
-            {
-                x.Name = "!login";
-                x.Value = "This command will direct message the user a link to be redirected to NTime login " +
-                "and connect the Discord bot to their NTime account for the integrated bot feature use.";
-                x.IsInline = false;
-            });
-
-            builder.AddField(x =>
-            {
-                x.Name = "!unlink";
-                x.Value = "This command will allow the user to disconnect the Discord bot from their NTime account " +
-                "to remove the integrated bot features.";
-                x.IsInline = false;
-            });
-            await ReplyAsync("", false, builder.Build());
-        }
     }
 }
