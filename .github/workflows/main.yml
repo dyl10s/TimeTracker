@@ -148,5 +148,5 @@ jobs:
             sed -i 's/Domain1Here/${{ secrets.DEV_DOMAIN_1 }}/' docker-compose.yml
             sed -i 's/Domain2Here/${{ secrets.DEV_DOMAIN_2 }}/' docker-compose.yml
             export TIMETRACK_TAG=dev
-            sudo docker-compose pull api frontend
-            sudo docker-compose up -d
+            sudo -E docker-compose pull api frontend
+            sudo -E docker-compose up -d
