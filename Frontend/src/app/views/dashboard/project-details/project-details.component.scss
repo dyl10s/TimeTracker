@@ -61,10 +61,35 @@ table {
     .adaptive-button-text{
       display: none;
     }
-  
+
     .adaptive-button-icon{
       padding: 0 !important;
       margin: 0 !important;
     }
 }
+
+@media only screen and (max-width: 767px) {
+    table {
+        text-align: center;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .mob{
+        display: none;
+    }
+    table {
+        .name {
+            .delete {
+                display: flex;
+                justify-content: space-between;
+                #space-left{
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+}
+
 

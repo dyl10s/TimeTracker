@@ -227,6 +227,67 @@ namespace TimeTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Removes user from project along with all of their data & entries.
+        /// </summary>
+        /// <param name="projectUserRemoveInfo"> The project id the user is to be removed from, and the user id to be removed </param>
+        /// <returns>The Id of the user deleted</returns>
+        [Authorize]
+        [HttpPatch("RemoveUserFromProject")]
+        public async Task<GenericResponseDTO<int>> RemoveUserFromProject(ProjectRemoveUserDTO projectUserRemoveInfo)
+        {
+            var response = new GenericResponseDTO<int>()
+            {
+                Success = false
+            };
+
+            var currentUserId = authHelper.GetCurrentUserId(User);
+
+            Project project = await database.Projects
+                .AsQueryable()
+                .Where(x => x.Id == projectUserRemoveInfo.ProjectId && x.ArchivedDate == null)
+                .Where(x => x.Teacher.Id == currentUserId)
+                .Include(x => x.Teacher)
+                .Include(x => x.Students)
+                .FirstOrDefaultAsync();
+
+            if (project == null)
+            {
+                response.Message = "Couldn't find the project";
+                return response;
+            }
+
+            if (currentUserId != project.Teacher.Id || projectUserRemoveInfo.UserId == project.Teacher.Id)
+            {
+                response.Message = "Error, only teachers can remove users and teachers cannot be removed.";
+                return response;
+            }
+
+            User removeStud = project.Students
+                .Where(x => x.Id == projectUserRemoveInfo.UserId)
+                .FirstOrDefault();
+
+            if(removeStud == null)
+            {
+                response.Message = "Couldn't find the user in project";
+                return response;
+            }
+            project.Students.Remove(removeStud);
+     
+            List<TimeEntry> removeEntries = await database.TimeEntries
+                    .AsQueryable()
+                    .Where(
+                    x => x.Project.Id == projectUserRemoveInfo.ProjectId &&
+                    x.User.Id == projectUserRemoveInfo.UserId).ToListAsync();
+            database.TimeEntries.RemoveRange(removeEntries);
+              
+
+            await database.SaveChangesAsync();
+            response.Success = true;
+            response.Data = removeStud.Id;
+            return response;
+        }
+
+        /// <summary>
         /// Create a new project
         /// </summary>
         /// <param name="newProject">The details of the new project to create</param>
