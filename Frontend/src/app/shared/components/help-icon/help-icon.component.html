@@ -1,0 +1,10 @@
+<div id="help"  [nbPopover]="popoverTemplate" nbPopoverTrigger="hover">
+    <nb-icon icon="question-mark-circle"></nb-icon>
+</div>
+<nb-layout id="popoverStyle">
+    <ng-template #popoverTemplate>
+        <p>
+            <ng-content></ng-content>
+        </p>
+    </ng-template>
+</nb-layout>
