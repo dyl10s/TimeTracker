@@ -21,6 +21,41 @@ namespace TimeTracker.Discord.Commands
         }
 
         [Command("create")]
+        public async Task Create()
+        {
+            User user = database.Users
+                .AsQueryable()
+                .FirstOrDefault(u => u.DiscordId == Context.User.Id.ToString());
+            
+            if(user == null) {
+                await Context.Message.ReplyAsync("Your Discord account is not currently linked to an NTime account. Use `!login` to link your accounts together.");
+                return;
+            }
+
+            List<Project> projects = database.Projects
+                .AsQueryable()
+                .Where(x => x.ArchivedDate == null)
+                .ToList();
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+            {
+                Color = new Color(35, 45, 154),
+                Title = "Projects",
+                Description = "You have multiple projects you can create a TimeEntry for."
+            };
+
+            for(int i = 0; i < projects.Count; i++) {
+                embedBuilder.AddField(field => {
+                    field.Name = "Create TimeEntry for " + projects[i].Name;
+                    field.Value = "!create " + projects[i].Id.ToString() + " Length Notes";
+                    field.IsInline = false;
+                });
+            }
+
+            await Context.Message.ReplyAsync("", false, embedBuilder.Build());
+        }
+
+        [Command("create")]
         [Summary("Create a time entry for the current day.")]
         public async Task Create(int? projectId, double? length, [Remainder] string notes = "")
         {
