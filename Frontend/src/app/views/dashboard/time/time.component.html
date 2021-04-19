@@ -231,4 +231,26 @@
         </ng-container>
     </table>
     </div>
+
+    <app-help-icon>
+      This is the Time Entry page, where you can view, create, and edit time entries for your projects.<br><br>
+      <span *ngIf="dayView">
+        This is the <u>Day View</u>, where you can view all the time entries for a particular day.<br><br>
+        <u>Choose a Day</u> by using the arrow buttons at the top, the <nb-icon icon="calendar"></nb-icon> button, or the weekday buttons.<br><br>
+        <u>Edit or Delete a Time Entry</u> by clicking on the <nb-icon icon="edit"></nb-icon> button.<br><br>
+        You can <u>Start a Timer</u> by clicking on the <nb-icon icon="play-circle-outline"></nb-icon><b class="adaptive-button-text"> Start</b> button.<br><br>
+        To <u>Stop a Timer</u>, click on the <nb-icon icon="stop-circle-outline"></nb-icon><b class="adaptive-button-text"> Stop</b> button for that timer.<br>
+        Stopping a running timer will create a new time entry with the amount of time the timer had on it.<br><br>
+        <u>Toggle Between Day and Week View</u> by using the Day/Week toggle buttons.<br><br>
+      </span>
+      <span *ngIf="weekView">
+        This is the <u>Week View</u>, where you can view all the time entries for the entire week.<br><br>
+        <u>Select a Week</u> by using the arrow buttons at the top or the <nb-icon icon="calendar"></nb-icon> button.<br><br>
+        <u>Toggle Between Day and Week View</u> by using the Day/Week toggle buttons, or by clicking on a day of the week.<br><br>
+      </span>
+      To <u>Add a New Time Entry</u>, click on the <nb-icon icon="plus"></nb-icon><b class="adaptive-button-text"> New Entry</b> button.<br>
+      When creating a time entry, you have to select the project it's for and enter in how many hours will be on it.<br>
+      Notes about the time entry can be added as well, but are not required to submit a time entry.
+    </app-help-icon>
+    
 </div>
