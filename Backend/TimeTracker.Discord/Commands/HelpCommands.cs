@@ -69,8 +69,8 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!login";
-                x.Value = "This command will direct message the user a link to be redirected to NTime login " +
-                "and connect the Discord bot to their NTime account for the integrated bot feature use.";
+                x.Value = "This command will send the user a direct message containing a link to the NTime login page. " +
+                "A successful login will connect the Discord bot to their NTime account.";
                 x.IsInline = false;
             });
 
@@ -99,8 +99,8 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!start";
-                x.Value = "This command will allow the user to start an NTime timer on their accounts via discord. " +
-                " A timer will start on the users project without a timer, and if multiple projects dont have timers" +
+                x.Value = "This command will allow the user to start an NTime timer on their account. " +
+                " A timer will start on the users project without a timer, and if multiple projects don't have timers" +
                 " the user will be prompted to select a specific project to start the timer.";
                 x.IsInline = false;
             });
@@ -108,7 +108,7 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!start  [project ID]";
-                x.Value = "This command will allow the user to start an NTime timer on their accounts via discord. " +
+                x.Value = "This command will allow the user to start an NTime timer on their account. " +
                 " A timer will be started on the users project with the specified ID if one is found.";
                 x.IsInline = false;
             });
@@ -116,7 +116,7 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!start  [project name]";
-                x.Value = "This command will allow the user to start an NTime timer on their accounts via discord." +
+                x.Value = "This command will allow the user to start an NTime timer on their account." +
                 " A timer will be started on the users project with the specified name if one is found.";
                 x.IsInline = false;
             });
@@ -131,17 +131,17 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!stop";
-                x.Value = "This command will allow the user to stop an NTime timer on their accounts via discord. " +
-                "The least recently started timer will be stopped within a users projects. If the user only has" +
-                " one timer running this means that timer will be stopped. This will result in the creation of a" +
-                " time entry on the project of the timer and the user will be returned the timers data. ";
+                x.Value = "This command will allow the user to stop an NTime timer on their account. " +
+                "If multiple timers are active, the user will be prompted to select a timer to stop. " +
+                "This will result in the creation of a time entry on the project of the timer and the " +
+                "user will be returned the timers data. ";
                 x.IsInline = false;
             });
 
             builder.AddField(x =>
             {
                 x.Name = "!stop [timer ID]";
-                x.Value = "This command will allow the user to stop an NTime timer by ID on their accounts via discord. " +
+                x.Value = "This command will allow the user to stop an NTime timer by ID on their account. " +
                 "This will result in the creation of a time entry on the project of the timer and the user will be returned the timers data.";
                 x.IsInline = false;
             });
@@ -149,7 +149,7 @@ namespace TimeTracker.Discord.Commands
             builder.AddField(x =>
             {
                 x.Name = "!stop [project name]";
-                x.Value = "This command will allow the user to stop an NTime timer by project name on their accounts via discord. " +
+                x.Value = "This command will allow the user to stop an NTime timer by project name on their account. " +
                           "The timer running on the specified project name will be stopped. This will result in the creation of a " +
                           "time entry on the project of the timer and the user will be returned the timers data. ";
                 x.IsInline = false;
