@@ -15,7 +15,7 @@
         </span>
       </div>
 
-    <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbFilter]="">
+    <table [nbTreeGrid]="showActive ? activeDataSource : archivedDataSource" [nbFilter]="" [nbSpinner]="showLoadingSpinner">
         <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="gridHeaders"></tr>
         <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: gridHeaders"></tr>
     
@@ -51,4 +51,15 @@
             </td>
         </ng-container>
     </table>
+    
+    <app-help-icon>
+      This is the main Reports page, where you can view the amount of time spent on each of your projects by all team members.<br><br>
+      <u>Adjust the Date Range</u> for the displayed results by using the date range selector at the top of the screen.<br>
+      The dropdown menu allows you to choose a specific time interval. Clicking the arrow buttons will change the dates by that interval.<br>
+      Clicking on the date boxes will also let you change the date range by typing in a new date or using the calendar menu.<br><br>
+      <u>Search for Projects</u> by project name or team member name using the search bar above the table.<br><br>
+      Toggle between <u>Archived and Active Projects</u> using the buttons next to the search bar.<br><br>
+      To see each <u>Team Member's Time Spent</u> on a project, click on a row in the table to expand it.<br><br>
+      Navigate to the <u>Detailed Report Page</u> for a project by clicking on the <nb-icon icon="bar-chart"></nb-icon><b class="adaptive-button-text"> Detailed Report</b> button next to a team member's name.<br>
+    </app-help-icon>
 </div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NbGetters, NbTreeGridDataService, NbTreeGridFilterService, NbTreeGridService, NbTreeGridSortService } from '@nebular/theme';
 import { NbDialogService, NbToastrService, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { GenericResponseDTO } from 'src/app/core/models/GenericResponseDTO.model';
@@ -31,41 +32,61 @@ export class ProjectsComponent {
     private dataSourceBuilder: CustomTreeBuilder<ProjectDTO>,
     private projectService: ProjectService,
     private toastrService: NbToastrService,
-    private dialogService: NbDialogService) {
+    private dialogService: NbDialogService,
+    private titleService: Title
+    ) {
+        this.titleService.setTitle("NTime - Projects");
+        this.loadActiveProjects();
+      }
 
-    this.loadProjects();
-  }
-
-  loadProjects() {
+  loadActiveProjects() {
     this.showLoadingSpinner = true;
     this.activeProjects = [];
 
-    this.projectService.getProjectsByUser(false).subscribe((res: GenericResponseDTO) => {
+    this.projectService.getActiveProjectsByUser().subscribe((res: GenericResponseDTO) => {
       res.data.forEach(x => {
-        if(x.archivedDate == null) {
-          this.activeProjects.push({
-            data: x
-          });
-        }else{
-          this.archivedProjects.push({
-            data: x
-          });
-        }
-      }, (err) => {
-        console.log(err)
+        this.activeProjects.push({
+          data: x
+        });
+      }, () => {
+        this.toastrService.danger("There was an error loading the active projects.", "Error");
       });
 
       let customFilter = new CustomFilterService<ProjectDTO>();
       customFilter.setFilterColumns(["name", "clientName"]);
 
       this.activeDataSource = this.dataSourceBuilder.create(this.activeProjects, customFilter);
+      this.showLoadingSpinner = false;
+    });
+  }
+
+  loadArchivedProjects() {
+    this.showLoadingSpinner = true;
+    this.activeProjects = [];
+
+    this.projectService.getArchivedProjectsByUser().subscribe((res: GenericResponseDTO) => {
+      res.data.forEach(x => {
+        this.archivedProjects.push({
+          data: x
+        });
+      }, () => {
+        this.toastrService.danger("There was an error loading the archived projects.", "Error");
+      });
+
+      let customFilter = new CustomFilterService<ProjectDTO>();
+      customFilter.setFilterColumns(["name", "clientName"]);
+
       this.archivedDataSource = this.dataSourceBuilder.create(this.archivedProjects, customFilter);
       this.showLoadingSpinner = false;
-    })
+    });
   }
 
   viewArchivedProjects() {
     this.showActive = false;
+
+    if(this.archivedDataSource == null) {
+      this.loadArchivedProjects();
+    }
   }
 
   viewActiveProjects() {
@@ -93,8 +114,12 @@ export class ProjectsComponent {
 
   openCreateNewProject() {
     this.dialogService.open(CreateProjectComponent, {}).onClose.subscribe((x: any) => {
-      if(x.update) {
-        this.loadProjects();
+      // Clicking outside of dialog will not pass
+      if(x) {
+        // Clicking cancel will not pass
+        if(x.update){
+          this.loadActiveProjects();
+        }
       }
     });
   }

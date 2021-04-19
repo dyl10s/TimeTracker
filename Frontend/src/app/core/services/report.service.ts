@@ -31,4 +31,14 @@ export class ReportService {
         } 
     });
   }
+
+  getLengthsReport(projectIds: number[], startDate: Date, endDate: Date){
+    return this.http.get<GenericResponseDTO<any>>(`${this.api}/Report/Lengths`, { 
+        params: {
+            startDate: startDate.toDateString(), 
+            endDate: endDate.toDateString(),
+            projectIds: projectIds.map(x => x.toString())
+        } 
+    });
+  }
 }

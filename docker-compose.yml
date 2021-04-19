@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: postgres
       POSTGRES_DB: TimeTracker
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
 
   api:
     image: strohscd/timetracker-api:${TIMETRACK_TAG:-latest}
@@ -20,9 +22,21 @@ services:
   frontend:
     image: strohscd/timetracker-frontend:${TIMETRACK_TAG:-latest}
     restart: always
+    environment:
+      SSLEmail: SSLEmailHere
+      Domain1: Domain1Here
+      Domain2: Domain2Here
     ports: 
       - 80:80
       - 443:443
+    volumes:
+      - ./certbot-data:/etc/letsencrypt/
     depends_on: 
       - db
       - api
+
+volumes:
+  postgres-data:
+    driver: local
+  certbot-data:
+    driver: local
