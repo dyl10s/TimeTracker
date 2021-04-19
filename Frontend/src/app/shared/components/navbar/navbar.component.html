@@ -13,7 +13,7 @@
             <button nbButton class="desk" (click)="routeClick('register')">Sign up</button>
           </div>
           <div class="right-aligned" class="desk" *ngIf="jwtService.isAuthenticated()">
-            <button nbButton class="desk" (click)="router.navigate(['/dashboard/profile'])">Dashboard</button>
+            <button nbButton class="desk" (click)="router.navigate(['/dashboard/time'])">Dashboard</button>
           </div>
         </div>
       </div>
