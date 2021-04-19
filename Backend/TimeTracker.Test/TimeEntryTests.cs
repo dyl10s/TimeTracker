@@ -81,7 +81,7 @@ namespace TimeTracker.Test
             var updateTimeResuls = await timeEntryController.UpdateTime(updatedTimeEntry);
 
             // Get the time entry
-            var getUpdatedTimeResults = await timeEntryController.Get(updateTimeResuls.Data);
+            var getUpdatedTimeResults = await timeEntryController.Get(updateTimeResuls.Data.Id);
 
             Assert.AreEqual(getUpdatedTimeResults.Success, true);
             Assert.AreEqual(getUpdatedTimeResults.Data.Id, getCreatedTimeResults.Data.Id);

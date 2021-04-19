@@ -73,7 +73,9 @@ namespace TimeTracker.Test {
             Assert.IsTrue(timers[0].Notes.SequenceEqual("Working on stuff"));
             Assert.AreEqual(timers[0].StartTime, startTimerResponse.Data.StartTime);
 
-            GenericResponseDTO<TimeEntryDTO> stopTimerResponse = await timerController.StopTimer(timers[0].Id);
+            GenericResponseDTO<TimeEntryDTO> stopTimerResponse = await timerController.StopTimer(new TimerIdDTO {
+                TimerId = timers[0].Id
+            });
             DateTime responseGottenTime = DateTime.UtcNow;
 
             Assert.IsTrue(stopTimerResponse.Success);
@@ -116,7 +118,9 @@ namespace TimeTracker.Test {
 
             Assert.IsTrue(startTimerResponse.Success);
 
-            GenericResponseDTO<TimerDTO> getTimerByIdResponse = await timerController.GetTimerById(startTimerResponse.Data.Id);
+            GenericResponseDTO<TimerDTO> getTimerByIdResponse = await timerController.GetTimerById(new TimerIdDTO {
+                TimerId = startTimerResponse.Data.Id
+            });
 
             Assert.IsTrue(getTimerByIdResponse.Success);
             Assert.AreEqual(getTimerByIdResponse.Data.Id, startTimerResponse.Data.Id);
@@ -155,12 +159,12 @@ namespace TimeTracker.Test {
 
             Assert.IsTrue(startTimerResponse.Success);
 
-            GenericResponseDTO<List<TimerDTO>> getTimerByIdResponse = await timerController.GetTimersWithinDateRange(DateTime.UtcNow, DateTime.UtcNow);
+            GenericResponseDTO<List<Timer>> getTimerByIdResponse = await timerController.GetTimersWithinDateRange(DateTime.UtcNow, DateTime.UtcNow);
 
             Assert.IsTrue(getTimerByIdResponse.Success);
             Assert.AreEqual(getTimerByIdResponse.Data[0].Id, startTimerResponse.Data.Id);
             Assert.AreEqual(getTimerByIdResponse.Data[0].Notes, "Didn't really do anything");
-            Assert.AreEqual(getTimerByIdResponse.Data[0].ProjectId, projectId);
+            Assert.AreEqual(getTimerByIdResponse.Data[0].Project.Id, projectId);
             Assert.AreEqual(getTimerByIdResponse.Data[0].StartTime, startTimerResponse.Data.StartTime);
 
             DateTime tomorrow = DateTime.UtcNow + new TimeSpan(24, 0, 0);
